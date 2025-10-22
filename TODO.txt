@@ -1,0 +1,13 @@
+Main Part
+
+- Research other examples of drone simulation and any type of network simulation of different applications
+- find out how network equipments on drones will be simulated (back-up, is to simulate network nodes at different altitudes and weather)
+- Using FastDDs to bridge gap between AirSim(Backup Gazebo) and ns-3(Backup ?)
+- Code development of algorithms Hawks,etc for structure drone swarm flight
+- Testing simulation in all weather and potential causes of flight/network problems
+
+Secondary Part
+
+- RL implementation
+- Physical implementation of Drones(building the kit)
+

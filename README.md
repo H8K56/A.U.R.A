@@ -4,7 +4,7 @@
 **AURA (Autonomous UAV Relay Architecture)** is a multi-drone, AI-driven communication network designed for **disaster response and resilient connectivity**.  
 When ground infrastructure fails — due to wildfires, earthquakes, or other crises — AURA enables drones to **form an adaptive aerial network** that restores coverage and data links between emergency teams, civilians, and command centers.
 
-AURA integrates **AirSim** for flight simulation and **ns-3** for network-level modeling, creating a unified environment that captures both **physical flight dynamics** and **communication behavior**.  
+AURA integrates **Gazebo** for flight simulation and **ns-3** for network-level modeling, creating a unified environment that captures both **physical flight dynamics** and **communication behavior**.  
 This dual-simulation approach allows the system to learn and optimize for real-world conditions such as weather impairments, node failure, and interference.
 
 ---
@@ -27,7 +27,7 @@ AURA aims to:
 ---
 
 ## 🧠 Tech Stack
-- **AirSim** – For realistic UAV flight dynamics and environmental physics.
+- **Gazebo** – For realistic UAV flight dynamics and environmental physics.
 - **ns-3** – For simulating communication networks (Wi-Fi, LTE, LoRa).
 - **Python / C++** – For RL, system integration, and data logging.
 - **Grafana + Prometheus** – For live metrics visualization and analysis.

@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c

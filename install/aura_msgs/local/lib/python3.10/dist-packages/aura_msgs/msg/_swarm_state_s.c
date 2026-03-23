@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_py/aura_msgs/msg/_swarm_state_s.c

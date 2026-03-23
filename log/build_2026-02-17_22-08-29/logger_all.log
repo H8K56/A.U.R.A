@@ -1,0 +1,530 @@
+[0.069s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.069s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=20, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7ab6fa1a2a70>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7ab6fa1a2500>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7ab6fa1a2500>>, mixin_verb=('build',))
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.096s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.096s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/aura/ws'
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.096s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.106s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.106s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.106s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.106s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['ignore', 'ignore_ament_install']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'ignore'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'ignore_ament_install'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['colcon_pkg']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'colcon_pkg'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['colcon_meta']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'colcon_meta'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['ros']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'ros'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['cmake', 'python']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'cmake'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'python'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extensions ['python_setup_py']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(config) by extension 'python_setup_py'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['ignore', 'ignore_ament_install']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'ignore'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'ignore_ament_install'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['colcon_pkg']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'colcon_pkg'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['colcon_meta']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'colcon_meta'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['ros']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'ros'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['cmake', 'python']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'cmake'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'python'
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extensions ['python_setup_py']
+[0.107s] Level 1:colcon.colcon_core.package_identification:_identify(launch) by extension 'python_setup_py'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['ignore', 'ignore_ament_install']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'ignore'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'ignore_ament_install'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['colcon_pkg']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'colcon_pkg'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['colcon_meta']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'colcon_meta'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['ros']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'ros'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['cmake', 'python']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'cmake'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'python'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extensions ['python_setup_py']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(models) by extension 'python_setup_py'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['ignore', 'ignore_ament_install']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'ignore'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'ignore_ament_install'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['colcon_pkg']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'colcon_pkg'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['colcon_meta']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'colcon_meta'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['ros']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'ros'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['cmake', 'python']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'cmake'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'python'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extensions ['python_setup_py']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(scripts) by extension 'python_setup_py'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.108s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['ignore', 'ignore_ament_install']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'ignore'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'ignore_ament_install'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['colcon_pkg']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'colcon_pkg'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['colcon_meta']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'colcon_meta'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['ros']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'ros'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['cmake', 'python']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'cmake'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'python'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extensions ['python_setup_py']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization) by extension 'python_setup_py'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['ignore', 'ignore_ament_install']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'ignore'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'ignore_ament_install'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['colcon_pkg']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'colcon_pkg'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['colcon_meta']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'colcon_meta'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['ros']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'ros'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['cmake', 'python']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'cmake'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'python'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extensions ['python_setup_py']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include) by extension 'python_setup_py'
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['ignore', 'ignore_ament_install']
+[0.109s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'ignore'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'ignore_ament_install'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['colcon_pkg']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'colcon_pkg'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['colcon_meta']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'colcon_meta'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['ros']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'ros'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['cmake', 'python']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'cmake'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'python'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extensions ['python_setup_py']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/include/aura_localization) by extension 'python_setup_py'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['ignore', 'ignore_ament_install']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'ignore'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'ignore_ament_install'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['colcon_pkg']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'colcon_pkg'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['colcon_meta']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'colcon_meta'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['ros']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'ros'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['cmake', 'python']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'cmake'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'python'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extensions ['python_setup_py']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_localization/src) by extension 'python_setup_py'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['ignore', 'ignore_ament_install']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'ignore'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'ignore_ament_install'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['colcon_pkg']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'colcon_pkg'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['colcon_meta']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'colcon_meta'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['ros']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'ros'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['cmake', 'python']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'cmake'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'python'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extensions ['python_setup_py']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control) by extension 'python_setup_py'
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['ignore', 'ignore_ament_install']
+[0.110s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'ignore'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'ignore_ament_install'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['colcon_pkg']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'colcon_pkg'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['colcon_meta']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'colcon_meta'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['ros']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'ros'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['cmake', 'python']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'cmake'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'python'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extensions ['python_setup_py']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_mission_control/aura_mission_control) by extension 'python_setup_py'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extension 'ignore'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extension 'ignore_ament_install'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extensions ['colcon_pkg']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extension 'colcon_pkg'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extensions ['colcon_meta']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extension 'colcon_meta'
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extensions ['ros']
+[0.111s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_msgs) by extension 'ros'
+[0.113s] DEBUG:colcon.colcon_core.package_identification:Package 'src/aura_msgs' with type 'ros.ament_cmake' and name 'aura_msgs'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['ignore', 'ignore_ament_install']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'ignore'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'ignore_ament_install'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['colcon_pkg']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'colcon_pkg'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['colcon_meta']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'colcon_meta'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['ros']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'ros'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['cmake', 'python']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'cmake'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'python'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extensions ['python_setup_py']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim) by extension 'python_setup_py'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['ignore', 'ignore_ament_install']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'ignore'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'ignore_ament_install'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['colcon_pkg']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'colcon_pkg'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['colcon_meta']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'colcon_meta'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['ros']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'ros'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['cmake', 'python']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'cmake'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'python'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extensions ['python_setup_py']
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_network_sim/aura_network_sim) by extension 'python_setup_py'
+[0.113s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extensions ['ignore', 'ignore_ament_install']
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extension 'ignore'
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extension 'ignore_ament_install'
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extensions ['colcon_pkg']
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extension 'colcon_pkg'
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extensions ['colcon_meta']
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extension 'colcon_meta'
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extensions ['ros']
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_px4_interface) by extension 'ros'
+[0.114s] DEBUG:colcon.colcon_core.package_identification:Package 'src/aura_px4_interface' with type 'ros.ament_cmake' and name 'aura_px4_interface'
+[0.114s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['ignore', 'ignore_ament_install']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'ignore'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'ignore_ament_install'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['colcon_pkg']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'colcon_pkg'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['colcon_meta']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'colcon_meta'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['ros']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'ros'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['cmake', 'python']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'cmake'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'python'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extensions ['python_setup_py']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl) by extension 'python_setup_py'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['ignore', 'ignore_ament_install']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'ignore'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'ignore_ament_install'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['colcon_pkg']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'colcon_pkg'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['colcon_meta']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'colcon_meta'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['ros']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'ros'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['cmake', 'python']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'cmake'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'python'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extensions ['python_setup_py']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/aura_strategic_rl) by extension 'python_setup_py'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['ignore', 'ignore_ament_install']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'ignore'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'ignore_ament_install'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['colcon_pkg']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'colcon_pkg'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['colcon_meta']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'colcon_meta'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['ros']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'ros'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['cmake', 'python']
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'cmake'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'python'
+[0.115s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extensions ['python_setup_py']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/scripts) by extension 'python_setup_py'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['ignore', 'ignore_ament_install']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'ignore'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'ignore_ament_install'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['colcon_pkg']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'colcon_pkg'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['colcon_meta']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'colcon_meta'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['ros']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'ros'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['cmake', 'python']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'cmake'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'python'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extensions ['python_setup_py']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_strategic_rl/training) by extension 'python_setup_py'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extensions ['ignore', 'ignore_ament_install']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extension 'ignore'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extension 'ignore_ament_install'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extensions ['colcon_pkg']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extension 'colcon_pkg'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extensions ['colcon_meta']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extension 'colcon_meta'
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extensions ['ros']
+[0.116s] Level 1:colcon.colcon_core.package_identification:_identify(src/aura_trajectory) by extension 'ros'
+[0.117s] DEBUG:colcon.colcon_core.package_identification:Package 'src/aura_trajectory' with type 'ros.ament_cmake' and name 'aura_trajectory'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['ignore', 'ignore_ament_install']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'ignore'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'ignore_ament_install'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['colcon_pkg']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'colcon_pkg'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['colcon_meta']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'colcon_meta'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['ros']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'ros'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['cmake', 'python']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'cmake'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'python'
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extensions ['python_setup_py']
+[0.117s] Level 1:colcon.colcon_core.package_identification:_identify(worlds) by extension 'python_setup_py'
+[0.117s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.117s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.117s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.117s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.117s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.131s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.131s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/aura/ws/install/aura_trajectory' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/aura/ws/install/aura_px4_interface' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/aura/ws/install/aura_msgs' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/aura/ws/install/aura_trajectory' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/aura/ws/install/aura_px4_interface' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.131s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/aura/ws/install/aura_msgs' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.132s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/aura/ws/install
+[0.132s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 2 installed packages in /opt/px4_ros/install
+[0.133s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 195 installed packages in /opt/ros/humble
+[0.133s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.148s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_target' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.149s] DEBUG:colcon.colcon_core.verb:Building package 'aura_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/aura/ws/build/aura_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/aura/ws/install/aura_msgs', 'merge_install': False, 'path': '/home/aura/ws/src/aura_msgs', 'symlink_install': True, 'test_result_base': None}
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_target' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_clean_cache' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_clean_first' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'cmake_force_configure' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'ament_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'catkin_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_px4_interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.149s] DEBUG:colcon.colcon_core.verb:Building package 'aura_px4_interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/aura/ws/build/aura_px4_interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/aura/ws/install/aura_px4_interface', 'merge_install': False, 'path': '/home/aura/ws/src/aura_px4_interface', 'symlink_install': True, 'test_result_base': None}
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_target' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_clean_cache' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_clean_first' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'cmake_force_configure' from command line to 'False'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'ament_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'catkin_cmake_args' from command line to 'None'
+[0.149s] Level 5:colcon.colcon_core.verb:set package 'aura_trajectory' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.149s] DEBUG:colcon.colcon_core.verb:Building package 'aura_trajectory' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/aura/ws/build/aura_trajectory', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/aura/ws/install/aura_trajectory', 'merge_install': False, 'path': '/home/aura/ws/src/aura_trajectory', 'symlink_install': True, 'test_result_base': None}
+[0.149s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.150s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.150s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/aura/ws/src/aura_msgs' with build type 'ament_cmake'
+[0.150s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/aura/ws/src/aura_msgs'
+[0.152s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.152s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.152s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.158s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/aura/ws/src/aura_msgs -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_msgs
+[2.143s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/aura/ws/src/aura_msgs -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_msgs
+[2.145s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/aura/ws/build/aura_msgs -- -j20 -l20
+[11.415s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/aura/ws/build/aura_msgs -- -j20 -l20
+[11.428s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/aura/ws/build/aura_msgs
+[13.843s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_msgs)
+[13.844s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/aura/ws/build/aura_msgs
+[13.846s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs' for CMake module files
+[13.847s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs' for CMake config files
+[13.849s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_msgs', 'cmake_prefix_path')
+[13.849s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.ps1'
+[13.850s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.dsv'
+[13.851s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.sh'
+[13.851s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib'
+[13.851s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_msgs', 'ld_library_path_lib')
+[13.851s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.ps1'
+[13.852s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.dsv'
+[13.852s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.sh'
+[13.852s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/bin'
+[13.852s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib/pkgconfig/aura_msgs.pc'
+[13.852s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib/python3.10/site-packages'
+[13.852s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/bin'
+[13.853s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.ps1'
+[13.853s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.dsv'
+[13.853s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.sh'
+[13.854s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.bash'
+[13.854s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.zsh'
+[13.854s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_msgs/share/colcon-core/packages/aura_msgs)
+[13.855s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_msgs)
+[13.855s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs' for CMake module files
+[13.855s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs' for CMake config files
+[13.856s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_msgs', 'cmake_prefix_path')
+[13.856s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.ps1'
+[13.857s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.dsv'
+[13.857s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/cmake_prefix_path.sh'
+[13.857s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib'
+[13.857s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_msgs', 'ld_library_path_lib')
+[13.857s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.ps1'
+[13.858s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.dsv'
+[13.858s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_msgs/share/aura_msgs/hook/ld_library_path_lib.sh'
+[13.858s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/bin'
+[13.858s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib/pkgconfig/aura_msgs.pc'
+[13.858s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/lib/python3.10/site-packages'
+[13.858s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_msgs/bin'
+[13.858s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.ps1'
+[13.859s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.dsv'
+[13.859s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.sh'
+[13.859s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.bash'
+[13.860s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_msgs/share/aura_msgs/package.zsh'
+[13.860s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_msgs/share/colcon-core/packages/aura_msgs)
+[13.860s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/aura/ws/src/aura_px4_interface' with build type 'ament_cmake'
+[13.860s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/aura/ws/src/aura_px4_interface'
+[13.860s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[13.860s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[13.863s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/aura/ws/src/aura_trajectory' with build type 'ament_cmake'
+[13.863s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/aura/ws/src/aura_trajectory'
+[13.863s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[13.863s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[13.870s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_px4_interface': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake /home/aura/ws/src/aura_px4_interface -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_px4_interface
+[13.872s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_trajectory': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake /home/aura/ws/src/aura_trajectory -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_trajectory
+[15.187s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_trajectory' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake /home/aura/ws/src/aura_trajectory -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_trajectory
+[15.187s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_trajectory': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --build /home/aura/ws/build/aura_trajectory -- -j20 -l20
+[15.224s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_px4_interface' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake /home/aura/ws/src/aura_px4_interface -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_px4_interface
+[15.225s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_px4_interface': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --build /home/aura/ws/build/aura_px4_interface -- -j20 -l20
+[35.246s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_trajectory' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --build /home/aura/ws/build/aura_trajectory -- -j20 -l20
+[35.247s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_trajectory': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --install /home/aura/ws/build/aura_trajectory
+[35.422s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_trajectory)
+[35.422s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory' for CMake module files
+[35.423s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_trajectory' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --install /home/aura/ws/build/aura_trajectory
+[35.423s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory' for CMake config files
+[35.423s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_trajectory', 'cmake_prefix_path')
+[35.424s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.ps1'
+[35.424s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.dsv'
+[35.425s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.sh'
+[35.425s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib'
+[35.425s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/bin'
+[35.425s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib/pkgconfig/aura_trajectory.pc'
+[35.426s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib/python3.10/site-packages'
+[35.426s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/bin'
+[35.426s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.ps1'
+[35.426s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.dsv'
+[35.427s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.sh'
+[35.427s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.bash'
+[35.427s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.zsh'
+[35.427s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_trajectory/share/colcon-core/packages/aura_trajectory)
+[35.428s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_trajectory)
+[35.428s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory' for CMake module files
+[35.428s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory' for CMake config files
+[35.428s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_trajectory', 'cmake_prefix_path')
+[35.428s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.ps1'
+[35.428s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.dsv'
+[35.429s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/hook/cmake_prefix_path.sh'
+[35.429s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib'
+[35.429s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/bin'
+[35.429s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib/pkgconfig/aura_trajectory.pc'
+[35.429s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/lib/python3.10/site-packages'
+[35.429s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_trajectory/bin'
+[35.430s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.ps1'
+[35.430s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.dsv'
+[35.430s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.sh'
+[35.430s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.bash'
+[35.431s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.zsh'
+[35.431s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_trajectory/share/colcon-core/packages/aura_trajectory)
+[36.790s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_px4_interface' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --build /home/aura/ws/build/aura_px4_interface -- -j20 -l20
+[36.791s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/aura/ws/build/aura_px4_interface': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --install /home/aura/ws/build/aura_px4_interface
+[36.949s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_px4_interface)
+[36.949s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface' for CMake module files
+[36.949s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/aura/ws/build/aura_px4_interface' returned '0': CMAKE_PREFIX_PATH=/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic /usr/bin/cmake --install /home/aura/ws/build/aura_px4_interface
+[36.950s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface' for CMake config files
+[36.950s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_px4_interface', 'cmake_prefix_path')
+[36.950s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.ps1'
+[36.950s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.dsv'
+[36.951s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.sh'
+[36.951s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib'
+[36.951s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/bin'
+[36.951s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib/pkgconfig/aura_px4_interface.pc'
+[36.951s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib/python3.10/site-packages'
+[36.951s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/bin'
+[36.952s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.ps1'
+[36.952s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.dsv'
+[36.952s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.sh'
+[36.952s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.bash'
+[36.952s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.zsh'
+[36.953s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_px4_interface/share/colcon-core/packages/aura_px4_interface)
+[36.953s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(aura_px4_interface)
+[36.953s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface' for CMake module files
+[36.953s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface' for CMake config files
+[36.954s] Level 1:colcon.colcon_core.shell:create_environment_hook('aura_px4_interface', 'cmake_prefix_path')
+[36.954s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.ps1'
+[36.954s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.dsv'
+[36.954s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/hook/cmake_prefix_path.sh'
+[36.955s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib'
+[36.955s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/bin'
+[36.955s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib/pkgconfig/aura_px4_interface.pc'
+[36.955s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/lib/python3.10/site-packages'
+[36.955s] Level 1:colcon.colcon_core.environment:checking '/home/aura/ws/install/aura_px4_interface/bin'
+[36.955s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.ps1'
+[36.955s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.dsv'
+[36.956s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.sh'
+[36.956s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.bash'
+[36.956s] INFO:colcon.colcon_core.shell:Creating package script '/home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.zsh'
+[36.956s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/aura/ws/install/aura_px4_interface/share/colcon-core/packages/aura_px4_interface)
+[36.957s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[36.957s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[36.957s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[36.957s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[36.961s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[36.961s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[36.961s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[36.961s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[36.964s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.Spawn.ExecFailed: /usr/bin/dbus-launch terminated abnormally without any error message
+[36.964s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[36.965s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aura/ws/install/local_setup.ps1'
+[36.966s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/aura/ws/install/_local_setup_util_ps1.py'
+[36.967s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aura/ws/install/setup.ps1'
+[36.968s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aura/ws/install/local_setup.sh'
+[36.968s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/aura/ws/install/_local_setup_util_sh.py'
+[36.968s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aura/ws/install/setup.sh'
+[36.969s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aura/ws/install/local_setup.bash'
+[36.969s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aura/ws/install/setup.bash'
+[36.970s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/aura/ws/install/local_setup.zsh'
+[36.970s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/aura/ws/install/setup.zsh'

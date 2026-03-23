@@ -1,0 +1,24 @@
+# SetFormation.srv
+# Set swarm formation
+
+# Request
+uint8 FORMATION_SPREAD = 0
+uint8 FORMATION_CLUSTER = 1
+uint8 FORMATION_LINE = 2
+uint8 FORMATION_GRID = 3
+uint8 FORMATION_CUSTOM = 4
+uint8 formation_type
+
+# For custom formation: relative positions from hub
+geometry_msgs/Point[] custom_positions
+
+# Formation parameters
+float32 spacing_meters           # Distance between drones
+float32 altitude_meters          # Formation altitude
+geometry_msgs/Point center       # Formation center point
+float32 heading_rad              # Formation heading (for line/grid)
+---
+# Response
+bool success
+string message
+float32 estimated_transition_time

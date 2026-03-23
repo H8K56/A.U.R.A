@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_fastrtps_cpp.hpp

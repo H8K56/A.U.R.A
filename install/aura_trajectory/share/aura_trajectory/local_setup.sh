@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_trajectory/ament_cmake_environment_hooks/local_setup.sh

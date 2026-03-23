@@ -1,0 +1,1 @@
+/home/aura/ws/src/aura_msgs/msg/CoverageGoal.msg

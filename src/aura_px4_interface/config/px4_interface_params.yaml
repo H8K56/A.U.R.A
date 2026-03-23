@@ -1,0 +1,39 @@
+# PX4 Interface Configuration
+# A.U.R.A. Disaster Relief UAV Swarm
+
+px4_interface:
+  ros__parameters:
+    drone_id: 0
+    state_publish_rate_hz: 50.0
+    takeoff_altitude: 2.0
+    max_velocity: 3.0
+
+offboard_controller:
+  ros__parameters:
+    # Position control gains
+    pos_p_gain: 1.0
+    vel_p_gain: 1.5
+    vel_i_gain: 0.1
+    vel_d_gain: 0.05
+    
+    # Limits
+    max_velocity: 3.0
+    max_acceleration: 5.0
+    max_yaw_rate: 1.0
+    
+    # Tolerances
+    position_tolerance: 0.3
+    velocity_tolerance: 0.2
+    yaw_tolerance: 0.1
+    
+    # Takeoff/landing
+    takeoff_altitude: 2.0
+    takeoff_velocity: 1.0
+    landing_velocity: 0.5
+
+swarm_px4_manager:
+  ros__parameters:
+    num_drones: 5
+    takeoff_altitude: 2.0
+    takeoff_spacing: 2.0
+    stagger_delay_ms: 500

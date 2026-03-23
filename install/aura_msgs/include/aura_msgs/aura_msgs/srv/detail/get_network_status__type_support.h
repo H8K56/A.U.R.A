@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/srv/detail/get_network_status__type_support.h

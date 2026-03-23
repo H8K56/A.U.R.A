@@ -1,0 +1,18 @@
+{
+  "package_name": "aura_msgs",
+  "non_idl_tuples": [
+    "/home/aura/ws/src/aura_msgs:msg/DroneState.msg",
+    "/home/aura/ws/src/aura_msgs:msg/SwarmState.msg",
+    "/home/aura/ws/src/aura_msgs:msg/TrajectoryBroadcast.msg",
+    "/home/aura/ws/src/aura_msgs:msg/NetworkMetrics.msg",
+    "/home/aura/ws/src/aura_msgs:msg/CoverageGoal.msg",
+    "/home/aura/ws/src/aura_msgs:msg/CoverageMap.msg",
+    "/home/aura/ws/src/aura_msgs:msg/WeatherZone.msg",
+    "/home/aura/ws/src/aura_msgs:msg/MissionStatus.msg",
+    "/home/aura/ws/src/aura_msgs:srv/RequestTrajectory.srv",
+    "/home/aura/ws/src/aura_msgs:srv/EmergencyStop.srv",
+    "/home/aura/ws/src/aura_msgs:srv/SetFormation.srv",
+    "/home/aura/ws/src/aura_msgs:srv/GetNetworkStatus.srv",
+    "/home/aura/ws/src/aura_msgs:action/ExecuteMission.action"
+  ]
+}

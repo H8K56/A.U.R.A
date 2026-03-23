@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_fastrtps_c.h

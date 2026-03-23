@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libminco_trajectory.so -o libminco_trajectory.so CMakeFiles/minco_trajectory.dir/src/minco_trajectory.cpp.o CMakeFiles/minco_trajectory.dir/src/trajectory_optimizer.cpp.o CMakeFiles/minco_trajectory.dir/src/penalty_functions.cpp.o CMakeFiles/minco_trajectory.dir/src/safety_checker.cpp.o 

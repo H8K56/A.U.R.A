@@ -1,0 +1,40 @@
+file(REMOVE_RECURSE
+  "../rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_c.c"
+  "../rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_fastrtps_c.c"
+  "../rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c"
+  "../rosidl_generator_py/aura_msgs/action/__init__.py"
+  "../rosidl_generator_py/aura_msgs/action/_execute_mission.py"
+  "../rosidl_generator_py/aura_msgs/action/_execute_mission_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/__init__.py"
+  "../rosidl_generator_py/aura_msgs/msg/_coverage_goal.py"
+  "../rosidl_generator_py/aura_msgs/msg/_coverage_goal_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_coverage_map.py"
+  "../rosidl_generator_py/aura_msgs/msg/_coverage_map_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_drone_state.py"
+  "../rosidl_generator_py/aura_msgs/msg/_drone_state_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_mission_status.py"
+  "../rosidl_generator_py/aura_msgs/msg/_mission_status_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_network_metrics.py"
+  "../rosidl_generator_py/aura_msgs/msg/_network_metrics_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_swarm_state.py"
+  "../rosidl_generator_py/aura_msgs/msg/_swarm_state_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_trajectory_broadcast.py"
+  "../rosidl_generator_py/aura_msgs/msg/_trajectory_broadcast_s.c"
+  "../rosidl_generator_py/aura_msgs/msg/_weather_zone.py"
+  "../rosidl_generator_py/aura_msgs/msg/_weather_zone_s.c"
+  "../rosidl_generator_py/aura_msgs/srv/__init__.py"
+  "../rosidl_generator_py/aura_msgs/srv/_emergency_stop.py"
+  "../rosidl_generator_py/aura_msgs/srv/_emergency_stop_s.c"
+  "../rosidl_generator_py/aura_msgs/srv/_get_network_status.py"
+  "../rosidl_generator_py/aura_msgs/srv/_get_network_status_s.c"
+  "../rosidl_generator_py/aura_msgs/srv/_request_trajectory.py"
+  "../rosidl_generator_py/aura_msgs/srv/_request_trajectory_s.c"
+  "../rosidl_generator_py/aura_msgs/srv/_set_formation.py"
+  "../rosidl_generator_py/aura_msgs/srv/_set_formation_s.c"
+  "CMakeFiles/aura_msgs__py"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang )
+  include(CMakeFiles/aura_msgs__py.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

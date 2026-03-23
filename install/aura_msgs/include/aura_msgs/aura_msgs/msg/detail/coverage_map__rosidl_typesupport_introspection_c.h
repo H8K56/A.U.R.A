@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_introspection_c.h

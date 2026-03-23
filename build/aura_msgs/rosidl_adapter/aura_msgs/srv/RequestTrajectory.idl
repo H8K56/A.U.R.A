@@ -1,0 +1,50 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from aura_msgs/srv/RequestTrajectory.srv
+// generated code does not contain a copyright notice
+
+#include "aura_msgs/msg/TrajectoryBroadcast.idl"
+#include "geometry_msgs/msg/Point.idl"
+
+module aura_msgs {
+  module srv {
+    @verbatim (language="comment", text=
+      "RequestTrajectory.srv" "\n"
+      "Request MINCO to plan trajectory to goal")
+    struct RequestTrajectory_Request {
+      @verbatim (language="comment", text=
+        "Request")
+      uint8 drone_id;
+
+      geometry_msgs::msg::Point goal_position;
+
+      @verbatim (language="comment", text=
+        "0 = use default")
+      double max_velocity;
+
+      @verbatim (language="comment", text=
+        "0 = no time constraint")
+      double max_time;
+
+      boolean avoid_weather_zones;
+    };
+    @verbatim (language="comment", text=
+      "Response")
+    struct RequestTrajectory_Response {
+      boolean success;
+
+      string message;
+
+      @verbatim (language="comment", text=
+        "The planned trajectory")
+      aura_msgs::msg::TrajectoryBroadcast trajectory;
+
+      @verbatim (language="comment", text=
+        "Seconds to reach goal")
+      double estimated_time;
+
+      @verbatim (language="comment", text=
+        "Joules")
+      double estimated_energy;
+    };
+  };
+};

@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/srv/emergency_stop.h

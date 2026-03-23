@@ -1,0 +1,30 @@
+# ExecuteMission.action
+# Long-running mission execution
+
+# Goal
+string mission_id
+uint8 MISSION_COVERAGE = 0       # Standard coverage mission
+uint8 MISSION_SEARCH = 1         # Search pattern
+uint8 MISSION_RELAY = 2          # Point-to-point relay
+uint8 mission_type
+
+geometry_msgs/Point[] coverage_area_vertices  # Polygon defining area
+float32 target_altitude
+float32 target_coverage_percent  # Stop when achieved
+float32 max_duration_sec         # 0 = no limit
+---
+# Result
+bool success
+string message
+float32 coverage_achieved
+float32 total_time_sec
+float32 avg_network_quality
+uint32 total_connections_served
+---
+# Feedback
+float32 progress_percent
+float32 current_coverage_percent
+float32 current_network_quality
+uint8 drones_active
+string current_phase
+float32 elapsed_time_sec

@@ -1,0 +1,523 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found std_msgs: 4.9.0 (/opt/ros/humble/share/std_msgs/cmake)
+-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+-- Found PythonExtra: .so  
+-- Using numpy include directory: /home/aura/.local/lib/python3.10/site-packages/numpy/core/include
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/aura/ws/build/aura_msgs
+[  1%] [34m[1mGenerating C code for ROS interfaces[0m
+[  1%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[  1%] Built target ament_cmake_python_symlink_aura_msgs
+running egg_info
+creating aura_msgs.egg-info
+writing aura_msgs.egg-info/PKG-INFO
+writing dependency_links to aura_msgs.egg-info/dependency_links.txt
+writing top-level names to aura_msgs.egg-info/top_level.txt
+writing manifest file 'aura_msgs.egg-info/SOURCES.txt'
+reading manifest file 'aura_msgs.egg-info/SOURCES.txt'
+writing manifest file 'aura_msgs.egg-info/SOURCES.txt'
+[  1%] Built target ament_cmake_python_build_aura_msgs_egg
+[  1%] Built target aura_msgs__cpp
+[  2%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[  3%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[  3%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[  4%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/trajectory_broadcast__functions.c.o[0m
+[  5%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/mission_status__functions.c.o[0m
+[  5%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/weather_zone__functions.c.o[0m
+[  6%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/swarm_state__functions.c.o[0m
+[  6%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/drone_state__functions.c.o[0m
+[  7%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/network_metrics__functions.c.o[0m
+[  8%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/emergency_stop__functions.c.o[0m
+[  9%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/coverage_goal__functions.c.o[0m
+[ 10%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/request_trajectory__functions.c.o[0m
+[ 11%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/coverage_map__functions.c.o[0m
+[ 12%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/set_formation__functions.c.o[0m
+[ 13%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/get_network_status__functions.c.o[0m
+[ 13%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/action/detail/execute_mission__functions.c.o[0m
+[ 14%] [32m[1mLinking C shared library libaura_msgs__rosidl_generator_c.so[0m
+[ 14%] Built target aura_msgs__rosidl_generator_c
+[ 15%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[ 16%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[ 17%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[ 19%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/swarm_state__type_support.cpp.o[0m
+[ 19%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/coverage_goal__type_support.cpp.o[0m
+[ 20%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/trajectory_broadcast__type_support.cpp.o[0m
+[ 20%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/drone_state__type_support.cpp.o[0m
+[ 20%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/mission_status__type_support.cpp.o[0m
+[ 22%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/request_trajectory__type_support.cpp.o[0m
+[ 22%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/network_metrics__type_support.cpp.o[0m
+[ 23%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/coverage_map__type_support.cpp.o[0m
+[ 24%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/emergency_stop__type_support.cpp.o[0m
+[ 24%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/action/execute_mission__type_support.cpp.o[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/weather_zone__type_support.cpp.o[0m
+[ 26%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/get_network_status__type_support.cpp.o[0m
+[ 27%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/set_formation__type_support.cpp.o[0m
+[ 28%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/drone_state__type_support.cpp.o[0m
+[ 29%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/swarm_state__type_support.cpp.o[0m
+[ 30%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/network_metrics__type_support.cpp.o[0m
+[ 30%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/coverage_goal__type_support.cpp.o[0m
+[ 31%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/trajectory_broadcast__type_support.cpp.o[0m
+[ 32%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/coverage_map__type_support.cpp.o[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/weather_zone__type_support.cpp.o[0m
+[ 34%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/mission_status__type_support.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/request_trajectory__type_support.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/drone_state__type_support.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/emergency_stop__type_support.cpp.o[0m
+[ 36%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/swarm_state__type_support.cpp.o[0m
+[ 37%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/trajectory_broadcast__type_support.cpp.o[0m
+[ 38%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/set_formation__type_support.cpp.o[0m
+[ 39%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/get_network_status__type_support.cpp.o[0m
+[ 41%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/coverage_goal__type_support.cpp.o[0m
+[ 41%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/network_metrics__type_support.cpp.o[0m
+[ 41%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/coverage_map__type_support.cpp.o[0m
+[ 42%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/action/detail/execute_mission__type_support.cpp.o[0m
+[ 43%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/weather_zone__type_support.cpp.o[0m
+[ 44%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/mission_status__type_support.cpp.o[0m
+[ 45%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/request_trajectory__type_support.cpp.o[0m
+[ 46%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/emergency_stop__type_support.cpp.o[0m
+[ 46%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/set_formation__type_support.cpp.o[0m
+[ 47%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/get_network_status__type_support.cpp.o[0m
+[ 48%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/action/execute_mission__type_support.cpp.o[0m
+[ 49%] [32m[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_cpp.so[0m
+[ 50%] [32m[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_c.so[0m
+[ 52%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/swarm_state__type_support.cpp.o[0m
+[ 52%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/drone_state__type_support.cpp.o[0m
+[ 53%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/trajectory_broadcast__type_support.cpp.o[0m
+[ 53%] Built target aura_msgs__rosidl_typesupport_cpp
+[ 53%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/network_metrics__type_support.cpp.o[0m
+[ 53%] Built target aura_msgs__rosidl_typesupport_c
+[ 54%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/coverage_goal__type_support.cpp.o[0m
+[ 55%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/coverage_map__type_support.cpp.o[0m
+[ 56%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/weather_zone__type_support.cpp.o[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/mission_status__type_support.cpp.o[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/request_trajectory__type_support.cpp.o[0m
+[ 58%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/emergency_stop__type_support.cpp.o[0m
+[ 59%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/set_formation__type_support.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/get_network_status__type_support.cpp.o[0m
+[ 61%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/action/detail/dds_fastrtps/execute_mission__type_support.cpp.o[0m
+[ 62%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/drone_state__type_support.c.o[0m
+[ 63%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/swarm_state__type_support.c.o[0m
+[ 63%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/trajectory_broadcast__type_support.c.o[0m
+[ 64%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/network_metrics__type_support.c.o[0m
+[ 65%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/coverage_goal__type_support.c.o[0m
+[ 66%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/coverage_map__type_support.c.o[0m
+[ 67%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/weather_zone__type_support.c.o[0m
+[ 67%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/mission_status__type_support.c.o[0m
+[ 68%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/request_trajectory__type_support.c.o[0m
+[ 69%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/drone_state__type_support_c.cpp.o[0m
+[ 70%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/emergency_stop__type_support.c.o[0m
+[ 71%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/set_formation__type_support.c.o[0m
+[ 72%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/get_network_status__type_support.c.o[0m
+[ 72%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/swarm_state__type_support_c.cpp.o[0m
+[ 73%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/trajectory_broadcast__type_support_c.cpp.o[0m
+[ 73%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/action/detail/execute_mission__type_support.c.o[0m
+[ 74%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/network_metrics__type_support_c.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/coverage_goal__type_support_c.cpp.o[0m
+[ 76%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/coverage_map__type_support_c.cpp.o[0m
+[ 76%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/weather_zone__type_support_c.cpp.o[0m
+[ 77%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/mission_status__type_support_c.cpp.o[0m
+[ 78%] [32m[1mLinking C shared library libaura_msgs__rosidl_typesupport_introspection_c.so[0m
+[ 79%] [32m[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_introspection_cpp.so[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/request_trajectory__type_support_c.cpp.o[0m
+[ 81%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/emergency_stop__type_support_c.cpp.o[0m
+[ 81%] Built target aura_msgs__rosidl_typesupport_introspection_c
+[ 82%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/set_formation__type_support_c.cpp.o[0m
+[ 82%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/get_network_status__type_support_c.cpp.o[0m
+[ 83%] [32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/action/detail/execute_mission__type_support_c.cpp.o[0m
+[ 83%] Built target aura_msgs__rosidl_typesupport_introspection_cpp
+[ 83%] [32m[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_fastrtps_cpp.so[0m
+[ 84%] [32m[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_fastrtps_c.so[0m
+[ 84%] Built target aura_msgs__rosidl_typesupport_fastrtps_cpp
+[ 84%] Built target aura_msgs__rosidl_typesupport_fastrtps_c
+[ 84%] Built target aura_msgs
+[ 85%] [34m[1mGenerating Python code for ROS interfaces[0m
+[ 85%] Built target aura_msgs__py
+[ 85%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_swarm_state_s.c.o[0m
+[ 86%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_coverage_map_s.c.o[0m
+[ 88%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_drone_state_s.c.o[0m
+[ 88%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_network_metrics_s.c.o[0m
+[ 89%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_coverage_goal_s.c.o[0m
+[ 90%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_emergency_stop_s.c.o[0m
+[ 91%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_trajectory_broadcast_s.c.o[0m
+[ 91%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_get_network_status_s.c.o[0m
+[ 92%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_mission_status_s.c.o[0m
+[ 93%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/action/_execute_mission_s.c.o[0m
+[ 93%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_weather_zone_s.c.o[0m
+[ 94%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_request_trajectory_s.c.o[0m
+[ 95%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_set_formation_s.c.o[0m
+[ 96%] [32m[1mLinking C shared library rosidl_generator_py/aura_msgs/libaura_msgs__rosidl_generator_py.so[0m
+[ 96%] Built target aura_msgs__rosidl_generator_py
+[ 97%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[ 98%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_c.c.o[0m
+[ 99%] [32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[ 99%] [32m[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[100%] [32m[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[100%] [32m[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[100%] Built target aura_msgs__rosidl_typesupport_c__pyext
+[100%] Built target aura_msgs__rosidl_typesupport_introspection_c__pyext
+[100%] Built target aura_msgs__rosidl_typesupport_fastrtps_c__pyext
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/rosidl_interfaces/aura_msgs
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/execute_mission.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_goal.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_map.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/drone_state.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/mission_status.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/network_metrics.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_generator_c__visibility_control.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/swarm_state.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/trajectory_broadcast.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/weather_zone.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__functions.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__struct.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__type_support.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/emergency_stop.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/get_network_status.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/request_trajectory.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/set_formation.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/library_path.sh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/library_path.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/execute_mission.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_goal.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_map.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/drone_state.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/mission_status.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/network_metrics.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/swarm_state.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/trajectory_broadcast.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/weather_zone.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__builder.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__struct.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__traits.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__type_support.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/emergency_stop.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/get_network_status.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/request_trajectory.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/set_formation.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_introspection_c.h
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/pythonpath.sh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/pythonpath.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/PKG-INFO
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/SOURCES.txt
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/dependency_links.txt
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/top_level.txt
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/__init__.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_c.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/__init__.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/libaura_msgs__rosidl_generator_py.so
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/__init__.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/__init__.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory_s.c
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation.py
+-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation_s.c
+-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/DroneState.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/SwarmState.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/TrajectoryBroadcast.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/NetworkMetrics.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageGoal.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageMap.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/WeatherZone.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/MissionStatus.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/action/ExecuteMission.idl
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/DroneState.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/SwarmState.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/TrajectoryBroadcast.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/NetworkMetrics.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageGoal.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageMap.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/WeatherZone.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/MissionStatus.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory.srv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory_Request.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory_Response.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop.srv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop_Request.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop_Response.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation.srv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation_Request.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation_Response.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus.srv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus_Request.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus_Response.msg
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/action/ExecuteMission.action
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/package_run_dependencies/aura_msgs
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/parent_prefix_path/aura_msgs
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/ament_prefix_path.sh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/ament_prefix_path.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/path.sh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/path.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.bash
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.sh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.zsh
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/package.dsv
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/packages/aura_msgs
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_targets-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgsConfig.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgsConfig-version.cmake
+-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/package.xml
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_c.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_c.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_c.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_c.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_cpp.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_c.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_c.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_c.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_cpp.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_cpp.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_cpp.so" to ""
+Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/__init__.py'...
+Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/__init__.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission.py'...
+Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/__init__.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone.py'...
+Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/__init__.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory.py'...
+Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation.py'...
+-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_py.so
+-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_py.so" to ""
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cppExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cppExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_pyExport.cmake
+-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_pyExport-noconfig.cmake

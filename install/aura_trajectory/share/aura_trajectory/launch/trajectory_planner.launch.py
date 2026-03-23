@@ -1,0 +1,1 @@
+/home/aura/ws/src/aura_trajectory/launch/trajectory_planner.launch.py

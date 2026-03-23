@@ -1,0 +1,1100 @@
+[0.000000] (-) TimerEvent: {}
+[0.000494] (aura_msgs) JobQueued: {'identifier': 'aura_msgs', 'dependencies': OrderedDict()}
+[0.000580] (aura_px4_interface) JobQueued: {'identifier': 'aura_px4_interface', 'dependencies': OrderedDict([('aura_msgs', '/home/aura/ws/install/aura_msgs')])}
+[0.000642] (aura_trajectory) JobQueued: {'identifier': 'aura_trajectory', 'dependencies': OrderedDict([('aura_msgs', '/home/aura/ws/install/aura_msgs')])}
+[0.000705] (aura_msgs) JobStarted: {'identifier': 'aura_msgs'}
+[0.006106] (aura_msgs) JobProgress: {'identifier': 'aura_msgs', 'progress': 'cmake'}
+[0.006640] (aura_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/aura/ws/src/aura_msgs', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_msgs'], 'cwd': '/home/aura/ws/build/aura_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib::/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_msgs'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[0.082340] (aura_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.099874] (-) TimerEvent: {}
+[0.142947] (aura_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.153475] (aura_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.200046] (-) TimerEvent: {}
+[0.232836] (aura_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.240686] (aura_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.242718] (aura_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.243284] (aura_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.247929] (aura_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.300153] (-) TimerEvent: {}
+[0.338033] (aura_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.343149] (aura_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.343367] (aura_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.343536] (aura_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.351121] (aura_msgs) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.400231] (-) TimerEvent: {}
+[0.500471] (-) TimerEvent: {}
+[0.600716] (-) TimerEvent: {}
+[0.629231] (aura_msgs) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[0.679994] (aura_msgs) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[0.700816] (-) TimerEvent: {}
+[0.706383] (aura_msgs) StdoutLine: {'line': b'-- Found std_msgs: 4.9.0 (/opt/ros/humble/share/std_msgs/cmake)\n'}
+[0.741133] (aura_msgs) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.745913] (aura_msgs) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.753423] (aura_msgs) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.764700] (aura_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.778267] (aura_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.798811] (aura_msgs) StdoutLine: {'line': b'-- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)\n'}
+[0.800905] (-) TimerEvent: {}
+[0.809686] (aura_msgs) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)\n'}
+[0.901050] (-) TimerEvent: {}
+[1.001319] (-) TimerEvent: {}
+[1.101552] (-) TimerEvent: {}
+[1.150892] (aura_msgs) StdoutLine: {'line': b'-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)\n'}
+[1.201716] (-) TimerEvent: {}
+[1.301916] (-) TimerEvent: {}
+[1.402165] (-) TimerEvent: {}
+[1.502370] (-) TimerEvent: {}
+[1.519762] (aura_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[1.602483] (-) TimerEvent: {}
+[1.665293] (aura_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[1.700258] (aura_msgs) StdoutLine: {'line': b'-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") \n'}
+[1.702564] (-) TimerEvent: {}
+[1.703878] (aura_msgs) StdoutLine: {'line': b'-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)\n'}
+[1.739594] (aura_msgs) StdoutLine: {'line': b'-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") \n'}
+[1.739702] (aura_msgs) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /usr/bin/python3\n'}
+[1.739742] (aura_msgs) StdoutLine: {'line': b'-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10\n'}
+[1.739773] (aura_msgs) StdoutLine: {'line': b'-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so\n'}
+[1.763015] (aura_msgs) StdoutLine: {'line': b'-- Found PythonExtra: .so  \n'}
+[1.802727] (-) TimerEvent: {}
+[1.903015] (-) TimerEvent: {}
+[1.923220] (aura_msgs) StdoutLine: {'line': b'-- Using numpy include directory: /home/aura/.local/lib/python3.10/site-packages/numpy/core/include\n'}
+[1.942876] (aura_msgs) StdoutLine: {'line': b'-- Configuring done\n'}
+[1.977196] (aura_msgs) StdoutLine: {'line': b'-- Generating done\n'}
+[1.986018] (aura_msgs) StdoutLine: {'line': b'-- Build files have been written to: /home/aura/ws/build/aura_msgs\n'}
+[1.992480] (aura_msgs) CommandEnded: {'returncode': 0}
+[1.993953] (aura_msgs) JobProgress: {'identifier': 'aura_msgs', 'progress': 'build'}
+[1.994630] (aura_msgs) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/aura/ws/build/aura_msgs', '--', '-j20', '-l20'], 'cwd': '/home/aura/ws/build/aura_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib::/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_msgs'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[2.003064] (-) TimerEvent: {}
+[2.039954] (aura_msgs) StdoutLine: {'line': b'[  1%] \x1b[34m\x1b[1mGenerating C code for ROS interfaces\x1b[0m\n'}
+[2.047914] (aura_msgs) StdoutLine: {'line': b'[  1%] \x1b[34m\x1b[1mGenerating C++ code for ROS interfaces\x1b[0m\n'}
+[2.058634] (aura_msgs) StdoutLine: {'line': b'[  1%] Built target ament_cmake_python_symlink_aura_msgs\n'}
+[2.103212] (-) TimerEvent: {}
+[2.203369] (aura_msgs) StdoutLine: {'line': b'running egg_info\n'}
+[2.203557] (-) TimerEvent: {}
+[2.211332] (aura_msgs) StdoutLine: {'line': b'creating aura_msgs.egg-info\n'}
+[2.211463] (aura_msgs) StdoutLine: {'line': b'writing aura_msgs.egg-info/PKG-INFO\n'}
+[2.211658] (aura_msgs) StdoutLine: {'line': b'writing dependency_links to aura_msgs.egg-info/dependency_links.txt\n'}
+[2.211795] (aura_msgs) StdoutLine: {'line': b'writing top-level names to aura_msgs.egg-info/top_level.txt\n'}
+[2.211978] (aura_msgs) StdoutLine: {'line': b"writing manifest file 'aura_msgs.egg-info/SOURCES.txt'\n"}
+[2.235757] (aura_msgs) StdoutLine: {'line': b"reading manifest file 'aura_msgs.egg-info/SOURCES.txt'\n"}
+[2.236346] (aura_msgs) StdoutLine: {'line': b"writing manifest file 'aura_msgs.egg-info/SOURCES.txt'\n"}
+[2.260469] (aura_msgs) StdoutLine: {'line': b'[  1%] Built target ament_cmake_python_build_aura_msgs_egg\n'}
+[2.303707] (-) TimerEvent: {}
+[2.404059] (-) TimerEvent: {}
+[2.504371] (-) TimerEvent: {}
+[2.604716] (-) TimerEvent: {}
+[2.705050] (-) TimerEvent: {}
+[2.805383] (-) TimerEvent: {}
+[2.905732] (-) TimerEvent: {}
+[3.006074] (-) TimerEvent: {}
+[3.106392] (-) TimerEvent: {}
+[3.206770] (-) TimerEvent: {}
+[3.307114] (-) TimerEvent: {}
+[3.407378] (-) TimerEvent: {}
+[3.507727] (-) TimerEvent: {}
+[3.608137] (-) TimerEvent: {}
+[3.708459] (-) TimerEvent: {}
+[3.808835] (-) TimerEvent: {}
+[3.909190] (-) TimerEvent: {}
+[3.962327] (aura_msgs) StdoutLine: {'line': b'[  1%] Built target aura_msgs__cpp\n'}
+[3.969661] (aura_msgs) StdoutLine: {'line': b'[  2%] \x1b[34m\x1b[1mGenerating C++ type support dispatch for ROS interfaces\x1b[0m\n'}
+[3.971371] (aura_msgs) StdoutLine: {'line': b'[  3%] \x1b[34m\x1b[1mGenerating C++ type support for eProsima Fast-RTPS\x1b[0m\n'}
+[3.971500] (aura_msgs) StdoutLine: {'line': b'[  3%] \x1b[34m\x1b[1mGenerating C++ introspection for ROS interfaces\x1b[0m\n'}
+[3.987541] (aura_msgs) StdoutLine: {'line': b'[  4%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/trajectory_broadcast__functions.c.o\x1b[0m\n'}
+[3.988614] (aura_msgs) StdoutLine: {'line': b'[  5%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/mission_status__functions.c.o\x1b[0m\n'}
+[3.988984] (aura_msgs) StdoutLine: {'line': b'[  5%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/weather_zone__functions.c.o\x1b[0m\n'}
+[3.989375] (aura_msgs) StdoutLine: {'line': b'[  6%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/swarm_state__functions.c.o\x1b[0m\n'}
+[3.989524] (aura_msgs) StdoutLine: {'line': b'[  6%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/drone_state__functions.c.o\x1b[0m\n'}
+[3.990002] (aura_msgs) StdoutLine: {'line': b'[  7%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/network_metrics__functions.c.o\x1b[0m\n'}
+[3.990228] (aura_msgs) StdoutLine: {'line': b'[  8%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/emergency_stop__functions.c.o\x1b[0m\n'}
+[3.990509] (aura_msgs) StdoutLine: {'line': b'[  9%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/coverage_goal__functions.c.o\x1b[0m\n'}
+[3.990717] (aura_msgs) StdoutLine: {'line': b'[ 10%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/request_trajectory__functions.c.o\x1b[0m\n'}
+[3.990886] (aura_msgs) StdoutLine: {'line': b'[ 11%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/msg/detail/coverage_map__functions.c.o\x1b[0m\n'}
+[3.991084] (aura_msgs) StdoutLine: {'line': b'[ 12%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/set_formation__functions.c.o\x1b[0m\n'}
+[3.992892] (aura_msgs) StdoutLine: {'line': b'[ 13%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/srv/detail/get_network_status__functions.c.o\x1b[0m\n'}
+[3.993118] (aura_msgs) StdoutLine: {'line': b'[ 13%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_c.dir/rosidl_generator_c/aura_msgs/action/detail/execute_mission__functions.c.o\x1b[0m\n'}
+[4.009280] (-) TimerEvent: {}
+[4.099699] (aura_msgs) StdoutLine: {'line': b'[ 14%] \x1b[32m\x1b[1mLinking C shared library libaura_msgs__rosidl_generator_c.so\x1b[0m\n'}
+[4.109352] (-) TimerEvent: {}
+[4.141674] (aura_msgs) StdoutLine: {'line': b'[ 14%] Built target aura_msgs__rosidl_generator_c\n'}
+[4.151454] (aura_msgs) StdoutLine: {'line': b'[ 15%] \x1b[34m\x1b[1mGenerating C type support for eProsima Fast-RTPS\x1b[0m\n'}
+[4.151749] (aura_msgs) StdoutLine: {'line': b'[ 16%] \x1b[34m\x1b[1mGenerating C introspection for ROS interfaces\x1b[0m\n'}
+[4.152752] (aura_msgs) StdoutLine: {'line': b'[ 17%] \x1b[34m\x1b[1mGenerating C type support dispatch for ROS interfaces\x1b[0m\n'}
+[4.209448] (-) TimerEvent: {}
+[4.309683] (-) TimerEvent: {}
+[4.409929] (-) TimerEvent: {}
+[4.510162] (-) TimerEvent: {}
+[4.610509] (-) TimerEvent: {}
+[4.710823] (-) TimerEvent: {}
+[4.811127] (-) TimerEvent: {}
+[4.911414] (-) TimerEvent: {}
+[5.011720] (-) TimerEvent: {}
+[5.112085] (-) TimerEvent: {}
+[5.212427] (-) TimerEvent: {}
+[5.312732] (-) TimerEvent: {}
+[5.413065] (-) TimerEvent: {}
+[5.513335] (-) TimerEvent: {}
+[5.601175] (aura_msgs) StdoutLine: {'line': b'[ 19%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/swarm_state__type_support.cpp.o\x1b[0m\n'}
+[5.601411] (aura_msgs) StdoutLine: {'line': b'[ 19%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/coverage_goal__type_support.cpp.o\x1b[0m\n'}
+[5.602013] (aura_msgs) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/trajectory_broadcast__type_support.cpp.o\x1b[0m\n'}
+[5.602159] (aura_msgs) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/drone_state__type_support.cpp.o\x1b[0m\n'}
+[5.602891] (aura_msgs) StdoutLine: {'line': b'[ 20%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/mission_status__type_support.cpp.o\x1b[0m\n'}
+[5.603093] (aura_msgs) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/request_trajectory__type_support.cpp.o\x1b[0m\n'}
+[5.603175] (aura_msgs) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/network_metrics__type_support.cpp.o\x1b[0m\n'}
+[5.603253] (aura_msgs) StdoutLine: {'line': b'[ 23%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/coverage_map__type_support.cpp.o\x1b[0m\n'}
+[5.603331] (aura_msgs) StdoutLine: {'line': b'[ 24%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/emergency_stop__type_support.cpp.o\x1b[0m\n'}
+[5.603445] (aura_msgs) StdoutLine: {'line': b'[ 24%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/action/execute_mission__type_support.cpp.o\x1b[0m\n'}
+[5.603525] (aura_msgs) StdoutLine: {'line': b'[ 25%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/msg/weather_zone__type_support.cpp.o\x1b[0m\n'}
+[5.603601] (aura_msgs) StdoutLine: {'line': b'[ 26%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/get_network_status__type_support.cpp.o\x1b[0m\n'}
+[5.604258] (aura_msgs) StdoutLine: {'line': b'[ 27%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/aura_msgs/srv/set_formation__type_support.cpp.o\x1b[0m\n'}
+[5.614098] (-) TimerEvent: {}
+[5.714445] (-) TimerEvent: {}
+[5.815111] (-) TimerEvent: {}
+[5.865171] (aura_msgs) StdoutLine: {'line': b'[ 28%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/drone_state__type_support.cpp.o\x1b[0m\n'}
+[5.867157] (aura_msgs) StdoutLine: {'line': b'[ 29%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/swarm_state__type_support.cpp.o\x1b[0m\n'}
+[5.867493] (aura_msgs) StdoutLine: {'line': b'[ 30%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/network_metrics__type_support.cpp.o\x1b[0m\n'}
+[5.869828] (aura_msgs) StdoutLine: {'line': b'[ 30%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/coverage_goal__type_support.cpp.o\x1b[0m\n'}
+[5.870048] (aura_msgs) StdoutLine: {'line': b'[ 31%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/trajectory_broadcast__type_support.cpp.o\x1b[0m\n'}
+[5.876599] (aura_msgs) StdoutLine: {'line': b'[ 32%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/coverage_map__type_support.cpp.o\x1b[0m\n'}
+[5.880939] (aura_msgs) StdoutLine: {'line': b'[ 33%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/weather_zone__type_support.cpp.o\x1b[0m\n'}
+[5.881199] (aura_msgs) StdoutLine: {'line': b'[ 34%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/msg/detail/mission_status__type_support.cpp.o\x1b[0m\n'}
+[5.884001] (aura_msgs) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/request_trajectory__type_support.cpp.o\x1b[0m\n'}
+[5.887159] (aura_msgs) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/drone_state__type_support.cpp.o\x1b[0m\n'}
+[5.906115] (aura_msgs) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/emergency_stop__type_support.cpp.o\x1b[0m\n'}
+[5.906350] (aura_msgs) StdoutLine: {'line': b'[ 36%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/swarm_state__type_support.cpp.o\x1b[0m\n'}
+[5.911299] (aura_msgs) StdoutLine: {'line': b'[ 37%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/trajectory_broadcast__type_support.cpp.o\x1b[0m\n'}
+[5.914988] (aura_msgs) StdoutLine: {'line': b'[ 38%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/set_formation__type_support.cpp.o\x1b[0m\n'}
+[5.915194] (-) TimerEvent: {}
+[5.920683] (aura_msgs) StdoutLine: {'line': b'[ 39%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/srv/detail/get_network_status__type_support.cpp.o\x1b[0m\n'}
+[5.927287] (aura_msgs) StdoutLine: {'line': b'[ 41%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/coverage_goal__type_support.cpp.o\x1b[0m\n'}
+[5.927494] (aura_msgs) StdoutLine: {'line': b'[ 41%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/network_metrics__type_support.cpp.o\x1b[0m\n'}
+[5.937841] (aura_msgs) StdoutLine: {'line': b'[ 41%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/coverage_map__type_support.cpp.o\x1b[0m\n'}
+[5.942631] (aura_msgs) StdoutLine: {'line': b'[ 42%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/aura_msgs/action/detail/execute_mission__type_support.cpp.o\x1b[0m\n'}
+[5.958695] (aura_msgs) StdoutLine: {'line': b'[ 43%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/weather_zone__type_support.cpp.o\x1b[0m\n'}
+[5.960752] (aura_msgs) StdoutLine: {'line': b'[ 44%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/msg/mission_status__type_support.cpp.o\x1b[0m\n'}
+[5.972477] (aura_msgs) StdoutLine: {'line': b'[ 45%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/request_trajectory__type_support.cpp.o\x1b[0m\n'}
+[5.993106] (aura_msgs) StdoutLine: {'line': b'[ 46%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/emergency_stop__type_support.cpp.o\x1b[0m\n'}
+[5.994721] (aura_msgs) StdoutLine: {'line': b'[ 46%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/set_formation__type_support.cpp.o\x1b[0m\n'}
+[6.015309] (-) TimerEvent: {}
+[6.032477] (aura_msgs) StdoutLine: {'line': b'[ 47%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/srv/get_network_status__type_support.cpp.o\x1b[0m\n'}
+[6.042869] (aura_msgs) StdoutLine: {'line': b'[ 48%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/aura_msgs/action/execute_mission__type_support.cpp.o\x1b[0m\n'}
+[6.077614] (aura_msgs) StdoutLine: {'line': b'[ 49%] \x1b[32m\x1b[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_cpp.so\x1b[0m\n'}
+[6.098084] (aura_msgs) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_c.so\x1b[0m\n'}
+[6.114409] (aura_msgs) StdoutLine: {'line': b'[ 52%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/swarm_state__type_support.cpp.o\x1b[0m\n'}
+[6.115489] (-) TimerEvent: {}
+[6.115613] (aura_msgs) StdoutLine: {'line': b'[ 52%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/drone_state__type_support.cpp.o\x1b[0m\n'}
+[6.115769] (aura_msgs) StdoutLine: {'line': b'[ 53%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/trajectory_broadcast__type_support.cpp.o\x1b[0m\n'}
+[6.127760] (aura_msgs) StdoutLine: {'line': b'[ 53%] Built target aura_msgs__rosidl_typesupport_cpp\n'}
+[6.141113] (aura_msgs) StdoutLine: {'line': b'[ 53%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/network_metrics__type_support.cpp.o\x1b[0m\n'}
+[6.156102] (aura_msgs) StdoutLine: {'line': b'[ 53%] Built target aura_msgs__rosidl_typesupport_c\n'}
+[6.167209] (aura_msgs) StdoutLine: {'line': b'[ 54%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/coverage_goal__type_support.cpp.o\x1b[0m\n'}
+[6.215614] (-) TimerEvent: {}
+[6.232057] (aura_msgs) StdoutLine: {'line': b'[ 55%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/coverage_map__type_support.cpp.o\x1b[0m\n'}
+[6.249090] (aura_msgs) StdoutLine: {'line': b'[ 56%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/weather_zone__type_support.cpp.o\x1b[0m\n'}
+[6.253633] (aura_msgs) StdoutLine: {'line': b'[ 57%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/msg/detail/dds_fastrtps/mission_status__type_support.cpp.o\x1b[0m\n'}
+[6.279090] (aura_msgs) StdoutLine: {'line': b'[ 57%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/request_trajectory__type_support.cpp.o\x1b[0m\n'}
+[6.315725] (-) TimerEvent: {}
+[6.325693] (aura_msgs) StdoutLine: {'line': b'[ 58%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/emergency_stop__type_support.cpp.o\x1b[0m\n'}
+[6.373983] (aura_msgs) StdoutLine: {'line': b'[ 59%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/set_formation__type_support.cpp.o\x1b[0m\n'}
+[6.374649] (aura_msgs) StdoutLine: {'line': b'[ 60%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/srv/detail/dds_fastrtps/get_network_status__type_support.cpp.o\x1b[0m\n'}
+[6.403668] (aura_msgs) StdoutLine: {'line': b'[ 61%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/aura_msgs/action/detail/dds_fastrtps/execute_mission__type_support.cpp.o\x1b[0m\n'}
+[6.415845] (-) TimerEvent: {}
+[6.430222] (aura_msgs) StdoutLine: {'line': b'[ 62%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/drone_state__type_support.c.o\x1b[0m\n'}
+[6.456177] (aura_msgs) StdoutLine: {'line': b'[ 63%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/swarm_state__type_support.c.o\x1b[0m\n'}
+[6.460630] (aura_msgs) StdoutLine: {'line': b'[ 63%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/trajectory_broadcast__type_support.c.o\x1b[0m\n'}
+[6.470186] (aura_msgs) StdoutLine: {'line': b'[ 64%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/network_metrics__type_support.c.o\x1b[0m\n'}
+[6.474214] (aura_msgs) StdoutLine: {'line': b'[ 65%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/coverage_goal__type_support.c.o\x1b[0m\n'}
+[6.485438] (aura_msgs) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/coverage_map__type_support.c.o\x1b[0m\n'}
+[6.501530] (aura_msgs) StdoutLine: {'line': b'[ 67%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/weather_zone__type_support.c.o\x1b[0m\n'}
+[6.505550] (aura_msgs) StdoutLine: {'line': b'[ 67%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/msg/detail/mission_status__type_support.c.o\x1b[0m\n'}
+[6.510341] (aura_msgs) StdoutLine: {'line': b'[ 68%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/request_trajectory__type_support.c.o\x1b[0m\n'}
+[6.515962] (-) TimerEvent: {}
+[6.531179] (aura_msgs) StdoutLine: {'line': b'[ 69%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/drone_state__type_support_c.cpp.o\x1b[0m\n'}
+[6.539160] (aura_msgs) StdoutLine: {'line': b'[ 70%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/emergency_stop__type_support.c.o\x1b[0m\n'}
+[6.540710] (aura_msgs) StdoutLine: {'line': b'[ 71%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/set_formation__type_support.c.o\x1b[0m\n'}
+[6.550888] (aura_msgs) StdoutLine: {'line': b'[ 72%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/srv/detail/get_network_status__type_support.c.o\x1b[0m\n'}
+[6.552129] (aura_msgs) StdoutLine: {'line': b'[ 72%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/swarm_state__type_support_c.cpp.o\x1b[0m\n'}
+[6.554055] (aura_msgs) StdoutLine: {'line': b'[ 73%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/trajectory_broadcast__type_support_c.cpp.o\x1b[0m\n'}
+[6.554189] (aura_msgs) StdoutLine: {'line': b'[ 73%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/aura_msgs/action/detail/execute_mission__type_support.c.o\x1b[0m\n'}
+[6.582774] (aura_msgs) StdoutLine: {'line': b'[ 74%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/network_metrics__type_support_c.cpp.o\x1b[0m\n'}
+[6.588985] (aura_msgs) StdoutLine: {'line': b'[ 75%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/coverage_goal__type_support_c.cpp.o\x1b[0m\n'}
+[6.596977] (aura_msgs) StdoutLine: {'line': b'[ 76%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/coverage_map__type_support_c.cpp.o\x1b[0m\n'}
+[6.597197] (aura_msgs) StdoutLine: {'line': b'[ 76%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/weather_zone__type_support_c.cpp.o\x1b[0m\n'}
+[6.601104] (aura_msgs) StdoutLine: {'line': b'[ 77%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/msg/detail/mission_status__type_support_c.cpp.o\x1b[0m\n'}
+[6.613168] (aura_msgs) StdoutLine: {'line': b'[ 78%] \x1b[32m\x1b[1mLinking C shared library libaura_msgs__rosidl_typesupport_introspection_c.so\x1b[0m\n'}
+[6.616073] (-) TimerEvent: {}
+[6.618026] (aura_msgs) StdoutLine: {'line': b'[ 79%] \x1b[32m\x1b[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_introspection_cpp.so\x1b[0m\n'}
+[6.641300] (aura_msgs) StdoutLine: {'line': b'[ 80%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/request_trajectory__type_support_c.cpp.o\x1b[0m\n'}
+[6.644791] (aura_msgs) StdoutLine: {'line': b'[ 81%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/emergency_stop__type_support_c.cpp.o\x1b[0m\n'}
+[6.651956] (aura_msgs) StdoutLine: {'line': b'[ 81%] Built target aura_msgs__rosidl_typesupport_introspection_c\n'}
+[6.661912] (aura_msgs) StdoutLine: {'line': b'[ 82%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/set_formation__type_support_c.cpp.o\x1b[0m\n'}
+[6.680860] (aura_msgs) StdoutLine: {'line': b'[ 82%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/srv/detail/get_network_status__type_support_c.cpp.o\x1b[0m\n'}
+[6.717258] (-) TimerEvent: {}
+[6.725280] (aura_msgs) StdoutLine: {'line': b'[ 83%] \x1b[32mBuilding CXX object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/aura_msgs/action/detail/execute_mission__type_support_c.cpp.o\x1b[0m\n'}
+[6.726739] (aura_msgs) StdoutLine: {'line': b'[ 83%] Built target aura_msgs__rosidl_typesupport_introspection_cpp\n'}
+[6.818117] (-) TimerEvent: {}
+[6.918485] (-) TimerEvent: {}
+[6.975574] (aura_msgs) StdoutLine: {'line': b'[ 83%] \x1b[32m\x1b[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_fastrtps_cpp.so\x1b[0m\n'}
+[7.018630] (-) TimerEvent: {}
+[7.031315] (aura_msgs) StdoutLine: {'line': b'[ 84%] \x1b[32m\x1b[1mLinking CXX shared library libaura_msgs__rosidl_typesupport_fastrtps_c.so\x1b[0m\n'}
+[7.044379] (aura_msgs) StdoutLine: {'line': b'[ 84%] Built target aura_msgs__rosidl_typesupport_fastrtps_cpp\n'}
+[7.089207] (aura_msgs) StdoutLine: {'line': b'[ 84%] Built target aura_msgs__rosidl_typesupport_fastrtps_c\n'}
+[7.114316] (aura_msgs) StdoutLine: {'line': b'[ 84%] Built target aura_msgs\n'}
+[7.118730] (-) TimerEvent: {}
+[7.140291] (aura_msgs) StdoutLine: {'line': b'[ 85%] \x1b[34m\x1b[1mGenerating Python code for ROS interfaces\x1b[0m\n'}
+[7.218869] (-) TimerEvent: {}
+[7.319285] (-) TimerEvent: {}
+[7.419554] (-) TimerEvent: {}
+[7.519818] (-) TimerEvent: {}
+[7.620096] (-) TimerEvent: {}
+[7.720392] (-) TimerEvent: {}
+[7.820653] (-) TimerEvent: {}
+[7.920918] (-) TimerEvent: {}
+[8.021165] (-) TimerEvent: {}
+[8.121437] (-) TimerEvent: {}
+[8.221739] (-) TimerEvent: {}
+[8.321996] (-) TimerEvent: {}
+[8.422232] (-) TimerEvent: {}
+[8.522469] (-) TimerEvent: {}
+[8.622758] (-) TimerEvent: {}
+[8.722996] (-) TimerEvent: {}
+[8.823253] (-) TimerEvent: {}
+[8.923565] (-) TimerEvent: {}
+[9.023836] (-) TimerEvent: {}
+[9.124111] (-) TimerEvent: {}
+[9.224425] (-) TimerEvent: {}
+[9.324720] (-) TimerEvent: {}
+[9.424975] (-) TimerEvent: {}
+[9.525242] (-) TimerEvent: {}
+[9.625505] (-) TimerEvent: {}
+[9.725797] (-) TimerEvent: {}
+[9.826095] (-) TimerEvent: {}
+[9.926362] (-) TimerEvent: {}
+[10.026625] (-) TimerEvent: {}
+[10.126921] (-) TimerEvent: {}
+[10.227226] (-) TimerEvent: {}
+[10.327512] (-) TimerEvent: {}
+[10.427836] (-) TimerEvent: {}
+[10.528178] (-) TimerEvent: {}
+[10.628622] (-) TimerEvent: {}
+[10.728981] (-) TimerEvent: {}
+[10.820792] (aura_msgs) StdoutLine: {'line': b'[ 85%] Built target aura_msgs__py\n'}
+[10.829112] (-) TimerEvent: {}
+[10.843119] (aura_msgs) StdoutLine: {'line': b'[ 85%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_swarm_state_s.c.o\x1b[0m\n'}
+[10.846511] (aura_msgs) StdoutLine: {'line': b'[ 86%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_coverage_map_s.c.o\x1b[0m\n'}
+[10.846908] (aura_msgs) StdoutLine: {'line': b'[ 88%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_drone_state_s.c.o\x1b[0m\n'}
+[10.847303] (aura_msgs) StdoutLine: {'line': b'[ 88%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_network_metrics_s.c.o\x1b[0m\n'}
+[10.847519] (aura_msgs) StdoutLine: {'line': b'[ 89%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_coverage_goal_s.c.o\x1b[0m\n'}
+[10.847753] (aura_msgs) StdoutLine: {'line': b'[ 90%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_emergency_stop_s.c.o\x1b[0m\n'}
+[10.847954] (aura_msgs) StdoutLine: {'line': b'[ 91%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_trajectory_broadcast_s.c.o\x1b[0m\n'}
+[10.848463] (aura_msgs) StdoutLine: {'line': b'[ 91%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_get_network_status_s.c.o\x1b[0m\n'}
+[10.849494] (aura_msgs) StdoutLine: {'line': b'[ 92%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_mission_status_s.c.o\x1b[0m\n'}
+[10.850354] (aura_msgs) StdoutLine: {'line': b'[ 93%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/action/_execute_mission_s.c.o\x1b[0m\n'}
+[10.850699] (aura_msgs) StdoutLine: {'line': b'[ 93%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/msg/_weather_zone_s.c.o\x1b[0m\n'}
+[10.850932] (aura_msgs) StdoutLine: {'line': b'[ 94%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_request_trajectory_s.c.o\x1b[0m\n'}
+[10.851234] (aura_msgs) StdoutLine: {'line': b'[ 95%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_generator_py.dir/rosidl_generator_py/aura_msgs/srv/_set_formation_s.c.o\x1b[0m\n'}
+[10.929269] (-) TimerEvent: {}
+[11.009915] (aura_msgs) StdoutLine: {'line': b'[ 96%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/aura_msgs/libaura_msgs__rosidl_generator_py.so\x1b[0m\n'}
+[11.029390] (-) TimerEvent: {}
+[11.068881] (aura_msgs) StdoutLine: {'line': b'[ 96%] Built target aura_msgs__rosidl_generator_py\n'}
+[11.095173] (aura_msgs) StdoutLine: {'line': b'[ 97%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c.o\x1b[0m\n'}
+[11.096734] (aura_msgs) StdoutLine: {'line': b'[ 98%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_c.c.o\x1b[0m\n'}
+[11.098295] (aura_msgs) StdoutLine: {'line': b'[ 99%] \x1b[32mBuilding C object CMakeFiles/aura_msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o\x1b[0m\n'}
+[11.129564] (-) TimerEvent: {}
+[11.211593] (aura_msgs) StdoutLine: {'line': b'[ 99%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[11.212294] (aura_msgs) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[11.216638] (aura_msgs) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[11.229729] (-) TimerEvent: {}
+[11.248163] (aura_msgs) StdoutLine: {'line': b'[100%] Built target aura_msgs__rosidl_typesupport_c__pyext\n'}
+[11.252703] (aura_msgs) StdoutLine: {'line': b'[100%] Built target aura_msgs__rosidl_typesupport_introspection_c__pyext\n'}
+[11.253541] (aura_msgs) StdoutLine: {'line': b'[100%] Built target aura_msgs__rosidl_typesupport_fastrtps_c__pyext\n'}
+[11.264788] (aura_msgs) CommandEnded: {'returncode': 0}
+[11.265674] (aura_msgs) JobProgress: {'identifier': 'aura_msgs', 'progress': 'install'}
+[11.277327] (aura_msgs) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/aura/ws/build/aura_msgs'], 'cwd': '/home/aura/ws/build/aura_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib::/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_msgs'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[11.287896] (aura_msgs) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[11.288796] (aura_msgs) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[11.288938] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/rosidl_interfaces/aura_msgs\n'}
+[11.299405] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__functions.h\n'}
+[11.309005] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__struct.h\n'}
+[11.317884] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__type_support.h\n'}
+[11.327132] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/execute_mission.h\n'}
+[11.329821] (-) TimerEvent: {}
+[11.337180] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_goal.h\n'}
+[11.347726] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_map.h\n'}
+[11.357386] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__functions.h\n'}
+[11.366774] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__struct.h\n'}
+[11.375514] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__type_support.h\n'}
+[11.384014] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__functions.h\n'}
+[11.394009] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__struct.h\n'}
+[11.400886] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__type_support.h\n'}
+[11.408888] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__functions.h\n'}
+[11.417634] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__struct.h\n'}
+[11.427334] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__type_support.h\n'}
+[11.429883] (-) TimerEvent: {}
+[11.436612] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__functions.h\n'}
+[11.446569] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__struct.h\n'}
+[11.456518] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__type_support.h\n'}
+[11.464518] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__functions.h\n'}
+[11.472019] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__struct.h\n'}
+[11.479742] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__type_support.h\n'}
+[11.488363] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__functions.h\n'}
+[11.498122] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__struct.h\n'}
+[11.506733] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__type_support.h\n'}
+[11.514689] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__functions.h\n'}
+[11.522694] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__struct.h\n'}
+[11.529975] (-) TimerEvent: {}
+[11.531406] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__type_support.h\n'}
+[11.539220] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__functions.h\n'}
+[11.548207] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__struct.h\n'}
+[11.556973] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__type_support.h\n'}
+[11.565732] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/drone_state.h\n'}
+[11.575103] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/mission_status.h\n'}
+[11.585322] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/network_metrics.h\n'}
+[11.592436] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_generator_c__visibility_control.h\n'}
+[11.604052] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/swarm_state.h\n'}
+[11.615741] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/trajectory_broadcast.h\n'}
+[11.627730] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/weather_zone.h\n'}
+[11.630145] (-) TimerEvent: {}
+[11.638634] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__functions.h\n'}
+[11.649220] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__struct.h\n'}
+[11.659795] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__type_support.h\n'}
+[11.670370] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__functions.h\n'}
+[11.679335] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__struct.h\n'}
+[11.687781] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__type_support.h\n'}
+[11.696227] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__functions.h\n'}
+[11.704025] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__struct.h\n'}
+[11.713953] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__type_support.h\n'}
+[11.722286] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__functions.h\n'}
+[11.730208] (-) TimerEvent: {}
+[11.731350] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__struct.h\n'}
+[11.737858] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__type_support.h\n'}
+[11.744962] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/emergency_stop.h\n'}
+[11.751342] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/get_network_status.h\n'}
+[11.758547] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/request_trajectory.h\n'}
+[11.768391] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/set_formation.h\n'}
+[11.774300] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/library_path.sh\n'}
+[11.781578] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/library_path.dsv\n'}
+[11.790272] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_fastrtps_c.h\n'}
+[11.796696] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_fastrtps_c.h\n'}
+[11.802365] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_fastrtps_c.h\n'}
+[11.808832] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_fastrtps_c.h\n'}
+[11.815930] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_fastrtps_c.h\n'}
+[11.821261] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_fastrtps_c.h\n'}
+[11.826750] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_fastrtps_c.h\n'}
+[11.830316] (-) TimerEvent: {}
+[11.834873] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_fastrtps_c.h\n'}
+[11.840737] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_fastrtps_c.h\n'}
+[11.846457] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h\n'}
+[11.854824] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_fastrtps_c.h\n'}
+[11.860014] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_fastrtps_c.h\n'}
+[11.865988] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_fastrtps_c.h\n'}
+[11.871725] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_fastrtps_c.h\n'}
+[11.880465] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__builder.hpp\n'}
+[11.888292] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__struct.hpp\n'}
+[11.896784] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__traits.hpp\n'}
+[11.903533] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__type_support.hpp\n'}
+[11.911800] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/execute_mission.hpp\n'}
+[11.919260] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_goal.hpp\n'}
+[11.928201] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/coverage_map.hpp\n'}
+[11.930417] (-) TimerEvent: {}
+[11.937010] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__builder.hpp\n'}
+[11.946502] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__struct.hpp\n'}
+[11.955270] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__traits.hpp\n'}
+[11.963015] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__type_support.hpp\n'}
+[11.971125] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__builder.hpp\n'}
+[11.978804] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__struct.hpp\n'}
+[11.986721] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__traits.hpp\n'}
+[11.995482] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__type_support.hpp\n'}
+[12.002779] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__builder.hpp\n'}
+[12.007924] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__struct.hpp\n'}
+[12.013281] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__traits.hpp\n'}
+[12.018842] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__type_support.hpp\n'}
+[12.026291] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__builder.hpp\n'}
+[12.030540] (-) TimerEvent: {}
+[12.033757] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__struct.hpp\n'}
+[12.040607] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__traits.hpp\n'}
+[12.048557] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__type_support.hpp\n'}
+[12.057130] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__builder.hpp\n'}
+[12.064570] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__struct.hpp\n'}
+[12.070693] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__traits.hpp\n'}
+[12.079145] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__type_support.hpp\n'}
+[12.087511] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__builder.hpp\n'}
+[12.097219] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__struct.hpp\n'}
+[12.106892] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__traits.hpp\n'}
+[12.114444] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__type_support.hpp\n'}
+[12.119752] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__builder.hpp\n'}
+[12.126475] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__struct.hpp\n'}
+[12.130632] (-) TimerEvent: {}
+[12.131788] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__traits.hpp\n'}
+[12.138885] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__type_support.hpp\n'}
+[12.146384] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__builder.hpp\n'}
+[12.152509] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__struct.hpp\n'}
+[12.160258] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__traits.hpp\n'}
+[12.169196] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__type_support.hpp\n'}
+[12.177540] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/drone_state.hpp\n'}
+[12.187656] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/mission_status.hpp\n'}
+[12.193592] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/network_metrics.hpp\n'}
+[12.201438] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_generator_cpp__visibility_control.hpp\n'}
+[12.209246] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/swarm_state.hpp\n'}
+[12.217007] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/trajectory_broadcast.hpp\n'}
+[12.223363] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/weather_zone.hpp\n'}
+[12.230805] (-) TimerEvent: {}
+[12.231484] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__builder.hpp\n'}
+[12.242101] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__struct.hpp\n'}
+[12.251393] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__traits.hpp\n'}
+[12.259846] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__type_support.hpp\n'}
+[12.268689] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__builder.hpp\n'}
+[12.280011] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__struct.hpp\n'}
+[12.289482] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__traits.hpp\n'}
+[12.299296] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__type_support.hpp\n'}
+[12.308113] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__builder.hpp\n'}
+[12.317801] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__struct.hpp\n'}
+[12.325726] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__traits.hpp\n'}
+[12.330946] (-) TimerEvent: {}
+[12.334485] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__type_support.hpp\n'}
+[12.343907] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__builder.hpp\n'}
+[12.351517] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__struct.hpp\n'}
+[12.362637] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__traits.hpp\n'}
+[12.370295] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__type_support.hpp\n'}
+[12.379534] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/emergency_stop.hpp\n'}
+[12.388768] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/get_network_status.hpp\n'}
+[12.399414] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/request_trajectory.hpp\n'}
+[12.405054] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/set_formation.hpp\n'}
+[12.413875] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.421067] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.426965] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.431069] (-) TimerEvent: {}
+[12.432679] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.442750] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.451800] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.462070] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.471294] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.479732] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.488691] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h\n'}
+[12.497046] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.505507] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.515745] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.525388] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[12.531149] (-) TimerEvent: {}
+[12.534490] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_introspection_c.h\n'}
+[12.545620] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_introspection_c.h\n'}
+[12.554140] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_introspection_c.h\n'}
+[12.564101] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_introspection_c.h\n'}
+[12.573493] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_introspection_c.h\n'}
+[12.581400] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_introspection_c.h\n'}
+[12.588518] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_introspection_c.h\n'}
+[12.594397] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_introspection_c.h\n'}
+[12.600274] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_introspection_c.h\n'}
+[12.608368] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h\n'}
+[12.614357] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_introspection_c.h\n'}
+[12.621163] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_introspection_c.h\n'}
+[12.629880] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_introspection_c.h\n'}
+[12.631289] (-) TimerEvent: {}
+[12.638257] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_introspection_c.h\n'}
+[12.648077] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/action/detail/execute_mission__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.657396] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_goal__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.665733] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/coverage_map__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.674515] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/drone_state__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.684840] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/mission_status__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.692356] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/network_metrics__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.700774] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/swarm_state__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.708436] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/trajectory_broadcast__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.717175] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/msg/detail/weather_zone__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.725455] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/emergency_stop__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.731396] (-) TimerEvent: {}
+[12.735527] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/get_network_status__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.741599] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/request_trajectory__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.749249] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/include/aura_msgs/aura_msgs/srv/detail/set_formation__rosidl_typesupport_introspection_cpp.hpp\n'}
+[12.756033] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/pythonpath.sh\n'}
+[12.764298] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/pythonpath.dsv\n'}
+[12.773241] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/PKG-INFO\n'}
+[12.783087] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/SOURCES.txt\n'}
+[12.792411] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/dependency_links.txt\n'}
+[12.801101] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs-0.1.0-py3.10.egg-info/top_level.txt\n'}
+[12.811626] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/__init__.py\n'}
+[12.819648] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_c.c\n'}
+[12.829284] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_fastrtps_c.c\n'}
+[12.831476] (-) TimerEvent: {}
+[12.839339] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/_aura_msgs_s.ep.rosidl_typesupport_introspection_c.c\n'}
+[12.849610] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/__init__.py\n'}
+[12.857639] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission.py\n'}
+[12.864522] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission_s.c\n'}
+[12.873936] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\n'}
+[12.883078] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\n'}
+[12.891899] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\n'}
+[12.900148] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/libaura_msgs__rosidl_generator_py.so\n'}
+[12.909566] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/__init__.py\n'}
+[12.918316] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal.py\n'}
+[12.926532] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal_s.c\n'}
+[12.931585] (-) TimerEvent: {}
+[12.935747] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map.py\n'}
+[12.943679] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map_s.c\n'}
+[12.951160] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state.py\n'}
+[12.960026] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state_s.c\n'}
+[12.968830] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status.py\n'}
+[12.976904] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status_s.c\n'}
+[12.984783] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics.py\n'}
+[12.992537] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics_s.c\n'}
+[13.002104] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state.py\n'}
+[13.010796] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state_s.c\n'}
+[13.019382] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast.py\n'}
+[13.028504] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast_s.c\n'}
+[13.031658] (-) TimerEvent: {}
+[13.037455] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone.py\n'}
+[13.043112] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone_s.c\n'}
+[13.051968] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/__init__.py\n'}
+[13.060872] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop.py\n'}
+[13.070376] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop_s.c\n'}
+[13.079615] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status.py\n'}
+[13.087066] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status_s.c\n'}
+[13.097107] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory.py\n'}
+[13.103742] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory_s.c\n'}
+[13.111461] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation.py\n'}
+[13.118716] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation_s.c\n'}
+[13.127468] (aura_msgs) StdoutLine: {'line': b'-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\n'}
+[13.127618] (aura_msgs) StdoutLine: {'line': b'-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\n'}
+[13.127715] (aura_msgs) StdoutLine: {'line': b'-- Up-to-date symlink: /home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/aura_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\n'}
+[13.127818] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/DroneState.idl\n'}
+[13.131769] (-) TimerEvent: {}
+[13.137897] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/SwarmState.idl\n'}
+[13.147239] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/TrajectoryBroadcast.idl\n'}
+[13.155909] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/NetworkMetrics.idl\n'}
+[13.165503] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageGoal.idl\n'}
+[13.175294] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageMap.idl\n'}
+[13.185004] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/WeatherZone.idl\n'}
+[13.193006] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/MissionStatus.idl\n'}
+[13.200938] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory.idl\n'}
+[13.209290] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop.idl\n'}
+[13.217136] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation.idl\n'}
+[13.227012] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus.idl\n'}
+[13.231918] (-) TimerEvent: {}
+[13.236799] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/action/ExecuteMission.idl\n'}
+[13.246790] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/DroneState.msg\n'}
+[13.256369] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/SwarmState.msg\n'}
+[13.265859] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/TrajectoryBroadcast.msg\n'}
+[13.274837] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/NetworkMetrics.msg\n'}
+[13.284958] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageGoal.msg\n'}
+[13.294048] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/CoverageMap.msg\n'}
+[13.302539] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/WeatherZone.msg\n'}
+[13.312444] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/msg/MissionStatus.msg\n'}
+[13.318844] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory.srv\n'}
+[13.325707] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory_Request.msg\n'}
+[13.332067] (-) TimerEvent: {}
+[13.336143] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/RequestTrajectory_Response.msg\n'}
+[13.346975] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop.srv\n'}
+[13.356281] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop_Request.msg\n'}
+[13.365315] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/EmergencyStop_Response.msg\n'}
+[13.374362] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation.srv\n'}
+[13.384447] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation_Request.msg\n'}
+[13.394807] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/SetFormation_Response.msg\n'}
+[13.403074] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus.srv\n'}
+[13.412101] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus_Request.msg\n'}
+[13.421370] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/srv/GetNetworkStatus_Response.msg\n'}
+[13.429068] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/action/ExecuteMission.action\n'}
+[13.432154] (-) TimerEvent: {}
+[13.439151] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/package_run_dependencies/aura_msgs\n'}
+[13.447573] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/parent_prefix_path/aura_msgs\n'}
+[13.456536] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/ament_prefix_path.sh\n'}
+[13.466587] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/ament_prefix_path.dsv\n'}
+[13.474810] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/path.sh\n'}
+[13.484145] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/environment/path.dsv\n'}
+[13.493203] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.bash\n'}
+[13.502414] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.sh\n'}
+[13.510233] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.zsh\n'}
+[13.518878] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/local_setup.dsv\n'}
+[13.526898] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/package.dsv\n'}
+[13.532334] (-) TimerEvent: {}
+[13.536255] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/ament_index/resource_index/packages/aura_msgs\n'}
+[13.544884] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake-extras.cmake\n'}
+[13.553908] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[13.563800] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[13.571653] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[13.579019] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[13.587287] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake\n'}
+[13.596332] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake\n'}
+[13.604914] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgsConfig.cmake\n'}
+[13.613108] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgsConfig-version.cmake\n'}
+[13.622670] (aura_msgs) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_msgs/share/aura_msgs/package.xml\n'}
+[13.631460] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_c.so\n'}
+[13.631751] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_c.so" to ""\n'}
+[13.631874] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_c.so\n'}
+[13.632001] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_c.so" to ""\n'}
+[13.632104] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_cpp.so\n'}
+[13.632392] (-) TimerEvent: {}
+[13.632626] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""\n'}
+[13.632753] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_c.so\n'}
+[13.633016] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_c.so" to ""\n'}
+[13.633118] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_c.so\n'}
+[13.633206] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_c.so" to ""\n'}
+[13.633390] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_cpp.so\n'}
+[13.633534] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_introspection_cpp.so" to ""\n'}
+[13.633622] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_cpp.so\n'}
+[13.633770] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_typesupport_cpp.so" to ""\n'}
+[13.686606] (aura_msgs) StdoutLine: {'line': b"Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs'...\n"}
+[13.686730] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/__init__.py'...\n"}
+[13.686767] (aura_msgs) StdoutLine: {'line': b"Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action'...\n"}
+[13.686805] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/__init__.py'...\n"}
+[13.686835] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/action/_execute_mission.py'...\n"}
+[13.686865] (aura_msgs) StdoutLine: {'line': b"Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg'...\n"}
+[13.686895] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/__init__.py'...\n"}
+[13.686922] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_goal.py'...\n"}
+[13.686949] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_coverage_map.py'...\n"}
+[13.686977] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_drone_state.py'...\n"}
+[13.687004] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_mission_status.py'...\n"}
+[13.687033] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_network_metrics.py'...\n"}
+[13.687067] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_swarm_state.py'...\n"}
+[13.687094] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_trajectory_broadcast.py'...\n"}
+[13.687120] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/msg/_weather_zone.py'...\n"}
+[13.687152] (aura_msgs) StdoutLine: {'line': b"Listing '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv'...\n"}
+[13.687179] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/__init__.py'...\n"}
+[13.687207] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_emergency_stop.py'...\n"}
+[13.687234] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_get_network_status.py'...\n"}
+[13.687260] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_request_trajectory.py'...\n"}
+[13.687287] (aura_msgs) StdoutLine: {'line': b"Compiling '/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages/aura_msgs/srv/_set_formation.py'...\n"}
+[13.690651] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_py.so\n'}
+[13.690854] (aura_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/aura/ws/install/aura_msgs/lib/libaura_msgs__rosidl_generator_py.so" to ""\n'}
+[13.690953] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cExport.cmake\n'}
+[13.690991] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cExport-noconfig.cmake\n'}
+[13.691029] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cExport.cmake\n'}
+[13.691065] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake\n'}
+[13.691100] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_cppExport.cmake\n'}
+[13.691264] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cppExport.cmake\n'}
+[13.691346] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake\n'}
+[13.691384] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cExport.cmake\n'}
+[13.691514] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake\n'}
+[13.691724] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cExport.cmake\n'}
+[13.691784] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cExport-noconfig.cmake\n'}
+[13.691817] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cppExport.cmake\n'}
+[13.691848] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake\n'}
+[13.691879] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cppExport.cmake\n'}
+[13.691909] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/aura_msgs__rosidl_typesupport_cppExport-noconfig.cmake\n'}
+[13.691944] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_pyExport.cmake\n'}
+[13.691972] (aura_msgs) StdoutLine: {'line': b'-- Installing: /home/aura/ws/install/aura_msgs/share/aura_msgs/cmake/export_aura_msgs__rosidl_generator_pyExport-noconfig.cmake\n'}
+[13.693499] (aura_msgs) CommandEnded: {'returncode': 0}
+[13.709987] (aura_msgs) JobEnded: {'identifier': 'aura_msgs', 'rc': 0}
+[13.710501] (aura_px4_interface) JobStarted: {'identifier': 'aura_px4_interface'}
+[13.712651] (aura_trajectory) JobStarted: {'identifier': 'aura_trajectory'}
+[13.717250] (aura_px4_interface) JobProgress: {'identifier': 'aura_px4_interface', 'progress': 'cmake'}
+[13.717797] (aura_px4_interface) Command: {'cmd': ['/usr/bin/cmake', '/home/aura/ws/src/aura_px4_interface', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_px4_interface'], 'cwd': '/home/aura/ws/build/aura_px4_interface', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_px4_interface'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[13.719751] (aura_trajectory) JobProgress: {'identifier': 'aura_trajectory', 'progress': 'cmake'}
+[13.720192] (aura_trajectory) Command: {'cmd': ['/usr/bin/cmake', '/home/aura/ws/src/aura_trajectory', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/home/aura/ws/install/aura_trajectory'], 'cwd': '/home/aura/ws/build/aura_trajectory', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_trajectory'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[13.732521] (-) TimerEvent: {}
+[13.773796] (aura_px4_interface) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[13.777464] (aura_trajectory) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[13.814300] (aura_px4_interface) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[13.819450] (aura_trajectory) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[13.819609] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[13.824907] (aura_trajectory) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[13.832628] (-) TimerEvent: {}
+[13.888088] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[13.889163] (aura_trajectory) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[13.893395] (aura_px4_interface) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[13.893552] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[13.893852] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[13.894006] (aura_trajectory) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[13.894264] (aura_trajectory) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[13.894404] (aura_trajectory) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[13.895930] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[13.896445] (aura_trajectory) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[13.932764] (-) TimerEvent: {}
+[13.984682] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[13.986062] (aura_trajectory) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[13.989630] (aura_px4_interface) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[13.989774] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[13.990171] (aura_px4_interface) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[13.991266] (aura_trajectory) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[13.991474] (aura_trajectory) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[13.991655] (aura_trajectory) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[13.992252] (aura_px4_interface) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[13.993882] (aura_trajectory) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[14.032876] (-) TimerEvent: {}
+[14.133156] (-) TimerEvent: {}
+[14.233456] (-) TimerEvent: {}
+[14.281373] (aura_px4_interface) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[14.292315] (aura_trajectory) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[14.330674] (aura_px4_interface) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[14.333546] (-) TimerEvent: {}
+[14.339728] (aura_trajectory) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[14.357053] (aura_px4_interface) StdoutLine: {'line': b'-- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[14.364952] (aura_trajectory) StdoutLine: {'line': b'-- Found rclcpp: 16.0.17 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[14.390251] (aura_px4_interface) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[14.394160] (aura_px4_interface) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[14.396688] (aura_trajectory) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[14.400283] (aura_px4_interface) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[14.400556] (aura_trajectory) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[14.406903] (aura_trajectory) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[14.408827] (aura_px4_interface) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[14.415447] (aura_trajectory) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[14.420441] (aura_px4_interface) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[14.427188] (aura_trajectory) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[14.433681] (-) TimerEvent: {}
+[14.458333] (aura_px4_interface) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[14.459034] (aura_trajectory) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[14.460903] (aura_px4_interface) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.9 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[14.461183] (aura_trajectory) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.9 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[14.533876] (-) TimerEvent: {}
+[14.567592] (aura_px4_interface) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[14.567955] (aura_trajectory) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[14.599140] (aura_px4_interface) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[14.599274] (aura_trajectory) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[14.633985] (-) TimerEvent: {}
+[14.639409] (aura_trajectory) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[14.640366] (aura_px4_interface) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[14.649522] (aura_px4_interface) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[14.649606] (aura_trajectory) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[14.709108] (aura_px4_interface) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[14.709471] (aura_px4_interface) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[14.715478] (aura_trajectory) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[14.715925] (aura_trajectory) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[14.734140] (-) TimerEvent: {}
+[14.786665] (aura_trajectory) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[14.787517] (aura_trajectory) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[14.792203] (aura_px4_interface) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[14.793146] (aura_px4_interface) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[14.830865] (aura_trajectory) StdoutLine: {'line': b'-- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)\n'}
+[14.831106] (aura_px4_interface) StdoutLine: {'line': b'-- Found std_srvs: 4.9.0 (/opt/ros/humble/share/std_srvs/cmake)\n'}
+[14.834255] (-) TimerEvent: {}
+[14.839096] (aura_trajectory) StdoutLine: {'line': b'-- Found aura_msgs: 0.1.0 (/home/aura/ws/install/aura_msgs/share/aura_msgs/cmake)\n'}
+[14.839483] (aura_px4_interface) StdoutLine: {'line': b'-- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)\n'}
+[14.849093] (aura_px4_interface) StdoutLine: {'line': b'-- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)\n'}
+[14.862747] (aura_px4_interface) StdoutLine: {'line': b'-- Found nav_msgs: 4.9.0 (/opt/ros/humble/share/nav_msgs/cmake)\n'}
+[14.870351] (aura_trajectory) StdoutLine: {'line': b'-- Found tf2: 0.25.18 (/opt/ros/humble/share/tf2/cmake)\n'}
+[14.875728] (aura_px4_interface) StdoutLine: {'line': b'-- Found tf2: 0.25.18 (/opt/ros/humble/share/tf2/cmake)\n'}
+[14.880927] (aura_trajectory) StdoutLine: {'line': b'-- Found tf2_ros: 0.25.18 (/opt/ros/humble/share/tf2_ros/cmake)\n'}
+[14.884997] (aura_px4_interface) StdoutLine: {'line': b'-- Found tf2_ros: 0.25.18 (/opt/ros/humble/share/tf2_ros/cmake)\n'}
+[14.934401] (-) TimerEvent: {}
+[14.943131] (aura_trajectory) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[14.947555] (aura_px4_interface) StdoutLine: {'line': b'-- Found tf2_geometry_msgs: 0.25.18 (/opt/ros/humble/share/tf2_geometry_msgs/cmake)\n'}
+[14.961134] (aura_px4_interface) StdoutLine: {'line': b'-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)\n'}
+[14.962265] (aura_px4_interface) StdoutLine: {'line': b'-- Found Eigen3: TRUE (found version "3.4.0") \n'}
+[14.962439] (aura_px4_interface) StdoutLine: {'line': b'-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target\n'}
+[14.963247] (aura_px4_interface) StdoutLine: {'line': b'-- Found aura_msgs: 0.1.0 (/home/aura/ws/install/aura_msgs/share/aura_msgs/cmake)\n'}
+[14.975879] (aura_px4_interface) StdoutLine: {'line': b'-- Found px4_msgs: 2.0.1 (/opt/px4_ros/install/px4_msgs/share/px4_msgs/cmake)\n'}
+[15.008645] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'copyright' to check source files copyright and LICENSE\n"}
+[15.009702] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[15.009903] (aura_trajectory) StdoutLine: {'line': b'-- Configured cppcheck include dirs: /home/aura/ws/src/aura_trajectory/include;$<BUILD_INTERFACE:/home/aura/ws/src/aura_trajectory/include>\n'}
+[15.010009] (aura_trajectory) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[15.010715] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'cpplint' to check C / C++ code against the Google style\n"}
+[15.010823] (aura_trajectory) StdoutLine: {'line': b'-- Configured cpplint exclude dirs and/or files: \n'}
+[15.011017] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'flake8' to check Python code syntax and style conventions\n"}
+[15.011582] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[15.011911] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257\n"}
+[15.012742] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[15.012852] (aura_trajectory) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[15.013161] (aura_trajectory) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[15.014075] (aura_trajectory) StdoutLine: {'line': b'-- Configuring done\n'}
+[15.025410] (aura_trajectory) StdoutLine: {'line': b'-- Generating done\n'}
+[15.029481] (aura_trajectory) StdoutLine: {'line': b'-- Build files have been written to: /home/aura/ws/build/aura_trajectory\n'}
+[15.034516] (-) TimerEvent: {}
+[15.035747] (aura_trajectory) CommandEnded: {'returncode': 0}
+[15.037072] (aura_trajectory) JobProgress: {'identifier': 'aura_trajectory', 'progress': 'build'}
+[15.037107] (aura_trajectory) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/aura/ws/build/aura_trajectory', '--', '-j20', '-l20'], 'cwd': '/home/aura/ws/build/aura_trajectory', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_trajectory'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[15.045860] (aura_px4_interface) StdoutLine: {'line': b'-- Configuring done\n'}
+[15.061113] (aura_px4_interface) StdoutLine: {'line': b'-- Generating done\n'}
+[15.066300] (aura_px4_interface) StdoutLine: {'line': b'-- Build files have been written to: /home/aura/ws/build/aura_px4_interface\n'}
+[15.073361] (aura_px4_interface) CommandEnded: {'returncode': 0}
+[15.073695] (aura_px4_interface) JobProgress: {'identifier': 'aura_px4_interface', 'progress': 'build'}
+[15.073986] (aura_px4_interface) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/aura/ws/build/aura_px4_interface', '--', '-j20', '-l20'], 'cwd': '/home/aura/ws/build/aura_px4_interface', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_px4_interface'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[15.078366] (aura_trajectory) StdoutLine: {'line': b'[ 11%] \x1b[32mBuilding CXX object CMakeFiles/minco_trajectory.dir/src/trajectory_optimizer.cpp.o\x1b[0m\n'}
+[15.079508] (aura_trajectory) StdoutLine: {'line': b'[ 22%] \x1b[32mBuilding CXX object CMakeFiles/minco_trajectory.dir/src/minco_trajectory.cpp.o\x1b[0m\n'}
+[15.079638] (aura_trajectory) StdoutLine: {'line': b'[ 33%] \x1b[32mBuilding CXX object CMakeFiles/minco_trajectory.dir/src/penalty_functions.cpp.o\x1b[0m\n'}
+[15.080602] (aura_trajectory) StdoutLine: {'line': b'[ 44%] \x1b[32mBuilding CXX object CMakeFiles/minco_trajectory.dir/src/safety_checker.cpp.o\x1b[0m\n'}
+[15.117210] (aura_px4_interface) StdoutLine: {'line': b'[ 37%] \x1b[32mBuilding CXX object CMakeFiles/px4_interface.dir/src/px4_interface.cpp.o\x1b[0m\n'}
+[15.117386] (aura_px4_interface) StdoutLine: {'line': b'[ 37%] \x1b[32mBuilding CXX object CMakeFiles/px4_interface.dir/src/vehicle_state.cpp.o\x1b[0m\n'}
+[15.117452] (aura_px4_interface) StdoutLine: {'line': b'[ 37%] \x1b[32mBuilding CXX object CMakeFiles/px4_interface.dir/src/offboard_controller.cpp.o\x1b[0m\n'}
+[15.134608] (-) TimerEvent: {}
+[15.234923] (-) TimerEvent: {}
+[15.335299] (-) TimerEvent: {}
+[15.435621] (-) TimerEvent: {}
+[15.535952] (-) TimerEvent: {}
+[15.636374] (-) TimerEvent: {}
+[15.736793] (-) TimerEvent: {}
+[15.837157] (-) TimerEvent: {}
+[15.937530] (-) TimerEvent: {}
+[16.037892] (-) TimerEvent: {}
+[16.138237] (-) TimerEvent: {}
+[16.238570] (-) TimerEvent: {}
+[16.338929] (-) TimerEvent: {}
+[16.439338] (-) TimerEvent: {}
+[16.539743] (-) TimerEvent: {}
+[16.640122] (-) TimerEvent: {}
+[16.740468] (-) TimerEvent: {}
+[16.840808] (-) TimerEvent: {}
+[16.941090] (-) TimerEvent: {}
+[17.041381] (-) TimerEvent: {}
+[17.141664] (-) TimerEvent: {}
+[17.241968] (-) TimerEvent: {}
+[17.342270] (-) TimerEvent: {}
+[17.442565] (-) TimerEvent: {}
+[17.542870] (-) TimerEvent: {}
+[17.643123] (-) TimerEvent: {}
+[17.743395] (-) TimerEvent: {}
+[17.843709] (-) TimerEvent: {}
+[17.944002] (-) TimerEvent: {}
+[18.044265] (-) TimerEvent: {}
+[18.144539] (-) TimerEvent: {}
+[18.244825] (-) TimerEvent: {}
+[18.345139] (-) TimerEvent: {}
+[18.445433] (-) TimerEvent: {}
+[18.545711] (-) TimerEvent: {}
+[18.645980] (-) TimerEvent: {}
+[18.746244] (-) TimerEvent: {}
+[18.846548] (-) TimerEvent: {}
+[18.946846] (-) TimerEvent: {}
+[19.047129] (-) TimerEvent: {}
+[19.147392] (-) TimerEvent: {}
+[19.247710] (-) TimerEvent: {}
+[19.347974] (-) TimerEvent: {}
+[19.448270] (-) TimerEvent: {}
+[19.548562] (-) TimerEvent: {}
+[19.648857] (-) TimerEvent: {}
+[19.749202] (-) TimerEvent: {}
+[19.849493] (-) TimerEvent: {}
+[19.949745] (-) TimerEvent: {}
+[20.050055] (-) TimerEvent: {}
+[20.150320] (-) TimerEvent: {}
+[20.195000] (aura_trajectory) StdoutLine: {'line': b'[ 55%] \x1b[32m\x1b[1mLinking CXX shared library libminco_trajectory.so\x1b[0m\n'}
+[20.250443] (-) TimerEvent: {}
+[20.255953] (aura_trajectory) StdoutLine: {'line': b'[ 55%] Built target minco_trajectory\n'}
+[20.273945] (aura_trajectory) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding CXX object CMakeFiles/swarm_coordinator_node.dir/src/swarm_coordinator_node.cpp.o\x1b[0m\n'}
+[20.275776] (aura_trajectory) StdoutLine: {'line': b'[ 77%] \x1b[32mBuilding CXX object CMakeFiles/trajectory_node.dir/src/trajectory_node.cpp.o\x1b[0m\n'}
+[20.350570] (-) TimerEvent: {}
+[20.450883] (-) TimerEvent: {}
+[20.551163] (-) TimerEvent: {}
+[20.651439] (-) TimerEvent: {}
+[20.751736] (-) TimerEvent: {}
+[20.852003] (-) TimerEvent: {}
+[20.952282] (-) TimerEvent: {}
+[21.052581] (-) TimerEvent: {}
+[21.152860] (-) TimerEvent: {}
+[21.253117] (-) TimerEvent: {}
+[21.353414] (-) TimerEvent: {}
+[21.453765] (-) TimerEvent: {}
+[21.554050] (-) TimerEvent: {}
+[21.654318] (-) TimerEvent: {}
+[21.754605] (-) TimerEvent: {}
+[21.854885] (-) TimerEvent: {}
+[21.955182] (-) TimerEvent: {}
+[22.055477] (-) TimerEvent: {}
+[22.155759] (-) TimerEvent: {}
+[22.256061] (-) TimerEvent: {}
+[22.356334] (-) TimerEvent: {}
+[22.456633] (-) TimerEvent: {}
+[22.556896] (-) TimerEvent: {}
+[22.657199] (-) TimerEvent: {}
+[22.757454] (-) TimerEvent: {}
+[22.857745] (-) TimerEvent: {}
+[22.958003] (-) TimerEvent: {}
+[23.058291] (-) TimerEvent: {}
+[23.158622] (-) TimerEvent: {}
+[23.258875] (-) TimerEvent: {}
+[23.359162] (-) TimerEvent: {}
+[23.459439] (-) TimerEvent: {}
+[23.559725] (-) TimerEvent: {}
+[23.660024] (-) TimerEvent: {}
+[23.760333] (-) TimerEvent: {}
+[23.860615] (-) TimerEvent: {}
+[23.960870] (-) TimerEvent: {}
+[24.061129] (-) TimerEvent: {}
+[24.161377] (-) TimerEvent: {}
+[24.261658] (-) TimerEvent: {}
+[24.361975] (-) TimerEvent: {}
+[24.462307] (-) TimerEvent: {}
+[24.562584] (-) TimerEvent: {}
+[24.662847] (-) TimerEvent: {}
+[24.763097] (-) TimerEvent: {}
+[24.863343] (-) TimerEvent: {}
+[24.963628] (-) TimerEvent: {}
+[25.063923] (-) TimerEvent: {}
+[25.164182] (-) TimerEvent: {}
+[25.264465] (-) TimerEvent: {}
+[25.364722] (-) TimerEvent: {}
+[25.464977] (-) TimerEvent: {}
+[25.565255] (-) TimerEvent: {}
+[25.665539] (-) TimerEvent: {}
+[25.765829] (-) TimerEvent: {}
+[25.866115] (-) TimerEvent: {}
+[25.966385] (-) TimerEvent: {}
+[26.066649] (-) TimerEvent: {}
+[26.166920] (-) TimerEvent: {}
+[26.267254] (-) TimerEvent: {}
+[26.367548] (-) TimerEvent: {}
+[26.467836] (-) TimerEvent: {}
+[26.568177] (-) TimerEvent: {}
+[26.668496] (-) TimerEvent: {}
+[26.768761] (-) TimerEvent: {}
+[26.869048] (-) TimerEvent: {}
+[26.969361] (-) TimerEvent: {}
+[27.069630] (-) TimerEvent: {}
+[27.169930] (-) TimerEvent: {}
+[27.270203] (-) TimerEvent: {}
+[27.370480] (-) TimerEvent: {}
+[27.470734] (-) TimerEvent: {}
+[27.570983] (-) TimerEvent: {}
+[27.671245] (-) TimerEvent: {}
+[27.771539] (-) TimerEvent: {}
+[27.871841] (-) TimerEvent: {}
+[27.972103] (-) TimerEvent: {}
+[28.072354] (-) TimerEvent: {}
+[28.148206] (aura_px4_interface) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX static library libpx4_interface.a\x1b[0m\n'}
+[28.172476] (-) TimerEvent: {}
+[28.272808] (-) TimerEvent: {}
+[28.373080] (-) TimerEvent: {}
+[28.430534] (aura_px4_interface) StdoutLine: {'line': b'[ 50%] Built target px4_interface\n'}
+[28.448711] (aura_px4_interface) StdoutLine: {'line': b'[ 62%] \x1b[32mBuilding CXX object CMakeFiles/swarm_px4_manager_node.dir/src/swarm_px4_manager_node.cpp.o\x1b[0m\n'}
+[28.450073] (aura_px4_interface) StdoutLine: {'line': b'[ 75%] \x1b[32mBuilding CXX object CMakeFiles/px4_interface_node.dir/src/px4_interface_node.cpp.o\x1b[0m\n'}
+[28.473269] (-) TimerEvent: {}
+[28.573576] (-) TimerEvent: {}
+[28.673832] (-) TimerEvent: {}
+[28.774152] (-) TimerEvent: {}
+[28.874473] (-) TimerEvent: {}
+[28.974768] (-) TimerEvent: {}
+[29.075058] (-) TimerEvent: {}
+[29.175343] (-) TimerEvent: {}
+[29.275635] (-) TimerEvent: {}
+[29.375925] (-) TimerEvent: {}
+[29.476197] (-) TimerEvent: {}
+[29.576477] (-) TimerEvent: {}
+[29.676751] (-) TimerEvent: {}
+[29.777049] (-) TimerEvent: {}
+[29.877314] (-) TimerEvent: {}
+[29.977586] (-) TimerEvent: {}
+[30.077892] (-) TimerEvent: {}
+[30.178153] (-) TimerEvent: {}
+[30.278434] (-) TimerEvent: {}
+[30.378721] (-) TimerEvent: {}
+[30.479070] (-) TimerEvent: {}
+[30.549656] (aura_trajectory) StdoutLine: {'line': b'[ 88%] \x1b[32m\x1b[1mLinking CXX executable swarm_coordinator_node\x1b[0m\n'}
+[30.579167] (-) TimerEvent: {}
+[30.679448] (-) TimerEvent: {}
+[30.702417] (aura_trajectory) StdoutLine: {'line': b'[ 88%] Built target swarm_coordinator_node\n'}
+[30.779577] (-) TimerEvent: {}
+[30.879898] (-) TimerEvent: {}
+[30.980194] (-) TimerEvent: {}
+[31.080484] (-) TimerEvent: {}
+[31.180786] (-) TimerEvent: {}
+[31.281108] (-) TimerEvent: {}
+[31.381423] (-) TimerEvent: {}
+[31.481714] (-) TimerEvent: {}
+[31.581980] (-) TimerEvent: {}
+[31.682290] (-) TimerEvent: {}
+[31.782590] (-) TimerEvent: {}
+[31.882883] (-) TimerEvent: {}
+[31.983193] (-) TimerEvent: {}
+[32.083487] (-) TimerEvent: {}
+[32.183768] (-) TimerEvent: {}
+[32.284062] (-) TimerEvent: {}
+[32.384337] (-) TimerEvent: {}
+[32.484677] (-) TimerEvent: {}
+[32.584931] (-) TimerEvent: {}
+[32.685241] (-) TimerEvent: {}
+[32.785533] (-) TimerEvent: {}
+[32.885817] (-) TimerEvent: {}
+[32.986118] (-) TimerEvent: {}
+[33.086430] (-) TimerEvent: {}
+[33.186715] (-) TimerEvent: {}
+[33.287054] (-) TimerEvent: {}
+[33.387334] (-) TimerEvent: {}
+[33.487583] (-) TimerEvent: {}
+[33.587845] (-) TimerEvent: {}
+[33.688093] (-) TimerEvent: {}
+[33.788373] (-) TimerEvent: {}
+[33.888633] (-) TimerEvent: {}
+[33.988967] (-) TimerEvent: {}
+[34.089258] (-) TimerEvent: {}
+[34.189549] (-) TimerEvent: {}
+[34.289846] (-) TimerEvent: {}
+[34.390096] (-) TimerEvent: {}
+[34.490373] (-) TimerEvent: {}
+[34.590686] (-) TimerEvent: {}
+[34.690971] (-) TimerEvent: {}
+[34.791234] (-) TimerEvent: {}
+[34.891516] (-) TimerEvent: {}
+[34.920482] (aura_trajectory) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable trajectory_node\x1b[0m\n'}
+[34.991626] (-) TimerEvent: {}
+[35.086200] (aura_trajectory) StdoutLine: {'line': b'[100%] Built target trajectory_node\n'}
+[35.091698] (-) TimerEvent: {}
+[35.096214] (aura_trajectory) CommandEnded: {'returncode': 0}
+[35.096829] (aura_trajectory) JobProgress: {'identifier': 'aura_trajectory', 'progress': 'install'}
+[35.097070] (aura_trajectory) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/aura/ws/build/aura_trajectory'], 'cwd': '/home/aura/ws/build/aura_trajectory', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_trajectory'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[35.105497] (aura_trajectory) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[35.105744] (aura_trajectory) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[35.106007] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/lib/aura_trajectory/libminco_trajectory.so\n'}
+[35.111814] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/lib/aura_trajectory/trajectory_node\n'}
+[35.117084] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/lib/aura_trajectory/swarm_coordinator_node\n'}
+[35.122850] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/include/aura_trajectory/minco_trajectory.hpp\n'}
+[35.129725] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/include/aura_trajectory/penalty_functions.hpp\n'}
+[35.135491] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/include/aura_trajectory/safety_checker.hpp\n'}
+[35.141880] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/include/aura_trajectory/trajectory_optimizer.hpp\n'}
+[35.148159] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/launch/trajectory_planner.launch.py\n'}
+[35.153742] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/config/trajectory_params.yaml\n'}
+[35.160709] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/ament_index/resource_index/package_run_dependencies/aura_trajectory\n'}
+[35.167351] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/ament_index/resource_index/parent_prefix_path/aura_trajectory\n'}
+[35.172778] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/environment/ament_prefix_path.sh\n'}
+[35.179983] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/environment/ament_prefix_path.dsv\n'}
+[35.187759] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/environment/path.sh\n'}
+[35.191800] (-) TimerEvent: {}
+[35.195442] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/environment/path.dsv\n'}
+[35.201180] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/local_setup.bash\n'}
+[35.207515] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/local_setup.sh\n'}
+[35.213697] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/local_setup.zsh\n'}
+[35.222623] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/local_setup.dsv\n'}
+[35.229255] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.dsv\n'}
+[35.237075] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/ament_index/resource_index/packages/aura_trajectory\n'}
+[35.244270] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/cmake/aura_trajectoryConfig.cmake\n'}
+[35.253118] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/cmake/aura_trajectoryConfig-version.cmake\n'}
+[35.261419] (aura_trajectory) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_trajectory/share/aura_trajectory/package.xml\n'}
+[35.272025] (aura_trajectory) CommandEnded: {'returncode': 0}
+[35.281010] (aura_trajectory) JobEnded: {'identifier': 'aura_trajectory', 'rc': 0}
+[35.291981] (-) TimerEvent: {}
+[35.392254] (-) TimerEvent: {}
+[35.410553] (aura_px4_interface) StdoutLine: {'line': b'[ 87%] \x1b[32m\x1b[1mLinking CXX executable px4_interface_node\x1b[0m\n'}
+[35.425349] (aura_px4_interface) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable swarm_px4_manager_node\x1b[0m\n'}
+[35.492391] (-) TimerEvent: {}
+[35.592722] (-) TimerEvent: {}
+[35.693023] (-) TimerEvent: {}
+[35.793299] (-) TimerEvent: {}
+[35.893656] (-) TimerEvent: {}
+[35.994014] (-) TimerEvent: {}
+[36.094333] (-) TimerEvent: {}
+[36.194613] (-) TimerEvent: {}
+[36.294944] (-) TimerEvent: {}
+[36.395243] (-) TimerEvent: {}
+[36.495561] (-) TimerEvent: {}
+[36.595946] (-) TimerEvent: {}
+[36.612375] (aura_px4_interface) StdoutLine: {'line': b'[100%] Built target swarm_px4_manager_node\n'}
+[36.631349] (aura_px4_interface) StdoutLine: {'line': b'[100%] Built target px4_interface_node\n'}
+[36.639839] (aura_px4_interface) CommandEnded: {'returncode': 0}
+[36.640336] (aura_px4_interface) JobProgress: {'identifier': 'aura_px4_interface', 'progress': 'install'}
+[36.640501] (aura_px4_interface) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/aura/ws/build/aura_px4_interface'], 'cwd': '/home/aura/ws/build/aura_px4_interface', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('HOSTNAME', 'drty-hry-Legion-5-15IRX10'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/aura/ws/install/aura_msgs/lib:/opt/px4_ros/install/px4_ros_com/lib:/opt/px4_ros/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/opt/ns-allinone-3.40/ns-3.40/build/lib:/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('HOME', '/home/aura'), ('OLDPWD', '/home/aura/ws'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/aura/ws/install:/opt/px4_ros/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('NVIDIA_DRIVER_CAPABILITIES', 'all'), ('TERM', 'xterm'), ('GAZEBO_MODEL_PATH', '/home/aura/ws/models::/home/aura/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models'), ('ROS_LOCALHOST_ONLY', '0'), ('NS3_HOME', '/opt/ns-allinone-3.40/ns-3.40'), ('PX4_HOME', '/home/aura/PX4-Autopilot'), ('QT_X11_NO_MITSHM', '1'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_fastrtps_cpp'), ('XAUTHORITY', '/home/aura/.Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('ROS_DOMAIN_ID', '0'), ('AMENT_PREFIX_PATH', '/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/home/aura/ws/install/aura_msgs:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('PWD', '/home/aura/ws/build/aura_px4_interface'), ('GAZEBO_PLUGIN_PATH', ':/home/aura/PX4-Autopilot/build/px4_sitl_default/build_gazebo-classic'), ('PYTHONPATH', '/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:/home/aura/ws/install/aura_msgs/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_ros_com/local/lib/python3.10/dist-packages:/opt/px4_ros/install/px4_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages:/opt/ns-allinone-3.40/ns-3.40/build/bindings/python:'), ('NVIDIA_VISIBLE_DEVICES', 'all'), ('TZ', 'UTC'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/aura/ws/install/aura_msgs:/home/aura/ws/install/aura_trajectory:/home/aura/ws/install/aura_px4_interface:/opt/px4_ros/install/px4_ros_com:/opt/px4_ros/install/px4_msgs:/opt/ros/humble')]), 'shell': False}
+[36.645883] (aura_px4_interface) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[36.646251] (aura_px4_interface) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[36.646520] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/lib/aura_px4_interface/libpx4_interface.a\n'}
+[36.654895] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/lib/aura_px4_interface/px4_interface_node\n'}
+[36.659778] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/lib/aura_px4_interface/swarm_px4_manager_node\n'}
+[36.665553] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/include/aura_px4_interface/offboard_controller.hpp\n'}
+[36.673049] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/include/aura_px4_interface/px4_interface.hpp\n'}
+[36.678661] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/include/aura_px4_interface/vehicle_state.hpp\n'}
+[36.683918] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/launch/px4_interface.launch.py\n'}
+[36.691074] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/launch/swarm_px4.launch.py\n'}
+[36.696046] (-) TimerEvent: {}
+[36.697211] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/config/px4_interface_params.yaml\n'}
+[36.703316] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/ament_index/resource_index/package_run_dependencies/aura_px4_interface\n'}
+[36.709230] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/ament_index/resource_index/parent_prefix_path/aura_px4_interface\n'}
+[36.714760] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/environment/ament_prefix_path.sh\n'}
+[36.720048] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/environment/ament_prefix_path.dsv\n'}
+[36.725677] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/environment/path.sh\n'}
+[36.733823] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/environment/path.dsv\n'}
+[36.739399] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/local_setup.bash\n'}
+[36.745406] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/local_setup.sh\n'}
+[36.752209] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/local_setup.zsh\n'}
+[36.759745] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/local_setup.dsv\n'}
+[36.765161] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.dsv\n'}
+[36.771311] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/ament_index/resource_index/packages/aura_px4_interface\n'}
+[36.778435] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/cmake/aura_px4_interfaceConfig.cmake\n'}
+[36.783576] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/cmake/aura_px4_interfaceConfig-version.cmake\n'}
+[36.790334] (aura_px4_interface) StdoutLine: {'line': b'-- Symlinking: /home/aura/ws/install/aura_px4_interface/share/aura_px4_interface/package.xml\n'}
+[36.796112] (-) TimerEvent: {}
+[36.799209] (aura_px4_interface) CommandEnded: {'returncode': 0}
+[36.806588] (aura_px4_interface) JobEnded: {'identifier': 'aura_px4_interface', 'rc': 0}
+[36.807107] (-) EventReactorShutdown: {}

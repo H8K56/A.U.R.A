@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_py/aura_msgs/srv/_get_network_status_s.c

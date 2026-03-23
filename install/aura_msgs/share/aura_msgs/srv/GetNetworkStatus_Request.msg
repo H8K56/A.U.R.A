@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_cmake/srv/GetNetworkStatus_Request.msg

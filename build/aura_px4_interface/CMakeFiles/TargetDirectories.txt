@@ -1,0 +1,12 @@
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/uninstall.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/aura_px4_interface_uninstall.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/px4_interface.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/px4_interface_node.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/swarm_px4_manager_node.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/test.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/edit_cache.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/rebuild_cache.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/list_install_components.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/install.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/install/local.dir
+/home/aura/ws/build/aura_px4_interface/CMakeFiles/install/strip.dir

@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/ament_cmake_core/aura_msgsConfig.cmake

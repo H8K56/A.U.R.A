@@ -1,0 +1,1 @@
+/home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/swarm_state__type_support.h

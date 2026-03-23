@@ -1,0 +1,70 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from aura_msgs/msg/CoverageGoal.msg
+// generated code does not contain a copyright notice
+
+#include "builtin_interfaces/msg/Time.idl"
+#include "geometry_msgs/msg/Point.idl"
+
+module aura_msgs {
+  module msg {
+    module CoverageGoal_Constants {
+      @verbatim (language="comment", text=
+        "Formation info" "\n"        "Maximize coverage area")
+      const uint8 FORMATION_SPREAD = 0;
+      @verbatim (language="comment", text=
+        "Cluster for high-density area")
+      const uint8 FORMATION_CLUSTER = 1;
+      @verbatim (language="comment", text=
+        "Line formation for corridor")
+      const uint8 FORMATION_LINE = 2;
+      @verbatim (language="comment", text=
+        "Let RL decide")
+      const uint8 FORMATION_ADAPTIVE = 3;
+    };
+    @verbatim (language="comment", text=
+      "CoverageGoal.msg" "\n"
+      "Goal position from Strategic RL to MINCO trajectory planner")
+    struct CoverageGoal {
+      builtin_interfaces::msg::Time timestamp;
+
+      uint8 drone_id;
+
+      @verbatim (language="comment", text=
+        "Target position (ENU frame)")
+      geometry_msgs::msg::Point position;
+
+      @verbatim (language="comment", text=
+        "Optional: desired arrival time (0 = ASAP)")
+      double desired_arrival_time;
+
+      uint8 formation_type;
+
+      @verbatim (language="comment", text=
+        "Priority (higher = more important to reach)" "\n"
+        "0-1")
+      float priority;
+
+      @verbatim (language="comment", text=
+        "Constraints" "\n"
+        "meters")
+      float min_altitude;
+
+      @verbatim (language="comment", text=
+        "meters")
+      float max_altitude;
+
+      @verbatim (language="comment", text=
+        "m/s, 0 = use default")
+      float max_velocity;
+
+      @verbatim (language="comment", text=
+        "Network requirements at this position" "\n"
+        "Minimum throughput needed")
+      float required_throughput_mbps;
+
+      @verbatim (language="comment", text=
+        "meters")
+      float required_coverage_radius;
+    };
+  };
+};

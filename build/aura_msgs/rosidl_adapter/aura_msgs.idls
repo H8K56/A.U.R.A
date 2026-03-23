@@ -1,0 +1,13 @@
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/DroneState.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/SwarmState.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/TrajectoryBroadcast.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/NetworkMetrics.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/CoverageGoal.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/CoverageMap.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/WeatherZone.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:msg/MissionStatus.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:srv/RequestTrajectory.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:srv/EmergencyStop.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:srv/SetFormation.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:srv/GetNetworkStatus.idl
+/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs:action/ExecuteMission.idl

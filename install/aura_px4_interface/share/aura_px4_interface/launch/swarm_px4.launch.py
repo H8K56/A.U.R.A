@@ -1,1 +1,0 @@
-/home/aura/ws/src/aura_px4_interface/launch/swarm_px4.launch.py

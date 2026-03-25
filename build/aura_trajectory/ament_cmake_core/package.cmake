@@ -1,6 +1,6 @@
 set(_AMENT_PACKAGE_NAME "aura_trajectory")
 set(aura_trajectory_VERSION "0.1.0")
-set(aura_trajectory_MAINTAINER "Lord Malifex <drty-hry@aura.dev>")
+set(aura_trajectory_MAINTAINER "Hussein Khadra <khadrahussein4@gmail.com>")
 set(aura_trajectory_BUILD_DEPENDS "eigen" "rclcpp" "std_msgs" "geometry_msgs" "aura_msgs" "tf2" "tf2_ros" "eigen3_cmake_module")
 set(aura_trajectory_BUILDTOOL_DEPENDS "ament_cmake")
 set(aura_trajectory_BUILD_EXPORT_DEPENDS "rclcpp" "std_msgs" "geometry_msgs" "aura_msgs" "tf2" "tf2_ros" "eigen3_cmake_module")

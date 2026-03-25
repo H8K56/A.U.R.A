@@ -154,6 +154,15 @@ private:
     std::vector<MincoTrajectory> current_other_trajectories_;
     double trajectory_start_time_;
     
+    friend double evaluate(
+    void* instance,
+    const Eigen::VectorXd& x,
+    Eigen::VectorXd& grad);
+
+    Eigen::VectorXd last_x_;
+    Eigen::VectorXd last_grad_;
+    double last_cost_ = 0.0;
+    bool grad_valid_ = false;
     // Cost computation
     double computeTotalCost(const MincoTrajectory& traj);
     
@@ -164,6 +173,7 @@ private:
     double computeSwarmPenalty(const MincoTrajectory& traj);
     double computeDynamicsPenalty(const MincoTrajectory& traj);
     double computeFormationPenalty(const MincoTrajectory& traj);
+
 };
 
 }  // namespace aura

@@ -4,7 +4,7 @@
   <name>aura_msgs</name>
   <version>0.1.0</version>
   <description>Custom messages, services, and actions for A.U.R.A. disaster relief UAV swarm</description>
-  <maintainer email="drty-hry@aura.dev">Lord Malifex</maintainer>
+  <maintainer email="khadrahussein4@gmail.com">Hussein Khadra</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

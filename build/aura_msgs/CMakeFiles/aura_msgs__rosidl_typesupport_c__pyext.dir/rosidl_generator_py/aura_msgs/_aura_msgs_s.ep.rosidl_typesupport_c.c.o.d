@@ -218,6 +218,8 @@ CMakeFiles/aura_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/aura_m
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/trajectory_broadcast__functions.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/network_metrics__type_support.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/network_metrics__struct.h \
+ /opt/ros/humble/include/std_msgs/std_msgs/msg/detail/header__struct.h \
+ /opt/ros/humble/include/rosidl_runtime_c/rosidl_runtime_c/string.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/network_metrics__functions.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/coverage_goal__type_support.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/coverage_goal__struct.h \
@@ -230,7 +232,6 @@ CMakeFiles/aura_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/aura_m
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/weather_zone__functions.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/mission_status__type_support.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/mission_status__struct.h \
- /opt/ros/humble/include/rosidl_runtime_c/rosidl_runtime_c/string.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/msg/detail/mission_status__functions.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/srv/detail/request_trajectory__type_support.h \
  /home/aura/ws/build/aura_msgs/rosidl_generator_c/aura_msgs/srv/detail/request_trajectory__struct.h \

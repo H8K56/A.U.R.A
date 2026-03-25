@@ -1,9 +1,100 @@
 #include "aura_trajectory/trajectory_optimizer.hpp"
+#include "aura_trajectory/minco_trajectory.hpp"
 #include "aura_trajectory/penalty_functions.hpp"
+#include "lbfgs.hpp"
 #include <iostream>
 #include <cmath>
+using namespace lbfgs;
 
 namespace aura {
+    struct LBFGSContext {
+        aura::TrajectoryOptimizer* optimizer;
+        Eigen::Vector3d start_pos;
+        Eigen::Vector3d start_vel;
+        Eigen::Vector3d goal_pos;
+        int M;
+        int num_waypoints;
+    };
+    namespace {
+        inline MincoTrajectory buildTrajectory(
+            const Eigen::VectorXd& x,
+            int M,
+            int num_waypoints,
+            const Eigen::Vector3d& start_pos,
+            const Eigen::Vector3d& start_vel,
+            const Eigen::Vector3d& goal_pos)
+        {
+            MincoTrajectory::Waypoints q(3, num_waypoints);
+            MincoTrajectory::TimeAlloc T(M);
+    
+            for (int i = 0; i < num_waypoints; ++i)
+                q.col(i) = x.segment<3>(3 * i);
+    
+            for (int i = 0; i < M; ++i)
+                T(i) = std::max(0.01, x(3 * num_waypoints + i));
+    
+            return MincoTrajectory(q, T, start_pos, start_vel,
+                                goal_pos, Eigen::Vector3d::Zero());
+        }
+    }
+    // ==============================
+    // LBFGS CALLBACK
+    // ==============================
+    double evaluate(void* instance,const Eigen::VectorXd& x,Eigen::VectorXd& grad)
+    {
+        LBFGSContext* ctx = reinterpret_cast<LBFGSContext*>(instance);
+
+        auto* opt = ctx->optimizer;
+
+        // === CACHE CHECK ===
+        if (opt->grad_valid_ && (x - opt->last_x_).norm() < 1e-4) {
+            grad = opt->last_grad_;
+            return opt->last_cost_;
+        }
+
+        MincoTrajectory traj = buildTrajectory(
+            x, ctx->M, ctx->num_waypoints,
+            ctx->start_pos, ctx->start_vel, ctx->goal_pos
+        );
+
+        double cost = traj.isValid() ? opt->computeTotalCost(traj) : 1e10;
+
+        // === GRADIENT ===
+        double eps = 1e-4;
+        grad.resize(x.size());
+
+        for (int i = 0; i < grad.size(); ++i) {
+
+            if (i >= 3 * ctx->num_waypoints) {
+                grad(i) = 0.0;
+                continue;
+            }
+
+            Eigen::VectorXd x_plus = x;
+            x_plus(i) += eps;
+
+            Eigen::VectorXd x_minus = x;
+            x_minus(i) -= eps;
+
+            auto traj_p = buildTrajectory(x_plus, ctx->M, ctx->num_waypoints,
+                                        ctx->start_pos, ctx->start_vel, ctx->goal_pos);
+            double cost_p = traj_p.isValid() ? opt->computeTotalCost(traj_p) : 1e10;
+
+            auto traj_m = buildTrajectory(x_minus, ctx->M, ctx->num_waypoints,
+                                        ctx->start_pos, ctx->start_vel, ctx->goal_pos);
+            double cost_m = traj_m.isValid() ? opt->computeTotalCost(traj_m) : 1e10;
+
+            grad(i) = (cost_p - cost_m) / (2.0 * eps);
+        }
+
+        // === CACHE STORE ===
+        opt->last_x_ = x;
+        opt->last_grad_ = grad;
+        opt->last_cost_ = cost;
+        opt->grad_valid_ = true;
+
+        return cost;
+    }
 
 TrajectoryOptimizer::TrajectoryOptimizer(const OptimizationConfig& config)
     : config_(config) {}
@@ -17,139 +108,166 @@ OptimizationResult TrajectoryOptimizer::optimize(
 {
     current_obstacles_ = obstacles;
     current_other_trajectories_ = other_trajectories;
-    trajectory_start_time_ = 0.0;  // Assume starting now
-    
+
     OptimizationResult result;
-    
-    // Initialize trajectory with straight line
+
     int M = config_.num_pieces;
+    int num_waypoints = M - 1;
+
+    // ==============================
+    // 1. INITIALIZATION
+    // ==============================
+    grad_valid_ = false;
     Eigen::Vector3d direction = goal_pos - start_pos;
     double distance = direction.norm();
-    
+
     if (distance < 1e-6) {
-        // Already at goal
         result.feasible = true;
         result.message = "Already at goal";
         result.trajectory = MincoTrajectory();
         return result;
     }
-    
-    // Estimate time based on max velocity
-    double estimated_time = distance / config_.max_velocity * 1.5;  // Add buffer
-    
-    // Create uniform time allocation
-    MincoTrajectory::TimeAlloc T = Eigen::VectorXd::Constant(M, estimated_time / M);
-    
-    // Create waypoints along straight line (will be optimized)
-    MincoTrajectory::Waypoints q(3, M - 1);
-    for (int i = 0; i < M - 1; ++i) {
+
+    double total_time = distance / config_.max_velocity * 1.5;
+
+    // parameter vector: [q(3*(M-1)), T(M)]
+    int dim = 3 * num_waypoints + M;
+    Eigen::VectorXd x(dim);
+
+    // init waypoints
+    for (int i = 0; i < num_waypoints; ++i) {
         double alpha = static_cast<double>(i + 1) / M;
-        q.col(i) = start_pos + alpha * direction;
+        Eigen::Vector3d pt = start_pos + alpha * direction;
+        x.segment<3>(3 * i) = pt;
     }
-    
-    // Create initial trajectory
-    MincoTrajectory traj(q, T, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-    
-    if (!traj.isValid()) {
-        result.feasible = false;
-        result.message = "Failed to create initial trajectory";
-        return result;
+
+    // init time
+    for (int i = 0; i < M; ++i) {
+        x(3 * num_waypoints + i) = total_time / M;
     }
-    
-    // Simple gradient descent optimization
-    double learning_rate = 0.01;
-    double prev_cost = computeTotalCost(traj);
-    int num_waypoints = M - 1;
-    
-    for (int iter = 0; iter < config_.max_iterations; ++iter) {
-        // Compute gradients numerically
-        double eps = 1e-5;
-        
-        // Gradient for waypoints
-        Eigen::MatrixXd grad_q(3, num_waypoints);
-        for (int i = 0; i < num_waypoints; ++i) {
-            for (int d = 0; d < 3; ++d) {
-                MincoTrajectory::Waypoints q_plus = q;
-                q_plus(d, i) += eps;
-                MincoTrajectory traj_plus(q_plus, T, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-                double cost_plus = traj_plus.isValid() ? computeTotalCost(traj_plus) : 1e10;
-                
-                MincoTrajectory::Waypoints q_minus = q;
-                q_minus(d, i) -= eps;
-                MincoTrajectory traj_minus(q_minus, T, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-                double cost_minus = traj_minus.isValid() ? computeTotalCost(traj_minus) : 1e10;
-                
-                grad_q(d, i) = (cost_plus - cost_minus) / (2.0 * eps);
-            }
-        }
-        
-        // Gradient for time allocation
-        Eigen::VectorXd grad_T(M);
-        for (int i = 0; i < M; ++i) {
-            MincoTrajectory::TimeAlloc T_plus = T;
-            T_plus(i) += eps;
-            MincoTrajectory traj_plus(q, T_plus, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-            double cost_plus = traj_plus.isValid() ? computeTotalCost(traj_plus) : 1e10;
-            
-            MincoTrajectory::TimeAlloc T_minus = T;
-            T_minus(i) = std::max(0.01, T_minus(i) - eps);
-            MincoTrajectory traj_minus(q, T_minus, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-            double cost_minus = traj_minus.isValid() ? computeTotalCost(traj_minus) : 1e10;
-            
-            grad_T(i) = (cost_plus - cost_minus) / (2.0 * eps);
-        }
-        
-        // Update parameters
-        q -= learning_rate * grad_q;
-        T -= learning_rate * grad_T;
-        
-        // Ensure positive time allocation
-        for (int i = 0; i < M; ++i) {
-            T(i) = std::max(0.01, T(i));
-        }
-        
-        // Update trajectory
-        traj = MincoTrajectory(q, T, start_pos, start_vel, goal_pos, Eigen::Vector3d::Zero());
-        
-        if (!traj.isValid()) {
-            // Revert to previous valid state
-            break;
-        }
-        
-        double cost = computeTotalCost(traj);
-        
-        // Check convergence
-        if (std::abs(prev_cost - cost) < config_.convergence_tolerance) {
-            result.iterations = iter + 1;
-            break;
-        }
-        
-        // Adaptive learning rate
-        if (cost > prev_cost) {
-            learning_rate *= 0.5;
-        } else {
-            learning_rate *= 1.1;
-        }
-        learning_rate = std::min(0.1, std::max(0.001, learning_rate));
-        
-        prev_cost = cost;
-        result.iterations = iter + 1;
-    }
-    
+
+    // ==============================
+    // 2. COST FUNCTION
+    // ==============================
+
+//    auto costFunction = [&](const Eigen::VectorXd& x_vec,
+//                         Eigen::VectorXd& grad) -> double
+//     {
+//         // ==============================
+//         // CACHE CHECK
+//         // ==============================
+//         if (grad_valid_ && (x_vec - last_x_).norm() < 1e-4) {
+//             grad = last_grad_;
+//             return last_cost_;
+//         }
+
+//         // ==============================
+//         // BUILD TRAJECTORY
+//         // ==============================
+//         MincoTrajectory traj = buildTrajectory(
+//             x_vec, M, num_waypoints,
+//             start_pos, start_vel, goal_pos
+//         );
+
+//         double cost = traj.isValid() ? computeTotalCost(traj) : 1e10;
+
+//         // ==============================
+//         // GRADIENT
+//         // ==============================
+//         double eps = 1e-4;
+//         grad.resize(x_vec.size());
+
+//         for (int i = 0; i < grad.size(); ++i) {
+
+//             if (i >= 3 * num_waypoints) {
+//                 grad(i) = 0.0;
+//                 continue;
+//             }
+
+//             Eigen::VectorXd x_plus = x_vec;
+//             x_plus(i) += eps;
+
+//             Eigen::VectorXd x_minus = x_vec;
+//             x_minus(i) -= eps;
+
+//             auto traj_p = buildTrajectory(x_plus, M, num_waypoints,
+//                                         start_pos, start_vel, goal_pos);
+//             double cost_p = traj_p.isValid() ? computeTotalCost(traj_p) : 1e10;
+
+//             auto traj_m = buildTrajectory(x_minus, M, num_waypoints,
+//                                         start_pos, start_vel, goal_pos);
+//             double cost_m = traj_m.isValid() ? computeTotalCost(traj_m) : 1e10;
+
+//             grad(i) = (cost_p - cost_m) / (2.0 * eps);
+//         }
+
+//         // ==============================
+//         // STORE CACHE
+//         // ==============================
+//         last_x_ = x_vec;
+//         last_grad_ = grad;
+//         last_cost_ = cost;
+//         grad_valid_ = true;
+
+//         // ==============================
+//         // EARLY STOP
+//         // ==============================
+//         if (grad.norm() < 1e-3) {
+//             return cost;
+//         }
+
+//         return cost;
+//     };
+
+    // ==============================
+    // 3. LBFGS SOLVE
+    // ==============================
+
+    lbfgs_parameter_t param;
+    param.mem_size = 10;
+    param.max_iterations = config_.max_iterations;
+    param.g_epsilon = config_.convergence_tolerance;
+
+    double final_cost;
+    LBFGSContext ctx;
+    ctx.optimizer = this;
+    ctx.start_pos = start_pos;
+    ctx.start_vel = start_vel;
+    ctx.goal_pos = goal_pos;
+    ctx.M = M;
+    ctx.num_waypoints = num_waypoints;
+
+    int ret = lbfgs_optimize(
+        x,
+        final_cost,
+        evaluate,
+        nullptr,
+        nullptr,
+        &ctx,
+        param
+    );
+
+    // ==============================
+    // 4. BUILD FINAL TRAJECTORY
+    // ==============================
+
+    MincoTrajectory::Waypoints q(3, num_waypoints);
+    MincoTrajectory::TimeAlloc T(M);
+
+    for (int i = 0; i < num_waypoints; ++i)
+        q.col(i) = x.segment<3>(3 * i);
+
+    for (int i = 0; i < M; ++i)
+        T(i) = std::max(0.01, x(3 * num_waypoints + i));
+
+    MincoTrajectory traj(q, T, start_pos, start_vel,
+                         goal_pos, Eigen::Vector3d::Zero());
+
     result.trajectory = traj;
-    result.total_cost = computeTotalCost(traj);
+    result.total_cost = final_cost;
     result.feasible = traj.isValid();
-    result.message = result.feasible ? "Optimization converged" : "Optimization failed";
-    
-    // Compute individual costs for debugging
-    if (result.trajectory.isValid()) {
-        result.cost_smoothness = penalties::smoothness_penalty(result.trajectory);
-        result.cost_time = penalties::time_penalty(result.trajectory);
-        result.cost_obstacle = computeObstaclePenalty(result.trajectory);
-        result.cost_swarm = computeSwarmPenalty(result.trajectory);
-        result.cost_dynamics = computeDynamicsPenalty(result.trajectory);
-    }
-    
+    result.message = (ret == LBFGS_CONVERGENCE) ? "LBFGS converged" : "LBFGS failed";
+
     return result;
 }
 

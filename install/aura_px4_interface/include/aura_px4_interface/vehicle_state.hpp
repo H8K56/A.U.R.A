@@ -1,1 +1,0 @@
-/home/aura/ws/src/aura_px4_interface/include/aura_px4_interface/vehicle_state.hpp

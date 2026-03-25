@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <n>aura_strategic_rl</n>
+  <name>aura_strategic_rl</name>
   <version>0.1.0</version>
   <description>Strategic RL policy for A.U.R.A. UAV swarm positioning</description>
-  <maintainer email="drty-hry@aura.dev">Lord Malifex</maintainer>
+  <maintainer email="khadrahussein4@gmail.com">Hussein Khadra</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_python</buildtool_depend>

@@ -16,11 +16,13 @@ setup(
     ],
     install_requires=['setuptools', 'numpy'],
     zip_safe=True,
-    maintainer='Lord Malifex',
-    maintainer_email='drty-hry@aura.dev',
+    maintainer='Hussein Khadra',
+    maintainer_email='khadrahussein4@gmail.com',
     description='Network simulation for A.U.R.A. UAV swarm',
     license='MIT',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'network_sim_node = aura_network_sim.network_sim_node:main',

@@ -360,13 +360,29 @@ private:
 class Init_NetworkMetrics_timestamp
 {
 public:
-  Init_NetworkMetrics_timestamp()
-  : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
+  explicit Init_NetworkMetrics_timestamp(::aura_msgs::msg::NetworkMetrics & msg)
+  : msg_(msg)
   {}
   Init_NetworkMetrics_grid_size_x timestamp(::aura_msgs::msg::NetworkMetrics::_timestamp_type arg)
   {
     msg_.timestamp = std::move(arg);
     return Init_NetworkMetrics_grid_size_x(msg_);
+  }
+
+private:
+  ::aura_msgs::msg::NetworkMetrics msg_;
+};
+
+class Init_NetworkMetrics_header
+{
+public:
+  Init_NetworkMetrics_header()
+  : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
+  {}
+  Init_NetworkMetrics_timestamp header(::aura_msgs::msg::NetworkMetrics::_header_type arg)
+  {
+    msg_.header = std::move(arg);
+    return Init_NetworkMetrics_timestamp(msg_);
   }
 
 private:
@@ -384,7 +400,7 @@ template<>
 inline
 auto build<::aura_msgs::msg::NetworkMetrics>()
 {
-  return aura_msgs::msg::builder::Init_NetworkMetrics_timestamp();
+  return aura_msgs::msg::builder::Init_NetworkMetrics_header();
 }
 
 }  // namespace aura_msgs

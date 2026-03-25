@@ -426,7 +426,24 @@ void resize_function__NetworkMetrics__link_rssi_dbm(void * untyped_member, size_
   member->resize(size);
 }
 
-static const ::rosidl_typesupport_introspection_cpp::MessageMember NetworkMetrics_message_member_array[22] = {
+static const ::rosidl_typesupport_introspection_cpp::MessageMember NetworkMetrics_message_member_array[23] = {
+  {
+    "header",  // name
+    ::rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE,  // type
+    0,  // upper bound of string
+    ::rosidl_typesupport_introspection_cpp::get_message_type_support_handle<std_msgs::msg::Header>(),  // members of sub message
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(aura_msgs::msg::NetworkMetrics, header),  // bytes offset in struct
+    nullptr,  // default value
+    nullptr,  // size() function pointer
+    nullptr,  // get_const(index) function pointer
+    nullptr,  // get(index) function pointer
+    nullptr,  // fetch(index, &value) function pointer
+    nullptr,  // assign(index, value) function pointer
+    nullptr  // resize(index) function pointer
+  },
   {
     "timestamp",  // name
     ::rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE,  // type
@@ -806,7 +823,7 @@ static const ::rosidl_typesupport_introspection_cpp::MessageMember NetworkMetric
 static const ::rosidl_typesupport_introspection_cpp::MessageMembers NetworkMetrics_message_members = {
   "aura_msgs::msg",  // message namespace
   "NetworkMetrics",  // message name
-  22,  // number of fields
+  23,  // number of fields
   sizeof(aura_msgs::msg::NetworkMetrics),
   NetworkMetrics_message_member_array,  // message members
   NetworkMetrics_init_function,  // function to initialize message memory (memory has to be allocated)

@@ -38,6 +38,7 @@ extern "C"
 #include "geometry_msgs/msg/detail/point__functions.h"  // origin
 #include "rosidl_runtime_c/primitives_sequence.h"  // coverage_mask, latency_ms, link_from_drone, link_latency_ms, link_rssi_dbm, link_throughput_mbps, link_to_drone, signal_strength_dbm, throughput_mbps
 #include "rosidl_runtime_c/primitives_sequence_functions.h"  // coverage_mask, latency_ms, link_from_drone, link_latency_ms, link_rssi_dbm, link_throughput_mbps, link_to_drone, signal_strength_dbm, throughput_mbps
+#include "std_msgs/msg/detail/header__functions.h"  // header
 
 // forward declare type support functions
 ROSIDL_TYPESUPPORT_FASTRTPS_C_IMPORT_aura_msgs
@@ -68,6 +69,20 @@ size_t max_serialized_size_geometry_msgs__msg__Point(
 ROSIDL_TYPESUPPORT_FASTRTPS_C_IMPORT_aura_msgs
 const rosidl_message_type_support_t *
   ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_fastrtps_c, geometry_msgs, msg, Point)();
+ROSIDL_TYPESUPPORT_FASTRTPS_C_IMPORT_aura_msgs
+size_t get_serialized_size_std_msgs__msg__Header(
+  const void * untyped_ros_message,
+  size_t current_alignment);
+
+ROSIDL_TYPESUPPORT_FASTRTPS_C_IMPORT_aura_msgs
+size_t max_serialized_size_std_msgs__msg__Header(
+  bool & full_bounded,
+  bool & is_plain,
+  size_t current_alignment);
+
+ROSIDL_TYPESUPPORT_FASTRTPS_C_IMPORT_aura_msgs
+const rosidl_message_type_support_t *
+  ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_fastrtps_c, std_msgs, msg, Header)();
 
 
 using _NetworkMetrics__ros_msg_type = aura_msgs__msg__NetworkMetrics;
@@ -81,6 +96,20 @@ static bool _NetworkMetrics__cdr_serialize(
     return false;
   }
   const _NetworkMetrics__ros_msg_type * ros_message = static_cast<const _NetworkMetrics__ros_msg_type *>(untyped_ros_message);
+  // Field name: header
+  {
+    const message_type_support_callbacks_t * callbacks =
+      static_cast<const message_type_support_callbacks_t *>(
+      ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(
+        rosidl_typesupport_fastrtps_c, std_msgs, msg, Header
+      )()->data);
+    if (!callbacks->cdr_serialize(
+        &ros_message->header, cdr))
+    {
+      return false;
+    }
+  }
+
   // Field name: timestamp
   {
     const message_type_support_callbacks_t * callbacks =
@@ -248,6 +277,20 @@ static bool _NetworkMetrics__cdr_deserialize(
     return false;
   }
   _NetworkMetrics__ros_msg_type * ros_message = static_cast<_NetworkMetrics__ros_msg_type *>(untyped_ros_message);
+  // Field name: header
+  {
+    const message_type_support_callbacks_t * callbacks =
+      static_cast<const message_type_support_callbacks_t *>(
+      ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(
+        rosidl_typesupport_fastrtps_c, std_msgs, msg, Header
+      )()->data);
+    if (!callbacks->cdr_deserialize(
+        cdr, &ros_message->header))
+    {
+      return false;
+    }
+  }
+
   // Field name: timestamp
   {
     const message_type_support_callbacks_t * callbacks =
@@ -588,6 +631,10 @@ size_t get_serialized_size_aura_msgs__msg__NetworkMetrics(
   (void)padding;
   (void)wchar_size;
 
+  // field.name header
+
+  current_alignment += get_serialized_size_std_msgs__msg__Header(
+    &(ros_message->header), current_alignment);
   // field.name timestamp
 
   current_alignment += get_serialized_size_builtin_interfaces__msg__Time(
@@ -790,6 +837,25 @@ size_t max_serialized_size_aura_msgs__msg__NetworkMetrics(
   full_bounded = true;
   is_plain = true;
 
+  // member: header
+  {
+    size_t array_size = 1;
+
+
+    last_member_size = 0;
+    for (size_t index = 0; index < array_size; ++index) {
+      bool inner_full_bounded;
+      bool inner_is_plain;
+      size_t inner_size;
+      inner_size =
+        max_serialized_size_std_msgs__msg__Header(
+        inner_full_bounded, inner_is_plain, current_alignment);
+      last_member_size += inner_size;
+      current_alignment += inner_size;
+      full_bounded &= inner_full_bounded;
+      is_plain &= inner_is_plain;
+    }
+  }
   // member: timestamp
   {
     size_t array_size = 1;

@@ -17,6 +17,8 @@
 
 
 // Include directives for member types
+// Member 'header'
+#include "std_msgs/msg/detail/header__struct.hpp"
 // Member 'timestamp'
 #include "builtin_interfaces/msg/detail/time__struct.hpp"
 // Member 'origin'
@@ -41,7 +43,8 @@ struct NetworkMetrics_
   using Type = NetworkMetrics_<ContainerAllocator>;
 
   explicit NetworkMetrics_(rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
-  : timestamp(_init),
+  : header(_init),
+    timestamp(_init),
     origin(_init)
   {
     if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
@@ -62,7 +65,8 @@ struct NetworkMetrics_
   }
 
   explicit NetworkMetrics_(const ContainerAllocator & _alloc, rosidl_runtime_cpp::MessageInitialization _init = rosidl_runtime_cpp::MessageInitialization::ALL)
-  : timestamp(_alloc, _init),
+  : header(_alloc, _init),
+    timestamp(_alloc, _init),
     origin(_alloc, _init)
   {
     if (rosidl_runtime_cpp::MessageInitialization::ALL == _init ||
@@ -83,6 +87,9 @@ struct NetworkMetrics_
   }
 
   // field types and members
+  using _header_type =
+    std_msgs::msg::Header_<ContainerAllocator>;
+  _header_type header;
   using _timestamp_type =
     builtin_interfaces::msg::Time_<ContainerAllocator>;
   _timestamp_type timestamp;
@@ -151,6 +158,12 @@ struct NetworkMetrics_
   _backhaul_latency_ms_type backhaul_latency_ms;
 
   // setters for named parameter idiom
+  Type & set__header(
+    const std_msgs::msg::Header_<ContainerAllocator> & _arg)
+  {
+    this->header = _arg;
+    return *this;
+  }
   Type & set__timestamp(
     const builtin_interfaces::msg::Time_<ContainerAllocator> & _arg)
   {
@@ -326,6 +339,9 @@ struct NetworkMetrics_
   // comparison operators
   bool operator==(const NetworkMetrics_ & other) const
   {
+    if (this->header != other.header) {
+      return false;
+    }
     if (this->timestamp != other.timestamp) {
       return false;
     }

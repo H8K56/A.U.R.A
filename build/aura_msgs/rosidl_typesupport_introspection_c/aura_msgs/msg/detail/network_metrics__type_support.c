@@ -13,6 +13,10 @@
 
 
 // Include directives for member types
+// Member `header`
+#include "std_msgs/msg/header.h"
+// Member `header`
+#include "std_msgs/msg/detail/header__rosidl_typesupport_introspection_c.h"
 // Member `timestamp`
 #include "builtin_interfaces/msg/time.h"
 // Member `timestamp`
@@ -546,7 +550,24 @@ bool aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__resize_
   return rosidl_runtime_c__float__Sequence__init(member, size);
 }
 
-static rosidl_typesupport_introspection_c__MessageMember aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[22] = {
+static rosidl_typesupport_introspection_c__MessageMember aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[23] = {
+  {
+    "header",  // name
+    rosidl_typesupport_introspection_c__ROS_TYPE_MESSAGE,  // type
+    0,  // upper bound of string
+    NULL,  // members of sub message (initialized later)
+    false,  // is array
+    0,  // array size
+    false,  // is upper bound
+    offsetof(aura_msgs__msg__NetworkMetrics, header),  // bytes offset in struct
+    NULL,  // default value
+    NULL,  // size() function pointer
+    NULL,  // get_const(index) function pointer
+    NULL,  // get(index) function pointer
+    NULL,  // fetch(index, &value) function pointer
+    NULL,  // assign(index, value) function pointer
+    NULL  // resize(index) function pointer
+  },
   {
     "timestamp",  // name
     rosidl_typesupport_introspection_c__ROS_TYPE_MESSAGE,  // type
@@ -926,7 +947,7 @@ static rosidl_typesupport_introspection_c__MessageMember aura_msgs__msg__Network
 static const rosidl_typesupport_introspection_c__MessageMembers aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_members = {
   "aura_msgs__msg",  // message namespace
   "NetworkMetrics",  // message name
-  22,  // number of fields
+  23,  // number of fields
   sizeof(aura_msgs__msg__NetworkMetrics),
   aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array,  // message members
   aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_init_function,  // function to initialize message memory (memory has to be allocated)
@@ -945,8 +966,10 @@ ROSIDL_TYPESUPPORT_INTROSPECTION_C_EXPORT_aura_msgs
 const rosidl_message_type_support_t *
 ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_introspection_c, aura_msgs, msg, NetworkMetrics)() {
   aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[0].members_ =
+    ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_introspection_c, std_msgs, msg, Header)();
+  aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[1].members_ =
     ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_introspection_c, builtin_interfaces, msg, Time)();
-  aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[4].members_ =
+  aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_member_array[5].members_ =
     ROSIDL_TYPESUPPORT_INTERFACE__MESSAGE_SYMBOL_NAME(rosidl_typesupport_introspection_c, geometry_msgs, msg, Point)();
   if (!aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_type_support_handle.typesupport_identifier) {
     aura_msgs__msg__NetworkMetrics__rosidl_typesupport_introspection_c__NetworkMetrics_message_type_support_handle.typesupport_identifier =

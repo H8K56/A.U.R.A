@@ -12,6 +12,8 @@
 
 
 // Include directives for member types
+// Member `header`
+#include "std_msgs/msg/detail/header__functions.h"
 // Member `timestamp`
 #include "builtin_interfaces/msg/detail/time__functions.h"
 // Member `origin`
@@ -31,6 +33,11 @@ bool
 aura_msgs__msg__NetworkMetrics__init(aura_msgs__msg__NetworkMetrics * msg)
 {
   if (!msg) {
+    return false;
+  }
+  // header
+  if (!std_msgs__msg__Header__init(&msg->header)) {
+    aura_msgs__msg__NetworkMetrics__fini(msg);
     return false;
   }
   // timestamp
@@ -108,6 +115,8 @@ aura_msgs__msg__NetworkMetrics__fini(aura_msgs__msg__NetworkMetrics * msg)
   if (!msg) {
     return;
   }
+  // header
+  std_msgs__msg__Header__fini(&msg->header);
   // timestamp
   builtin_interfaces__msg__Time__fini(&msg->timestamp);
   // grid_size_x
@@ -147,6 +156,12 @@ bool
 aura_msgs__msg__NetworkMetrics__are_equal(const aura_msgs__msg__NetworkMetrics * lhs, const aura_msgs__msg__NetworkMetrics * rhs)
 {
   if (!lhs || !rhs) {
+    return false;
+  }
+  // header
+  if (!std_msgs__msg__Header__are_equal(
+      &(lhs->header), &(rhs->header)))
+  {
     return false;
   }
   // timestamp
@@ -268,6 +283,12 @@ aura_msgs__msg__NetworkMetrics__copy(
   aura_msgs__msg__NetworkMetrics * output)
 {
   if (!input || !output) {
+    return false;
+  }
+  // header
+  if (!std_msgs__msg__Header__copy(
+      &(input->header), &(output->header)))
+  {
     return false;
   }
   // timestamp

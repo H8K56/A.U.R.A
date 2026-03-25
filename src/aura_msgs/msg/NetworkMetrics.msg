@@ -1,6 +1,6 @@
 # NetworkMetrics.msg
 # Network simulation metrics from NS-3 bridge
-
+std_msgs/Header header
 builtin_interfaces/Time timestamp
 
 # Grid-based coverage map

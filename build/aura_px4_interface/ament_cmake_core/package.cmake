@@ -1,6 +1,6 @@
 set(_AMENT_PACKAGE_NAME "aura_px4_interface")
 set(aura_px4_interface_VERSION "0.1.0")
-set(aura_px4_interface_MAINTAINER "Lord Malifex <drty-hry@aura.dev>")
+set(aura_px4_interface_MAINTAINER "Hussein Khadra <khadrahussein4@gmail.com>")
 set(aura_px4_interface_BUILD_DEPENDS "rclcpp" "std_msgs" "std_srvs" "geometry_msgs" "sensor_msgs" "nav_msgs" "tf2" "tf2_ros" "tf2_geometry_msgs" "aura_msgs" "px4_msgs")
 set(aura_px4_interface_BUILDTOOL_DEPENDS "ament_cmake")
 set(aura_px4_interface_BUILD_EXPORT_DEPENDS "rclcpp" "std_msgs" "std_srvs" "geometry_msgs" "sensor_msgs" "nav_msgs" "tf2" "tf2_ros" "tf2_geometry_msgs" "aura_msgs" "px4_msgs")

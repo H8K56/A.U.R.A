@@ -1,6 +1,6 @@
 set(_AMENT_PACKAGE_NAME "aura_msgs")
 set(aura_msgs_VERSION "0.1.0")
-set(aura_msgs_MAINTAINER "Lord Malifex <drty-hry@aura.dev>")
+set(aura_msgs_MAINTAINER "Hussein Khadra <khadrahussein4@gmail.com>")
 set(aura_msgs_BUILD_DEPENDS "std_msgs" "geometry_msgs" "builtin_interfaces")
 set(aura_msgs_BUILDTOOL_DEPENDS "ament_cmake" "rosidl_default_generators")
 set(aura_msgs_BUILD_EXPORT_DEPENDS "std_msgs" "geometry_msgs" "builtin_interfaces")

@@ -20,6 +20,10 @@
 #include "rosidl_runtime_c/primitives_sequence_functions.h"
 
 ROSIDL_GENERATOR_C_IMPORT
+bool std_msgs__msg__header__convert_from_py(PyObject * _pymsg, void * _ros_message);
+ROSIDL_GENERATOR_C_IMPORT
+PyObject * std_msgs__msg__header__convert_to_py(void * raw_ros_message);
+ROSIDL_GENERATOR_C_IMPORT
 bool builtin_interfaces__msg__time__convert_from_py(PyObject * _pymsg, void * _ros_message);
 ROSIDL_GENERATOR_C_IMPORT
 PyObject * builtin_interfaces__msg__time__convert_to_py(void * raw_ros_message);
@@ -61,6 +65,17 @@ bool aura_msgs__msg__network_metrics__convert_from_py(PyObject * _pymsg, void * 
     assert(strncmp("aura_msgs.msg._network_metrics.NetworkMetrics", full_classname_dest, 45) == 0);
   }
   aura_msgs__msg__NetworkMetrics * ros_message = _ros_message;
+  {  // header
+    PyObject * field = PyObject_GetAttrString(_pymsg, "header");
+    if (!field) {
+      return false;
+    }
+    if (!std_msgs__msg__header__convert_from_py(field, &ros_message->header)) {
+      Py_DECREF(field);
+      return false;
+    }
+    Py_DECREF(field);
+  }
   {  // timestamp
     PyObject * field = PyObject_GetAttrString(_pymsg, "timestamp");
     if (!field) {
@@ -764,6 +779,20 @@ PyObject * aura_msgs__msg__network_metrics__convert_to_py(void * raw_ros_message
     }
   }
   aura_msgs__msg__NetworkMetrics * ros_message = (aura_msgs__msg__NetworkMetrics *)raw_ros_message;
+  {  // header
+    PyObject * field = NULL;
+    field = std_msgs__msg__header__convert_to_py(&ros_message->header);
+    if (!field) {
+      return NULL;
+    }
+    {
+      int rc = PyObject_SetAttrString(_pymessage, "header", field);
+      Py_DECREF(field);
+      if (rc) {
+        return NULL;
+      }
+    }
+  }
   {  // timestamp
     PyObject * field = NULL;
     field = builtin_interfaces__msg__time__convert_to_py(&ros_message->timestamp);

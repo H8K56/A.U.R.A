@@ -18,6 +18,8 @@ extern "C"
 // Constants defined in the message
 
 // Include directives for member types
+// Member 'header'
+#include "std_msgs/msg/detail/header__struct.h"
 // Member 'timestamp'
 #include "builtin_interfaces/msg/detail/time__struct.h"
 // Member 'origin'
@@ -40,6 +42,7 @@ extern "C"
  */
 typedef struct aura_msgs__msg__NetworkMetrics
 {
+  std_msgs__msg__Header header;
   builtin_interfaces__msg__Time timestamp;
   /// Grid-based coverage map
   /// Number of cells in X

@@ -1,1 +1,0 @@
-/home/aura/ws/build/aura_px4_interface/ament_cmake_core/aura_px4_interfaceConfig-version.cmake

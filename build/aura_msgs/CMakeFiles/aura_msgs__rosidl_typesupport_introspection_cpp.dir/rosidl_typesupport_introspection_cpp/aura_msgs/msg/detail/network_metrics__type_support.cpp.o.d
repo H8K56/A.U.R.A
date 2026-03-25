@@ -176,6 +176,7 @@ CMakeFiles/aura_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesuppor
  /usr/include/c++/11/stdexcept \
  /opt/ros/humble/include/rosidl_runtime_cpp/rosidl_runtime_cpp/message_initialization.hpp \
  /opt/ros/humble/include/rosidl_runtime_c/rosidl_runtime_c/message_initialization.h \
+ /opt/ros/humble/include/std_msgs/std_msgs/msg/detail/header__struct.hpp \
  /opt/ros/humble/include/builtin_interfaces/builtin_interfaces/msg/detail/time__struct.hpp \
  /opt/ros/humble/include/geometry_msgs/geometry_msgs/msg/detail/point__struct.hpp \
  /opt/ros/humble/include/rosidl_typesupport_introspection_cpp/rosidl_typesupport_introspection_cpp/field_types.hpp \

@@ -99,6 +99,7 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
         '_link_throughput_mbps',
         '_link_latency_ms',
         '_link_rssi_dbm',
+        '_mesh_connected',
         '_backhaul_active',
         '_backhaul_throughput_mbps',
         '_backhaul_latency_ms',
@@ -125,6 +126,7 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
         'link_throughput_mbps': 'sequence<float>',
         'link_latency_ms': 'sequence<float>',
         'link_rssi_dbm': 'sequence<float>',
+        'mesh_connected': 'boolean',
         'backhaul_active': 'boolean',
         'backhaul_throughput_mbps': 'float',
         'backhaul_latency_ms': 'float',
@@ -151,6 +153,7 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
         rosidl_parser.definition.UnboundedSequence(rosidl_parser.definition.BasicType('float')),  # noqa: E501
         rosidl_parser.definition.UnboundedSequence(rosidl_parser.definition.BasicType('float')),  # noqa: E501
         rosidl_parser.definition.UnboundedSequence(rosidl_parser.definition.BasicType('float')),  # noqa: E501
+        rosidl_parser.definition.BasicType('boolean'),  # noqa: E501
         rosidl_parser.definition.BasicType('boolean'),  # noqa: E501
         rosidl_parser.definition.BasicType('float'),  # noqa: E501
         rosidl_parser.definition.BasicType('float'),  # noqa: E501
@@ -183,6 +186,7 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
         self.link_throughput_mbps = array.array('f', kwargs.get('link_throughput_mbps', []))
         self.link_latency_ms = array.array('f', kwargs.get('link_latency_ms', []))
         self.link_rssi_dbm = array.array('f', kwargs.get('link_rssi_dbm', []))
+        self.mesh_connected = kwargs.get('mesh_connected', bool())
         self.backhaul_active = kwargs.get('backhaul_active', bool())
         self.backhaul_throughput_mbps = kwargs.get('backhaul_throughput_mbps', float())
         self.backhaul_latency_ms = kwargs.get('backhaul_latency_ms', float())
@@ -255,6 +259,8 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
         if self.link_latency_ms != other.link_latency_ms:
             return False
         if self.link_rssi_dbm != other.link_rssi_dbm:
+            return False
+        if self.mesh_connected != other.mesh_connected:
             return False
         if self.backhaul_active != other.backhaul_active:
             return False
@@ -677,6 +683,19 @@ class NetworkMetrics(metaclass=Metaclass_NetworkMetrics):
                  all(not (val < -3.402823466e+38 or val > 3.402823466e+38) or math.isinf(val) for val in value)), \
                 "The 'link_rssi_dbm' field must be a set or sequence and each value of type 'float' and each float in [-340282346600000016151267322115014000640.000000, 340282346600000016151267322115014000640.000000]"
         self._link_rssi_dbm = array.array('f', value)
+
+    @builtins.property
+    def mesh_connected(self):
+        """Message field 'mesh_connected'."""
+        return self._mesh_connected
+
+    @mesh_connected.setter
+    def mesh_connected(self, value):
+        if __debug__:
+            assert \
+                isinstance(value, bool), \
+                "The 'mesh_connected' field must be of type 'bool'"
+        self._mesh_connected = value
 
     @builtins.property
     def backhaul_active(self):

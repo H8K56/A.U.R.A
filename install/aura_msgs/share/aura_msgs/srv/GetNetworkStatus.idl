@@ -1,1 +1,38 @@
-/home/aura/ws/build/aura_msgs/rosidl_adapter/aura_msgs/srv/GetNetworkStatus.idl
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from aura_msgs/srv/GetNetworkStatus.srv
+// generated code does not contain a copyright notice
+
+#include "aura_msgs/msg/NetworkMetrics.idl"
+
+module aura_msgs {
+  module srv {
+    @verbatim (language="comment", text=
+      "GetNetworkStatus.srv" "\n"
+      "Query current network status")
+    struct GetNetworkStatus_Request {
+      @verbatim (language="comment", text=
+        "Request" "\n"
+        "Include full grid data")
+      boolean include_coverage_map;
+
+      @verbatim (language="comment", text=
+        "Include per-link metrics")
+      boolean include_link_details;
+    };
+    @verbatim (language="comment", text=
+      "Response")
+    struct GetNetworkStatus_Response {
+      boolean success;
+
+      aura_msgs::msg::NetworkMetrics metrics;
+
+      @verbatim (language="comment", text=
+        "0-1, aggregate network health")
+      float overall_health;
+
+      @verbatim (language="comment", text=
+        "List of current issues")
+      sequence<string> issues;
+    };
+  };
+};

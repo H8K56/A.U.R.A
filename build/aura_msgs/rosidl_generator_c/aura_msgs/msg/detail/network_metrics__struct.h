@@ -81,6 +81,9 @@ typedef struct aura_msgs__msg__NetworkMetrics
   rosidl_runtime_c__float__Sequence link_latency_ms;
   /// Signal strength on this link
   rosidl_runtime_c__float__Sequence link_rssi_dbm;
+  /// Mesh connectivity status
+  /// Is the mesh fully connected?
+  bool mesh_connected;
   /// Backhaul status (Hub to command post)
   bool backhaul_active;
   float backhaul_throughput_mbps;

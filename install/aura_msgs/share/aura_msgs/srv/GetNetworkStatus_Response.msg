@@ -1,1 +1,6 @@
-/home/aura/ws/build/aura_msgs/rosidl_cmake/srv/GetNetworkStatus_Response.msg
+
+# Response
+bool success
+NetworkMetrics metrics
+float32 overall_health           # 0-1, aggregate network health
+string[] issues                  # List of current issues

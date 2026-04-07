@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────
+# A.U.R.A. Simulation Configuration
+# ─────────────────────────────────────────────────
+# Software-in-the-loop simulation parameters.
+# Used by sim_no_px4.launch.py for full-stack testing
+# without Gazebo or PX4 SITL.
+
+/**:
+  ros__parameters:
+
+    # ── Swarm Driver ──────────────────────────────
+    num_drones: 5
+    publish_rate_hz: 10.0
+    spawn_radius_m: 5.0           # Initial cluster radius
+    spawn_altitude_m: 0.5         # Ground level start
+    deploy_zone_x: 0.0            # Target deployment area
+    deploy_zone_y: 0.0
+    takeoff_altitude_m: 15.0
+    max_speed_m_s: 5.0
+    hub_drone_id: 0               # Drone 0 is the hub
+
+    # ── Network Simulation ────────────────────────
+    sim_rate_hz: 10.0
+    grid_resolution_m: 10.0
+    area_min_x: -200.0
+    area_min_y: -200.0
+    area_max_x: 200.0
+    area_max_y: 200.0
+    tx_power_dbm: 20.0
+    path_loss_exponent: 2.7
+    coverage_threshold_dbm: -80.0
+    max_mesh_distance_m: 150.0
+
+    # ── Dead Zones ────────────────────────────────
+    num_preset_zones: 2           # How many preset zones to load
+    enable_moving_zones: false    # Dynamic zone movement
+    zone_move_speed: 2.0          # m/s for moving zones
+
+    # ── Mission Control ───────────────────────────
+    tick_rate_hz: 2.0
+    status_publish_rate_hz: 1.0
+    auto_start: true              # Auto-start mission in sim mode
+    min_battery_for_launch: 30.0  # Lower threshold for sim
+    preflight_timeout_sec: 30.0   # Faster timeouts for sim
+    takeoff_timeout_sec: 30.0
+    transit_timeout_sec: 60.0
+    formation_timeout_sec: 60.0
+    operations_duration_sec: 300.0  # 5 min operations
+    coverage_target: 70.0          # Slightly lower for sim
+    critical_battery_percent: 15.0
+
+    # ── Strategic RL ──────────────────────────────
+    use_baseline: true            # Use baseline controller (no trained policy)
+    baseline_type: 'grid'         # grid | spread | hho
+    rl_update_rate_hz: 1.0
+
+    # ── Scenario Runner ───────────────────────────
+    auto_start_delay_sec: 5.0
+    inject_dead_zone: false
+    inject_at_ops_sec: 60.0       # Inject dead zone 60s into operations

@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/aura/ws/build/aura_trajectory/libminco_trajectory.so" "/home/aura/ws/build/aura_trajectory/trajectory_node" "/home/aura/ws/build/aura_trajectory/swarm_coordinator_node" "TARGETS" "minco_trajectory" "trajectory_node" "swarm_coordinator_node" "DESTINATION" "lib/aura_trajectory")

@@ -251,7 +251,7 @@ class NetworkSimNode(Node):
             msg.link_latency_ms.append(5.0)  # Simplified per-hop latency
         
         # Mesh status
-        msg.mesh_connected = mesh_stats['is_connected']
+        msg.mesh_connected = bool(mesh_stats['is_connected'])
         msg.backhaul_active = any(d.is_hub and d.hops_to_hub == 0 
                                    for d in self.mesh_sim.drones.values())
         

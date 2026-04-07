@@ -1,1 +1,2 @@
-/home/aura/ws/build/aura_trajectory/ament_cmake_environment_hooks/local_setup.dsv
+source;share/aura_trajectory/environment/ament_prefix_path.sh
+source;share/aura_trajectory/environment/path.sh

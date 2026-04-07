@@ -1,1 +1,1 @@
-/home/aura/ws/build/aura_msgs/rosidl_generator_py/aura_msgs/action/__init__.py
+from aura_msgs.action._execute_mission import ExecuteMission  # noqa: F401

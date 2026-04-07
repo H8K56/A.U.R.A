@@ -200,13 +200,29 @@ private:
 class Init_CoverageMap_timestamp
 {
 public:
-  Init_CoverageMap_timestamp()
-  : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
+  explicit Init_CoverageMap_timestamp(::aura_msgs::msg::CoverageMap & msg)
+  : msg_(msg)
   {}
   Init_CoverageMap_grid_size_x timestamp(::aura_msgs::msg::CoverageMap::_timestamp_type arg)
   {
     msg_.timestamp = std::move(arg);
     return Init_CoverageMap_grid_size_x(msg_);
+  }
+
+private:
+  ::aura_msgs::msg::CoverageMap msg_;
+};
+
+class Init_CoverageMap_header
+{
+public:
+  Init_CoverageMap_header()
+  : msg_(::rosidl_runtime_cpp::MessageInitialization::SKIP)
+  {}
+  Init_CoverageMap_timestamp header(::aura_msgs::msg::CoverageMap::_header_type arg)
+  {
+    msg_.header = std::move(arg);
+    return Init_CoverageMap_timestamp(msg_);
   }
 
 private:
@@ -224,7 +240,7 @@ template<>
 inline
 auto build<::aura_msgs::msg::CoverageMap>()
 {
-  return aura_msgs::msg::builder::Init_CoverageMap_timestamp();
+  return aura_msgs::msg::builder::Init_CoverageMap_header();
 }
 
 }  // namespace aura_msgs

@@ -58,6 +58,10 @@ class Metaclass_CoverageMap(type):
             if Point.__class__._TYPE_SUPPORT is None:
                 Point.__class__.__import_type_support__()
 
+            from std_msgs.msg import Header
+            if Header.__class__._TYPE_SUPPORT is None:
+                Header.__class__.__import_type_support__()
+
     @classmethod
     def __prepare__(cls, name, bases, **kwargs):
         # list constant names here so that they appear in the help text of
@@ -71,6 +75,7 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
     """Message class 'CoverageMap'."""
 
     __slots__ = [
+        '_header',
         '_timestamp',
         '_grid_size_x',
         '_grid_size_y',
@@ -86,6 +91,7 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
     ]
 
     _fields_and_field_types = {
+        'header': 'std_msgs/Header',
         'timestamp': 'builtin_interfaces/Time',
         'grid_size_x': 'uint32',
         'grid_size_y': 'uint32',
@@ -101,6 +107,7 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
     }
 
     SLOT_TYPES = (
+        rosidl_parser.definition.NamespacedType(['std_msgs', 'msg'], 'Header'),  # noqa: E501
         rosidl_parser.definition.NamespacedType(['builtin_interfaces', 'msg'], 'Time'),  # noqa: E501
         rosidl_parser.definition.BasicType('uint32'),  # noqa: E501
         rosidl_parser.definition.BasicType('uint32'),  # noqa: E501
@@ -119,6 +126,8 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
         assert all('_' + key in self.__slots__ for key in kwargs.keys()), \
             'Invalid arguments passed to constructor: %s' % \
             ', '.join(sorted(k for k in kwargs.keys() if '_' + k not in self.__slots__))
+        from std_msgs.msg import Header
+        self.header = kwargs.get('header', Header())
         from builtin_interfaces.msg import Time
         self.timestamp = kwargs.get('timestamp', Time())
         self.grid_size_x = kwargs.get('grid_size_x', int())
@@ -163,6 +172,8 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
+        if self.header != other.header:
+            return False
         if self.timestamp != other.timestamp:
             return False
         if self.grid_size_x != other.grid_size_x:
@@ -193,6 +204,20 @@ class CoverageMap(metaclass=Metaclass_CoverageMap):
     def get_fields_and_field_types(cls):
         from copy import copy
         return copy(cls._fields_and_field_types)
+
+    @builtins.property
+    def header(self):
+        """Message field 'header'."""
+        return self._header
+
+    @header.setter
+    def header(self, value):
+        if __debug__:
+            from std_msgs.msg import Header
+            assert \
+                isinstance(value, Header), \
+                "The 'header' field must be a sub message of type 'Header'"
+        self._header = value
 
     @builtins.property
     def timestamp(self):

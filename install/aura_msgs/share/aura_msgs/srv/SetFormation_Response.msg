@@ -1,1 +1,5 @@
-/home/aura/ws/build/aura_msgs/rosidl_cmake/srv/SetFormation_Response.msg
+
+# Response
+bool success
+string message
+float32 estimated_transition_time

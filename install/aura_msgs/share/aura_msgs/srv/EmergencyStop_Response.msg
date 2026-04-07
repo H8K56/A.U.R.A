@@ -1,1 +1,5 @@
-/home/aura/ws/build/aura_msgs/rosidl_cmake/srv/EmergencyStop_Response.msg
+
+# Response
+bool success
+string message
+uint8 drones_affected

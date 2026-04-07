@@ -250,6 +250,11 @@ static bool _NetworkMetrics__cdr_serialize(
     cdr.serializeArray(array_ptr, size);
   }
 
+  // Field name: mesh_connected
+  {
+    cdr << (ros_message->mesh_connected ? true : false);
+  }
+
   // Field name: backhaul_active
   {
     cdr << (ros_message->backhaul_active ? true : false);
@@ -597,6 +602,13 @@ static bool _NetworkMetrics__cdr_deserialize(
     cdr.deserializeArray(array_ptr, size);
   }
 
+  // Field name: mesh_connected
+  {
+    uint8_t tmp;
+    cdr >> tmp;
+    ros_message->mesh_connected = tmp ? true : false;
+  }
+
   // Field name: backhaul_active
   {
     uint8_t tmp;
@@ -788,6 +800,12 @@ size_t get_serialized_size_aura_msgs__msg__NetworkMetrics(
     (void)array_ptr;
     size_t item_size = sizeof(array_ptr[0]);
     current_alignment += array_size * item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // field.name mesh_connected
+  {
+    size_t item_size = sizeof(ros_message->mesh_connected);
+    current_alignment += item_size +
       eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
   }
   // field.name backhaul_active
@@ -1062,6 +1080,13 @@ size_t max_serialized_size_aura_msgs__msg__NetworkMetrics(
     last_member_size = array_size * sizeof(uint32_t);
     current_alignment += array_size * sizeof(uint32_t) +
       eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
+  // member: mesh_connected
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint8_t);
+    current_alignment += array_size * sizeof(uint8_t);
   }
   // member: backhaul_active
   {

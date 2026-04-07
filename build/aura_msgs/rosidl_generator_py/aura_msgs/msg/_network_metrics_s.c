@@ -730,6 +730,15 @@ bool aura_msgs__msg__network_metrics__convert_from_py(PyObject * _pymsg, void * 
     }
     Py_DECREF(field);
   }
+  {  // mesh_connected
+    PyObject * field = PyObject_GetAttrString(_pymsg, "mesh_connected");
+    if (!field) {
+      return false;
+    }
+    assert(PyBool_Check(field));
+    ros_message->mesh_connected = (Py_True == field);
+    Py_DECREF(field);
+  }
   {  // backhaul_active
     PyObject * field = PyObject_GetAttrString(_pymsg, "backhaul_active");
     if (!field) {
@@ -1386,6 +1395,17 @@ PyObject * aura_msgs__msg__network_metrics__convert_to_py(void * raw_ros_message
       Py_DECREF(ret);
     }
     Py_DECREF(field);
+  }
+  {  // mesh_connected
+    PyObject * field = NULL;
+    field = PyBool_FromLong(ros_message->mesh_connected ? 1 : 0);
+    {
+      int rc = PyObject_SetAttrString(_pymessage, "mesh_connected", field);
+      Py_DECREF(field);
+      if (rc) {
+        return NULL;
+      }
+    }
   }
   {  // backhaul_active
     PyObject * field = NULL;

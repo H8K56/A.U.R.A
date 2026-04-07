@@ -58,6 +58,7 @@ struct NetworkMetrics_
       this->avg_throughput_mbps = 0.0f;
       this->avg_latency_ms = 0.0f;
       this->packet_loss_percent = 0.0f;
+      this->mesh_connected = false;
       this->backhaul_active = false;
       this->backhaul_throughput_mbps = 0.0f;
       this->backhaul_latency_ms = 0.0f;
@@ -80,6 +81,7 @@ struct NetworkMetrics_
       this->avg_throughput_mbps = 0.0f;
       this->avg_latency_ms = 0.0f;
       this->packet_loss_percent = 0.0f;
+      this->mesh_connected = false;
       this->backhaul_active = false;
       this->backhaul_throughput_mbps = 0.0f;
       this->backhaul_latency_ms = 0.0f;
@@ -147,6 +149,9 @@ struct NetworkMetrics_
   using _link_rssi_dbm_type =
     std::vector<float, typename std::allocator_traits<ContainerAllocator>::template rebind_alloc<float>>;
   _link_rssi_dbm_type link_rssi_dbm;
+  using _mesh_connected_type =
+    bool;
+  _mesh_connected_type mesh_connected;
   using _backhaul_active_type =
     bool;
   _backhaul_active_type backhaul_active;
@@ -278,6 +283,12 @@ struct NetworkMetrics_
     this->link_rssi_dbm = _arg;
     return *this;
   }
+  Type & set__mesh_connected(
+    const bool & _arg)
+  {
+    this->mesh_connected = _arg;
+    return *this;
+  }
   Type & set__backhaul_active(
     const bool & _arg)
   {
@@ -397,6 +408,9 @@ struct NetworkMetrics_
       return false;
     }
     if (this->link_rssi_dbm != other.link_rssi_dbm) {
+      return false;
+    }
+    if (this->mesh_connected != other.mesh_connected) {
       return false;
     }
     if (this->backhaul_active != other.backhaul_active) {

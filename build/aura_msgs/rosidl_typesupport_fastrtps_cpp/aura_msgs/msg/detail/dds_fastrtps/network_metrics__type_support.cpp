@@ -168,6 +168,8 @@ cdr_serialize(
   {
     cdr << ros_message.link_rssi_dbm;
   }
+  // Member: mesh_connected
+  cdr << (ros_message.mesh_connected ? true : false);
   // Member: backhaul_active
   cdr << (ros_message.backhaul_active ? true : false);
   // Member: backhaul_throughput_mbps
@@ -262,6 +264,13 @@ cdr_deserialize(
   // Member: link_rssi_dbm
   {
     cdr >> ros_message.link_rssi_dbm;
+  }
+
+  // Member: mesh_connected
+  {
+    uint8_t tmp;
+    cdr >> tmp;
+    ros_message.mesh_connected = tmp ? true : false;
   }
 
   // Member: backhaul_active
@@ -444,6 +453,12 @@ get_serialized_size(
       eprosima::fastcdr::Cdr::alignment(current_alignment, padding);
     size_t item_size = sizeof(ros_message.link_rssi_dbm[0]);
     current_alignment += array_size * item_size +
+      eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
+  }
+  // Member: mesh_connected
+  {
+    size_t item_size = sizeof(ros_message.mesh_connected);
+    current_alignment += item_size +
       eprosima::fastcdr::Cdr::alignment(current_alignment, item_size);
   }
   // Member: backhaul_active
@@ -729,6 +744,14 @@ max_serialized_size_NetworkMetrics(
     last_member_size = array_size * sizeof(uint32_t);
     current_alignment += array_size * sizeof(uint32_t) +
       eprosima::fastcdr::Cdr::alignment(current_alignment, sizeof(uint32_t));
+  }
+
+  // Member: mesh_connected
+  {
+    size_t array_size = 1;
+
+    last_member_size = array_size * sizeof(uint8_t);
+    current_alignment += array_size * sizeof(uint8_t);
   }
 
   // Member: backhaul_active

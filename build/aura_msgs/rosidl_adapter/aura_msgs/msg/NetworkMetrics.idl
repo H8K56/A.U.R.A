@@ -87,6 +87,11 @@ module aura_msgs {
       sequence<float> link_rssi_dbm;
 
       @verbatim (language="comment", text=
+        "Mesh connectivity status" "\n"
+        "Is the mesh fully connected?")
+      boolean mesh_connected;
+
+      @verbatim (language="comment", text=
         "Backhaul status (Hub to command post)")
       boolean backhaul_active;
 

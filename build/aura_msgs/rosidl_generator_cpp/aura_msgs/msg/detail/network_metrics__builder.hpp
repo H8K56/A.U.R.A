@@ -69,16 +69,32 @@ private:
   ::aura_msgs::msg::NetworkMetrics msg_;
 };
 
+class Init_NetworkMetrics_mesh_connected
+{
+public:
+  explicit Init_NetworkMetrics_mesh_connected(::aura_msgs::msg::NetworkMetrics & msg)
+  : msg_(msg)
+  {}
+  Init_NetworkMetrics_backhaul_active mesh_connected(::aura_msgs::msg::NetworkMetrics::_mesh_connected_type arg)
+  {
+    msg_.mesh_connected = std::move(arg);
+    return Init_NetworkMetrics_backhaul_active(msg_);
+  }
+
+private:
+  ::aura_msgs::msg::NetworkMetrics msg_;
+};
+
 class Init_NetworkMetrics_link_rssi_dbm
 {
 public:
   explicit Init_NetworkMetrics_link_rssi_dbm(::aura_msgs::msg::NetworkMetrics & msg)
   : msg_(msg)
   {}
-  Init_NetworkMetrics_backhaul_active link_rssi_dbm(::aura_msgs::msg::NetworkMetrics::_link_rssi_dbm_type arg)
+  Init_NetworkMetrics_mesh_connected link_rssi_dbm(::aura_msgs::msg::NetworkMetrics::_link_rssi_dbm_type arg)
   {
     msg_.link_rssi_dbm = std::move(arg);
-    return Init_NetworkMetrics_backhaul_active(msg_);
+    return Init_NetworkMetrics_mesh_connected(msg_);
   }
 
 private:

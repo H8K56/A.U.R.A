@@ -272,6 +272,13 @@ inline void to_flow_style_yaml(
     out << ", ";
   }
 
+  // member: mesh_connected
+  {
+    out << "mesh_connected: ";
+    rosidl_generator_traits::value_to_yaml(msg.mesh_connected, out);
+    out << ", ";
+  }
+
   // member: backhaul_active
   {
     out << "backhaul_active: ";
@@ -583,6 +590,16 @@ inline void to_block_style_yaml(
         out << "\n";
       }
     }
+  }
+
+  // member: mesh_connected
+  {
+    if (indentation > 0) {
+      out << std::string(indentation, ' ');
+    }
+    out << "mesh_connected: ";
+    rosidl_generator_traits::value_to_yaml(msg.mesh_connected, out);
+    out << "\n";
   }
 
   // member: backhaul_active

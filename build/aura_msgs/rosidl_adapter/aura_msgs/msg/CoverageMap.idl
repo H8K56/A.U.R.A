@@ -4,6 +4,7 @@
 
 #include "builtin_interfaces/msg/Time.idl"
 #include "geometry_msgs/msg/Point.idl"
+#include "std_msgs/msg/Header.idl"
 
 module aura_msgs {
   module msg {
@@ -11,6 +12,8 @@ module aura_msgs {
       "CoverageMap.msg" "\n"
       "Coverage map for RL observation space")
     struct CoverageMap {
+      std_msgs::msg::Header header;
+
       builtin_interfaces::msg::Time timestamp;
 
       @verbatim (language="comment", text=

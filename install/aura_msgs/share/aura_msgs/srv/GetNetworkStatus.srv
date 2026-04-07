@@ -1,1 +1,12 @@
-/home/aura/ws/src/aura_msgs/srv/GetNetworkStatus.srv
+# GetNetworkStatus.srv
+# Query current network status
+
+# Request
+bool include_coverage_map        # Include full grid data
+bool include_link_details        # Include per-link metrics
+---
+# Response
+bool success
+NetworkMetrics metrics
+float32 overall_health           # 0-1, aggregate network health
+string[] issues                  # List of current issues

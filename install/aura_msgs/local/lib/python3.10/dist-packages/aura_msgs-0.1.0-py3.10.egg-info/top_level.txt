@@ -1,1 +1,1 @@
-/home/aura/ws/build/aura_msgs/ament_cmake_python/aura_msgs/aura_msgs.egg-info/top_level.txt
+aura_msgs

@@ -1,6 +1,7 @@
 # CoverageMap.msg
 # Coverage map for RL observation space
 
+std_msgs/Header header
 builtin_interfaces/Time timestamp
 
 # Grid parameters

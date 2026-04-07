@@ -23,6 +23,10 @@
 #include "geometry_msgs/msg/detail/point__functions.h"
 // end nested array functions include
 ROSIDL_GENERATOR_C_IMPORT
+bool std_msgs__msg__header__convert_from_py(PyObject * _pymsg, void * _ros_message);
+ROSIDL_GENERATOR_C_IMPORT
+PyObject * std_msgs__msg__header__convert_to_py(void * raw_ros_message);
+ROSIDL_GENERATOR_C_IMPORT
 bool builtin_interfaces__msg__time__convert_from_py(PyObject * _pymsg, void * _ros_message);
 ROSIDL_GENERATOR_C_IMPORT
 PyObject * builtin_interfaces__msg__time__convert_to_py(void * raw_ros_message);
@@ -68,6 +72,17 @@ bool aura_msgs__msg__coverage_map__convert_from_py(PyObject * _pymsg, void * _ro
     assert(strncmp("aura_msgs.msg._coverage_map.CoverageMap", full_classname_dest, 39) == 0);
   }
   aura_msgs__msg__CoverageMap * ros_message = _ros_message;
+  {  // header
+    PyObject * field = PyObject_GetAttrString(_pymsg, "header");
+    if (!field) {
+      return false;
+    }
+    if (!std_msgs__msg__header__convert_from_py(field, &ros_message->header)) {
+      Py_DECREF(field);
+      return false;
+    }
+    Py_DECREF(field);
+  }
   {  // timestamp
     PyObject * field = PyObject_GetAttrString(_pymsg, "timestamp");
     if (!field) {
@@ -544,6 +559,20 @@ PyObject * aura_msgs__msg__coverage_map__convert_to_py(void * raw_ros_message)
     }
   }
   aura_msgs__msg__CoverageMap * ros_message = (aura_msgs__msg__CoverageMap *)raw_ros_message;
+  {  // header
+    PyObject * field = NULL;
+    field = std_msgs__msg__header__convert_to_py(&ros_message->header);
+    if (!field) {
+      return NULL;
+    }
+    {
+      int rc = PyObject_SetAttrString(_pymessage, "header", field);
+      Py_DECREF(field);
+      if (rc) {
+        return NULL;
+      }
+    }
+  }
   {  // timestamp
     PyObject * field = NULL;
     field = builtin_interfaces__msg__time__convert_to_py(&ros_message->timestamp);

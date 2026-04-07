@@ -1,5 +1,6 @@
 # NetworkMetrics.msg
 # Network simulation metrics from NS-3 bridge
+
 std_msgs/Header header
 builtin_interfaces/Time timestamp
 
@@ -29,6 +30,9 @@ uint8[] link_to_drone            # Destination drone ID
 float32[] link_throughput_mbps   # Throughput on this link
 float32[] link_latency_ms        # Latency on this link
 float32[] link_rssi_dbm          # Signal strength on this link
+
+# Mesh connectivity status
+bool mesh_connected              # Is the mesh fully connected?
 
 # Backhaul status (Hub to command post)
 bool backhaul_active

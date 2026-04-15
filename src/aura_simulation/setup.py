@@ -29,6 +29,8 @@ setup(
             'sim_swarm_driver = aura_simulation.sim_swarm_driver:main',
             'dead_zone_publisher = aura_simulation.dead_zone_publisher:main',
             'scenario_runner = aura_simulation.scenario_runner:main',
+            'px4_dds_bridge = aura_simulation.px4_dds_bridge:main',
+            'px4_mavros_bridge = aura_simulation.px4_mavros_bridge:main',
         ],
     },
 )

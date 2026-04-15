@@ -41,7 +41,7 @@
     status_publish_rate_hz: 1.0
     auto_start: true              # Auto-start mission in sim mode
     min_battery_for_launch: 30.0  # Lower threshold for sim
-    preflight_timeout_sec: 30.0   # Faster timeouts for sim
+    preflight_timeout_sec: 120.0   # Faster timeouts for sim
     takeoff_timeout_sec: 30.0
     transit_timeout_sec: 60.0
     formation_timeout_sec: 60.0

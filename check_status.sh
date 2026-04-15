@@ -200,19 +200,89 @@
 # cd ~/ws && colcon build --packages-select aura_simulation 2>&1 | tail -3
 # source install/setup.bash
 # ros2 launch aura_simulation sim_no_px4.launch.py
-# 1. Check if the sed actually worked
-grep -n 'swarm_pub\|swarm/state' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py
+# # 1. Check if the sed actually worked
+# grep -n 'swarm_pub\|swarm/state' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py
 
-# 2. Check what the network_sim subscribes with
-grep -n -A2 'swarm_sub\|create_subscription' ~/ws/src/aura_network_sim/aura_network_sim/network_sim_node.py | head -15
+# # 2. Check what the network_sim subscribes with
+# grep -n -A2 'swarm_sub\|create_subscription' ~/ws/src/aura_network_sim/aura_network_sim/network_sim_node.py | head -15
 
-# 3. Quick live test — publish manually and see if network_sim receives it
-# Terminal 1: start just network_sim
-# Terminal 2: echo the topic to see if anything comes through
+# # 3. Quick live test — publish manually and see if network_sim receives it
+# # Terminal 1: start just network_sim
+# # Terminal 2: echo the topic to see if anything comes through
 
-# Actually, simplest diagnostic — check the publisher side:
-ros2 launch aura_simulation sim_no_px4.launch.py &
-sleep 5
-ros2 topic info /swarm/state -v
-ros2 topic echo /swarm/state --once 2>&1 | head -20
-kill %1 2>/dev/null
+# # Actually, simplest diagnostic — check the publisher side:
+# ros2 launch aura_simulation sim_no_px4.launch.py &
+# sleep 5
+# ros2 topic info /swarm/state -v
+# ros2 topic echo /swarm/state --once 2>&1 | head -20
+# kill %1 2>/dev/null
+
+# # 1. PX4 version and available targets
+# cd ~/PX4-Autopilot && git describe --tags 2>/dev/null || git log --oneline -1
+# make list_config_targets 2>/dev/null | grep -i "gazebo-classic" | head -10
+
+# # 2. Gazebo Classic version
+# gazebo --version 2>/dev/null || dpkg -l | grep gazebo
+
+# # 3. MAVROS availability
+# ros2 pkg list 2>/dev/null | grep mavros
+# dpkg -l | grep mavros
+
+# # 4. What Gazebo models exist
+# ls ~/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/models/ 2>/dev/null | head -20
+
+# # 5. Current workspace packages
+# ls ~/ws/src/
+
+# # 6. Existing world files
+# ls ~/ws/worlds/ 2>/dev/null
+# ls ~/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds/ 2>/dev/null | head -10
+# 1. Are PX4 processes actually running?
+# ps aux | grep px4 | grep -v grep
+
+# # 2. Are MAVROS nodes alive?
+# ros2 node list 2>/dev/null | grep mavros
+
+# # 3. Is the bridge node alive?
+# ros2 node list 2>/dev/null | grep px4_mavros_bridge
+
+# # 4. Are iris models in Gazebo?
+# gz model --list 2>/dev/null
+
+# # 5. What topics exist?
+# ros2 topic list 2>/dev/null | grep -E "mavros|drone.*mavros" | head -20
+
+# # 6. Check if any PX4 errors in the launch output
+# # Re-launch and capture output:
+# ros2 launch aura_simulation gazebo_swarm.launch.py 2>&1 | tee /tmp/gazebo_launch.log &
+# sleep 30
+# # Then check:
+# grep -i "error\|fail\|warn" /tmp/gazebo_launch.log | head -30
+# Check what the working make target actually sets
+# cd ~/PX4-Autopilot
+# grep -r "gazebo-classic" Tools/simulation/ ROMFS/px4fmu_common/init.d-posix/ --include="*.sh" -l 2>/dev/null | head -10
+
+# # Check the simulator_mavlink module
+# grep -r "SIM_GAZEBO\|GAZEBO_CLASSIC\|simulator_mavlink" ROMFS/px4fmu_common/init.d-posix/rcS | head -20
+
+# # Check what env vars the Makefile sets for gazebo-classic_iris
+# grep -A 20 "gazebo-classic_iris" Makefile 2>/dev/null || grep -A 20 "gazebo-classic" cmake/sitl_target.cmake 2>/dev/null | head -30
+
+# # Also check what autostart ID iris uses
+# grep -r "iris" ROMFS/px4fmu_common/init.d-posix/airframes/ | grep -i "gazebo-classic\|10016" | head -5
+
+# 1. Verify the fixes from last session are still applied
+grep 'mesh_connected' ~/ws/src/aura_network_sim/aura_network_sim/network_sim_node.py
+grep 'reliable_qos\|sensor_qos' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py | head -5
+grep 'drone_id.*state' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py
+
+# 2. What launch file are you using?
+# Are you running sim_no_px4.launch.py or a different one with Gazebo?
+
+# 3. Check if sim_swarm_driver is even in the launch
+# (if you're using Gazebo+PX4, the sim driver shouldn't be there —
+#  PX4 publishes drone state instead)
+
+# 4. Show me the launch file you're using
+ls ~/ws/src/aura_simulation/launch/
+cat ~/ws/launch/*.py 2>/dev/null | head -30

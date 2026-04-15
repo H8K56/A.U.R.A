@@ -1,0 +1,367 @@
+"""
+PX4-MAVROS Bridge for A.U.R.A. (v2 — mavros/uas_N namespace)
+
+Translates between MAVROS topics and A.U.R.A. SwarmState/CoverageGoal.
+Uses the /mavros/uas_N/ namespace scheme from MAVROS multi_uas.launch.
+
+Topic mapping:
+    /mavros/uas_1/local_position/pose  →  drone 0 position
+    /mavros/uas_2/local_position/pose  →  drone 1 position
+    ...
+    /mavros/uas_N/...                  →  drone N-1
+
+Architecture:
+    MAVROS /mavros/uas_1/* ──┐
+    MAVROS /mavros/uas_2/* ──┼──► px4_mavros_bridge ──► /swarm/state
+    MAVROS /mavros/uas_N/* ──┤                      ◄── /coverage/goals
+                             └──► /drone_{id}/state
+"""
+
+import rclpy
+from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
+import numpy as np
+from typing import Dict, Optional
+from dataclasses import dataclass, field
+
+from geometry_msgs.msg import PoseStamped, Point, Vector3, Quaternion, TwistStamped
+from sensor_msgs.msg import BatteryState, NavSatFix
+from mavros_msgs.msg import State as MavrosState
+from mavros_msgs.srv import CommandBool, SetMode
+from std_msgs.msg import String
+
+from aura_msgs.msg import (
+    DroneState,
+    SwarmState,
+    CoverageGoal,
+)
+
+
+PHASE_TO_MISSION_STATE = {
+    'IDLE': 0, 'PREFLIGHT': 1, 'TAKEOFF': 2, 'TRANSIT': 3,
+    'FORMATION': 4, 'OPERATIONS': 5, 'RTL': 6,
+    'COMPLETE': 7, 'ABORT': 8,
+}
+
+
+@dataclass
+class PX4Drone:
+    drone_id: int
+    role: int = 0
+    position: np.ndarray = field(default_factory=lambda: np.zeros(3))
+    velocity: np.ndarray = field(default_factory=lambda: np.zeros(3))
+    orientation: tuple = (0.0, 0.0, 0.0, 1.0)
+    armed: bool = False
+    connected: bool = False
+    mode: str = ""
+    battery_percent: float = 100.0
+    battery_voltage: float = 16.8
+    gps_fix: bool = False
+    num_satellites: int = 0
+    goal_position: Optional[np.ndarray] = None
+    sending_setpoints: bool = False
+
+
+class PX4MavrosBridge(Node):
+
+    def __init__(self):
+        super().__init__('px4_mavros_bridge')
+
+        self.declare_parameter('num_drones', 5)
+        self.declare_parameter('publish_rate_hz', 10.0)
+        self.declare_parameter('hub_drone_id', 0)
+        self.declare_parameter('setpoint_rate_hz', 20.0)
+        self.declare_parameter('takeoff_altitude_m', 15.0)
+        self.declare_parameter('auto_arm', True)
+
+        self.num_drones = self.get_parameter('num_drones').value
+        rate = self.get_parameter('publish_rate_hz').value
+        hub_id = self.get_parameter('hub_drone_id').value
+        self.setpoint_rate = self.get_parameter('setpoint_rate_hz').value
+        self.takeoff_alt = self.get_parameter('takeoff_altitude_m').value
+        self.auto_arm = self.get_parameter('auto_arm').value
+
+        self.current_phase = 'IDLE'
+        self.arm_sequence_done = False
+
+        # Drone trackers (0-indexed)
+        self.drones: Dict[int, PX4Drone] = {}
+        for i in range(self.num_drones):
+            self.drones[i] = PX4Drone(
+                drone_id=i,
+                role=1 if i == hub_id else 0,
+            )
+
+        # QoS
+        reliable_qos = QoSProfile(
+            reliability=ReliabilityPolicy.RELIABLE, depth=10)
+        sensor_qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT, depth=5)
+        mavros_qos = QoSProfile(
+            reliability=ReliabilityPolicy.RELIABLE, depth=10,
+            durability=DurabilityPolicy.VOLATILE)
+
+        # ── A.U.R.A. publishers ───────────────────────────
+        self.swarm_pub = self.create_publisher(
+            SwarmState, '/swarm/state', reliable_qos)
+        self.drone_pubs = {}
+        for i in range(self.num_drones):
+            self.drone_pubs[i] = self.create_publisher(
+                DroneState, f'/drone_{i}/state', reliable_qos)
+
+        # ── A.U.R.A. subscribers ──────────────────────────
+        self.create_subscription(
+            CoverageGoal, '/coverage/goals',
+            self._coverage_goal_cb, reliable_qos)
+        self.create_subscription(
+            String, '/mission/phase',
+            self._phase_cb, reliable_qos)
+
+        # ── Per-drone MAVROS subscribers ──────────────────
+        # Namespace: /mavros/uas_{tgt_sys} where tgt_sys = i+1
+        self.setpoint_pubs = {}
+        self.arm_clients = {}
+        self.mode_clients = {}
+
+        for i in range(self.num_drones):
+            tgt_sys = i + 1  # 1-based, matches PX4 instance
+            ns = f'/mavros/uas_{tgt_sys}'
+
+            self.create_subscription(
+                PoseStamped, f'{ns}/local_position/pose',
+                lambda msg, idx=i: self._pose_cb(msg, idx),
+                sensor_qos)
+
+            self.create_subscription(
+                TwistStamped, f'{ns}/local_position/velocity_body',
+                lambda msg, idx=i: self._vel_cb(msg, idx),
+                sensor_qos)
+
+            self.create_subscription(
+                MavrosState, f'{ns}/state',
+                lambda msg, idx=i: self._state_cb(msg, idx),
+                mavros_qos)
+
+            self.create_subscription(
+                BatteryState, f'{ns}/battery',
+                lambda msg, idx=i: self._battery_cb(msg, idx),
+                sensor_qos)
+
+            self.create_subscription(
+                NavSatFix, f'{ns}/global_position/global',
+                lambda msg, idx=i: self._gps_cb(msg, idx),
+                sensor_qos)
+
+            self.setpoint_pubs[i] = self.create_publisher(
+                PoseStamped, f'{ns}/setpoint_position/local',
+                reliable_qos)
+
+            self.arm_clients[i] = self.create_client(
+                CommandBool, f'{ns}/cmd/arming')
+            self.mode_clients[i] = self.create_client(
+                SetMode, f'{ns}/set_mode')
+
+        # ── Timers ────────────────────────────────────────
+        self.create_timer(1.0 / rate, self._publish_swarm_state)
+        self.create_timer(1.0 / self.setpoint_rate, self._send_setpoints)
+
+        self.get_logger().info(
+            f'PX4 MAVROS Bridge started: {self.num_drones} drones, '
+            f'namespace=/mavros/uas_N, rate={rate} Hz')
+
+    # ── MAVROS callbacks ─────────────────────────────────
+
+    def _pose_cb(self, msg: PoseStamped, idx: int):
+        d = self.drones[idx]
+        d.position = np.array([
+            msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
+        d.orientation = (
+            msg.pose.orientation.x, msg.pose.orientation.y,
+            msg.pose.orientation.z, msg.pose.orientation.w)
+
+    def _vel_cb(self, msg: TwistStamped, idx: int):
+        self.drones[idx].velocity = np.array([
+            msg.twist.linear.x, msg.twist.linear.y, msg.twist.linear.z])
+
+    def _state_cb(self, msg: MavrosState, idx: int):
+        d = self.drones[idx]
+        d.armed = msg.armed
+        d.connected = msg.connected
+        d.mode = msg.mode
+
+    def _battery_cb(self, msg: BatteryState, idx: int):
+        d = self.drones[idx]
+        d.battery_percent = msg.percentage * 100.0 if msg.percentage >= 0 else 100.0
+        d.battery_voltage = msg.voltage if msg.voltage > 0 else 16.8
+
+    def _gps_cb(self, msg: NavSatFix, idx: int):
+        self.drones[idx].gps_fix = msg.status.status >= 0
+
+    # ── A.U.R.A. callbacks ───────────────────────────────
+
+    def _coverage_goal_cb(self, msg: CoverageGoal):
+        did = msg.drone_id
+        if did in self.drones:
+            self.drones[did].goal_position = np.array([
+                msg.position.x, msg.position.y, msg.position.z])
+            self.drones[did].sending_setpoints = True
+
+    def _phase_cb(self, msg: String):
+        new_phase = msg.data
+        if new_phase != self.current_phase:
+            self.get_logger().info(f'Phase: {self.current_phase} -> {new_phase}')
+            self.current_phase = new_phase
+            if new_phase == 'PREFLIGHT' and self.auto_arm:
+                self._arm_all()
+            elif new_phase == 'TAKEOFF':
+                self._takeoff_all()
+            elif new_phase == 'RTL':
+                self._rtl_all()
+
+    # ── Drone commands ───────────────────────────────────
+
+    def _arm_all(self):
+        for i in range(self.num_drones):
+            self.drones[i].goal_position = np.array([
+                self.drones[i].position[0],
+                self.drones[i].position[1],
+                self.drones[i].position[2] + 0.5])
+            self.drones[i].sending_setpoints = True
+        self.arm_sequence_done = False
+        self.create_timer(2.0, self._do_arm_sequence)
+
+    def _do_arm_sequence(self):
+        if self.arm_sequence_done:
+            return
+        self.arm_sequence_done = True
+        for i in range(self.num_drones):
+            if self.mode_clients[i].service_is_ready():
+                req = SetMode.Request()
+                req.custom_mode = 'OFFBOARD'
+                self.mode_clients[i].call_async(req)
+                self.get_logger().info(f'Drone {i}: OFFBOARD requested')
+            else:
+                self.get_logger().warn(f'Drone {i}: set_mode not ready')
+            if self.arm_clients[i].service_is_ready():
+                req = CommandBool.Request()
+                req.value = True
+                self.arm_clients[i].call_async(req)
+                self.get_logger().info(f'Drone {i}: Arm requested')
+            else:
+                self.get_logger().warn(f'Drone {i}: arming not ready')
+
+    def _takeoff_all(self):
+        for i in range(self.num_drones):
+            d = self.drones[i]
+            d.goal_position = np.array([
+                d.position[0], d.position[1], self.takeoff_alt])
+            d.sending_setpoints = True
+
+    def _rtl_all(self):
+        for i in range(self.num_drones):
+            if self.mode_clients[i].service_is_ready():
+                req = SetMode.Request()
+                req.custom_mode = 'AUTO.RTL'
+                self.mode_clients[i].call_async(req)
+            self.drones[i].sending_setpoints = False
+
+    # ── Setpoint streaming ───────────────────────────────
+
+    def _send_setpoints(self):
+        for i in range(self.num_drones):
+            d = self.drones[i]
+            if d.sending_setpoints and d.goal_position is not None:
+                msg = PoseStamped()
+                msg.header.stamp = self.get_clock().now().to_msg()
+                msg.header.frame_id = 'map'
+                msg.pose.position.x = float(d.goal_position[0])
+                msg.pose.position.y = float(d.goal_position[1])
+                msg.pose.position.z = float(d.goal_position[2])
+                msg.pose.orientation.w = 1.0
+                self.setpoint_pubs[i].publish(msg)
+
+    # ── SwarmState publishing ────────────────────────────
+
+    def _publish_swarm_state(self):
+        msg = SwarmState()
+        msg.timestamp = self.get_clock().now().to_msg()
+        msg.num_drones_total = self.num_drones
+        msg.num_drones_active = sum(
+            1 for d in self.drones.values() if d.connected)
+        msg.num_hubs = sum(
+            1 for d in self.drones.values() if d.role == 1)
+        msg.num_leaves = sum(
+            1 for d in self.drones.values() if d.role == 0)
+        msg.mission_state = PHASE_TO_MISSION_STATE.get(
+            self.current_phase, 0)
+
+        for i in range(self.num_drones):
+            ds = self._make_drone_state(self.drones[i])
+            msg.drones.append(ds)
+            self.drone_pubs[i].publish(ds)
+
+        msg.coverage_percent = 0.0
+        msg.coverage_quality = 0.0
+        msg.avg_throughput_mbps = 0.0
+        msg.avg_latency_ms = 0.0
+        msg.packet_loss_percent = 0.0
+        msg.mesh_connected = False
+        msg.backhaul_connected = False
+
+        self.swarm_pub.publish(msg)
+
+    def _make_drone_state(self, d: PX4Drone) -> DroneState:
+        ds = DroneState()
+        ds.timestamp = self.get_clock().now().to_msg()
+        ds.drone_id = d.drone_id
+        ds.role = d.role
+        ds.position = Point(
+            x=float(d.position[0]), y=float(d.position[1]),
+            z=float(d.position[2]))
+        ds.velocity = Vector3(
+            x=float(d.velocity[0]), y=float(d.velocity[1]),
+            z=float(d.velocity[2]))
+        ds.orientation = Quaternion(
+            x=float(d.orientation[0]), y=float(d.orientation[1]),
+            z=float(d.orientation[2]), w=float(d.orientation[3]))
+
+        mode_map = {
+            'MANUAL': DroneState.FLIGHT_MODE_IDLE,
+            'STABILIZED': DroneState.FLIGHT_MODE_IDLE,
+            'AUTO.TAKEOFF': DroneState.FLIGHT_MODE_TAKEOFF,
+            'OFFBOARD': DroneState.FLIGHT_MODE_OPERATIONS,
+            'AUTO.LOITER': DroneState.FLIGHT_MODE_FORMATION,
+            'AUTO.MISSION': DroneState.FLIGHT_MODE_TRANSIT,
+            'AUTO.RTL': DroneState.FLIGHT_MODE_RTL,
+            'AUTO.LAND': DroneState.FLIGHT_MODE_RTL,
+        }
+        ds.flight_mode = mode_map.get(d.mode, DroneState.FLIGHT_MODE_IDLE)
+        ds.battery_percent = float(d.battery_percent)
+        ds.battery_voltage = float(d.battery_voltage)
+        ds.signal_strength_dbm = -65.0
+        ds.gps_fix = d.gps_fix
+        ds.num_satellites = 12
+        ds.throughput_mbps = 0.0
+        ds.latency_ms = 0.0
+        ds.connected_neighbors = 0
+        return ds
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = PX4MavrosBridge()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.get_logger().info("PX4 MAVROS Bridge shutting down")
+        node.destroy_node()
+        try:
+            rclpy.shutdown()
+        except Exception:
+            pass
+
+
+if __name__ == '__main__':
+    main()

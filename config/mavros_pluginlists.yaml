@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    plugin_denylist: [""]
+    plugin_allowlist:
+      - sys_status
+      - sys_time
+      - command
+      - param
+      - global_position
+      - local_position
+      - imu
+      - setpoint_position
+      - setpoint_velocity
+      - setpoint_raw
+      - ftp

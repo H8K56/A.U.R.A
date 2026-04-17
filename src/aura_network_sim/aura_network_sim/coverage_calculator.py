@@ -75,7 +75,8 @@ class CoverageCalculator:
         self.grid_size_y = len(self.grid_y)
     
     def compute_coverage(self, 
-                         drones: Dict[int, DroneNetworkState]
+                         drones: Dict[int, DroneNetworkState],
+                         dead_zones: list = None
                          ) -> CoverageResult:
         """
         Compute coverage map from current drone positions.
@@ -113,6 +114,15 @@ class CoverageCalculator:
                         link_id=(drone_id, -1),  # -1 for ground user
                         tx_power_dbm=drone.tx_power_dbm
                     )
+                    
+                    # Apply dead zone signal attenuation
+                    if dead_zones:
+                        for zone in dead_zones:
+                            dz_dx = x - zone['cx']
+                            dz_dy = y - zone['cy']
+                            dist_to_zone = np.sqrt(dz_dx*dz_dx + dz_dy*dz_dy)
+                            if dist_to_zone < zone['radius']:
+                                rssi -= zone['attenuation_db']
                     
                     if rssi > best_rssi:
                         best_rssi = rssi

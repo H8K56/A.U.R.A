@@ -271,18 +271,45 @@
 # # Also check what autostart ID iris uses
 # grep -r "iris" ROMFS/px4fmu_common/init.d-posix/airframes/ | grep -i "gazebo-classic\|10016" | head -5
 
-# 1. Verify the fixes from last session are still applied
-grep 'mesh_connected' ~/ws/src/aura_network_sim/aura_network_sim/network_sim_node.py
-grep 'reliable_qos\|sensor_qos' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py | head -5
-grep 'drone_id.*state' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py
+# # 1. Verify the fixes from last session are still applied
+# grep 'mesh_connected' ~/ws/src/aura_network_sim/aura_network_sim/network_sim_node.py
+# grep 'reliable_qos\|sensor_qos' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py | head -5
+# grep 'drone_id.*state' ~/ws/src/aura_simulation/aura_simulation/sim_swarm_driver.py
 
-# 2. What launch file are you using?
-# Are you running sim_no_px4.launch.py or a different one with Gazebo?
+# # 2. What launch file are you using?
+# # Are you running sim_no_px4.launch.py or a different one with Gazebo?
 
-# 3. Check if sim_swarm_driver is even in the launch
-# (if you're using Gazebo+PX4, the sim driver shouldn't be there —
-#  PX4 publishes drone state instead)
+# # 3. Check if sim_swarm_driver is even in the launch
+# # (if you're using Gazebo+PX4, the sim driver shouldn't be there —
+# #  PX4 publishes drone state instead)
 
-# 4. Show me the launch file you're using
-ls ~/ws/src/aura_simulation/launch/
-cat ~/ws/launch/*.py 2>/dev/null | head -30
+# # 4. Show me the launch file you're using
+# ls ~/ws/src/aura_simulation/launch/
+# cat ~/ws/launch/*.py 2>/dev/null | head -30
+# 1. Check current coverage baseline
+ros2 topic echo /mission/status --once 2>&1 | grep coverage
+
+# 2. Add a random dead zone
+ros2 service call /dead_zone_publisher/add_random_zone std_srvs/srv/Trigger
+
+# 3. Wait a few seconds for coverage to update, then check
+sleep 5
+ros2 topic echo /mission/status --once 2>&1 | grep coverage
+
+# 4. Add another dead zone
+ros2 service call /dead_zone_publisher/add_random_zone std_srvs/srv/Trigger
+sleep 5
+ros2 topic echo /mission/status --once 2>&1 | grep coverage
+
+# 5. Add a third
+ros2 service call /dead_zone_publisher/add_random_zone std_srvs/srv/Trigger
+sleep 5
+ros2 topic echo /mission/status --once 2>&1 | grep coverage
+
+# 6. Check network details
+ros2 topic echo /network/metrics --once 2>&1 | grep -E 'coverage|signal|throughput'
+
+# 7. Clear all dead zones and watch recovery
+ros2 service call /dead_zone_publisher/clear_zones std_srvs/srv/Trigger
+sleep 5
+ros2 topic echo /mission/status --once 2>&1 | grep coverage

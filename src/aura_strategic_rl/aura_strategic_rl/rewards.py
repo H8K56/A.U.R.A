@@ -18,12 +18,12 @@ class RewardConfig:
     """Configuration for reward computation"""
 
     # Coverage rewards
-    coverage_weight: float = 1.0
+    coverage_weight: float = 2.0
     coverage_target: float = 80.0           # Target coverage %
     coverage_bonus_threshold: float = 90.0  # Bonus above this
 
     # Network quality rewards
-    connectivity_weight: float = 2.0        # Mesh connectivity (binary)
+    connectivity_weight: float = 0.5        # Mesh connectivity (binary)
     throughput_weight: float = 0.3
     latency_weight: float = 0.1
     signal_weight: float = 0.2
@@ -33,8 +33,8 @@ class RewardConfig:
     hover_bonus: float = 0.01               # Small bonus for staying still
 
     # Safety penalties
-    collision_penalty: float = 10.0         # Drones too close
-    boundary_penalty: float = 5.0           # Near area boundary
+    collision_penalty: float = 2.0         # Drones too close
+    boundary_penalty: float = 1.0           # Near area boundary
     altitude_penalty: float = 2.0           # Outside altitude bounds
 
     # Safety thresholds

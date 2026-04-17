@@ -23,7 +23,7 @@ from .coverage_calculator import CoverageCalculator
 
 # Import A.U.R.A. messages
 try:
-    from aura_msgs.msg import DroneState, SwarmState, NetworkMetrics, CoverageMap
+    from aura_msgs.msg import DroneState, SwarmState, NetworkMetrics, CoverageMap, WeatherZone
 except ImportError:
     # Define minimal message stubs for standalone testing
     DroneState = None
@@ -46,6 +46,7 @@ class NetworkSimNode(Node):
     
     def __init__(self):
         super().__init__('network_sim')
+        self.dead_zones = []  # Track active dead zones
         
         # Declare global parameters (from /**:)
         self.declare_parameter('tx_power_dbm', 20.0)
@@ -130,11 +131,18 @@ class NetworkSimNode(Node):
         if SwarmState is not None:
             self.swarm_sub = self.create_subscription(
                 SwarmState, '/swarm/state',
-                self.swarm_state_callback, qos
-            )
+                self.swarm_state_callback, qos)
         else:
             self.get_logger().warn('SwarmState message not available, using test data')
             self.swarm_sub = None
+        
+        # Subscribe to dead zones for coverage attenuation
+        self.create_subscription(
+            WeatherZone, '/weather/zones',
+            self.dead_zone_callback, 10)
+        self.create_subscription(
+            WeatherZone, '/network/dead_zones',
+            self.dead_zone_callback, 10)
         
         # Publishers
         if NetworkMetrics is not None:
@@ -185,6 +193,29 @@ class NetworkSimNode(Node):
                 drone.drone_id, position, is_hub
             )
     
+    def dead_zone_callback(self, msg: 'WeatherZone'):
+        """Track active dead zones for coverage attenuation."""
+        zone_data = {
+            'cx': msg.center.x,
+            'cy': msg.center.y,
+            'radius': msg.radius_meters,
+            'attenuation_db': msg.signal_attenuation_db,
+            'active': msg.is_active,
+            'name': getattr(msg, 'zone_name', 'unknown'),
+        }
+        # Update or add zone (match by approximate position)
+        updated = False
+        for i, z in enumerate(self.dead_zones):
+            if abs(z['cx'] - zone_data['cx']) < 1.0 and abs(z['cy'] - zone_data['cy']) < 1.0:
+                self.dead_zones[i] = zone_data
+                updated = True
+                break
+        if not updated:
+            self.dead_zones.append(zone_data)
+        
+        # Remove inactive zones
+        self.dead_zones = [z for z in self.dead_zones if z['active']]
+    
     def update_callback(self):
         """Periodic network simulation update"""
         self.update_count += 1
@@ -194,7 +225,7 @@ class NetworkSimNode(Node):
         mesh_stats = self.mesh_sim.get_mesh_stats()
         
         # Compute ground coverage
-        coverage_result = self.coverage_calc.compute_coverage(self.mesh_sim.drones)
+        coverage_result = self.coverage_calc.compute_coverage(self.mesh_sim.drones, dead_zones=self.dead_zones)
         
         # Log stats periodically
         if self.update_count % 50 == 0:

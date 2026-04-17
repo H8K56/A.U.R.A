@@ -40,7 +40,7 @@ class EnvConfig:
 
     # Simulation
     num_drones: int = 5
-    max_steps: int = 500
+    max_steps: int = 200
     dt: float = 0.5  # Time step (seconds)
 
     # Area

@@ -14,6 +14,8 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 import torch
 import torch.nn as nn
+from .policy import MLPPolicy, PolicyCheckpoint
+from .spaces import ObservationBuilder as TrainedObsBuilder, ObservationConfig
 
 from geometry_msgs.msg import Point
 from aura_msgs.msg import (
@@ -211,27 +213,36 @@ class StrategicRLNode(Node):
         # Configuration
         self.config = RLConfig(num_drones=num_drones)
         
-        # Observation builder
-        self.obs_builder = ObservationBuilder(self.config)
+        # Observation builder — use the trained spaces when loading a trained policy
+        if model_path and not self.use_baseline:
+            obs_config = ObservationConfig(num_drones=num_drones)
+            self.obs_builder = TrainedObsBuilder(obs_config)
+            self.obs_builder.obs_dim = obs_config.total_obs_dim  # compatibility
+            self.get_logger().info(f'Using trained observation space (dim={obs_config.total_obs_dim})')
+        else:
+            self.obs_builder = ObservationBuilder(self.config)
         
         # Policy network
         action_dim = num_drones * 3  # dx, dy, dz per drone
-        self.policy = PolicyNetwork(
-            self.obs_builder.obs_dim,
-            action_dim,
-            self.config
-        )
+        self.policy = None
         
-        # Load model if available
+        # Load trained model if available
         if model_path:
             try:
-                self.policy.load_state_dict(torch.load(model_path))
-                self.policy.eval()
+                self.policy, meta = PolicyCheckpoint.load(model_path, device='cpu')
                 self.use_baseline = False
-                self.get_logger().info(f'Loaded policy from {model_path}')
+                self.get_logger().info(
+                    f'Loaded trained policy from {model_path} '
+                    f'(obs={meta.get("obs_dim")}, act={meta.get("action_dim")}, '
+                    f'reward={meta.get("eval_reward", "?"):.1f})')
             except Exception as e:
                 self.get_logger().warn(f'Failed to load model: {e}. Using baseline.')
                 self.use_baseline = True
+        
+        # Fallback to old PolicyNetwork if no trained model
+        if self.policy is None and not self.use_baseline:
+            self.policy = PolicyNetwork(
+                self.obs_builder.obs_dim, action_dim, self.config)
         
         # State
         self.latest_swarm: Optional[SwarmState] = None
@@ -334,11 +345,19 @@ class StrategicRLNode(Node):
         if self.latest_network is None:
             self.latest_network = NetworkMetrics()
         
-        obs = self.obs_builder.build(
-            self.latest_swarm,
-            self.latest_coverage,
-            self.latest_network
-        )
+        # Use appropriate observation builder
+        if hasattr(self.obs_builder, 'build_from_ros'):
+            obs = self.obs_builder.build_from_ros(
+                self.latest_swarm,
+                self.latest_network,
+                self.weather_zones
+            )
+        else:
+            obs = self.obs_builder.build(
+                self.latest_swarm,
+                self.latest_coverage,
+                self.latest_network
+            )
         
         # Run policy
         with torch.no_grad():

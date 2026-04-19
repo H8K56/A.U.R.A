@@ -134,11 +134,16 @@ def launch_setup(context, *args, **kwargs):
         ('aura_simulation', 'dead_zone_publisher', 'dead_zone_publisher', 0.0),
         ('aura_network_sim', 'network_sim_node', 'network_sim', 0.5),
         ('aura_network_sim', 'coverage_calculator_node', 'coverage_calculator', 1.0),
-        ('aura_strategic_rl', 'strategic_rl_node', 'strategic_rl', 1.5),
+        ('aura_strategic_rl', 'strategic_rl_node', 'strategic_rl', 1.5, {
+            'model_path': '/home/aura/ws/models/strategic_rl_v2/best_policy.pt',
+            'use_baseline': False,
+        }),
         ('aura_mission_control', 'mission_control_node', 'mission_control', 2.0),
     ]
 
-    for pkg, exe, name, offset in aura_nodes:
+    for entry in aura_nodes:
+        pkg, exe, name, offset = entry[0], entry[1], entry[2], entry[3]
+        extra_params = entry[4] if len(entry) > 4 else {}
         actions.append(TimerAction(
             period=aura_start + offset,
             actions=[Node(
@@ -149,6 +154,7 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[
                     sim_config,
                     {'num_drones': num_drones},
+                    extra_params,
                 ],
             )],
         ))

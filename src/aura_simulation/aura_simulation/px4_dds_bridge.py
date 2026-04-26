@@ -285,6 +285,9 @@ class PX4DDSBridge(Node):
 
     def _coverage_goal_cb(self, msg: CoverageGoal):
         did = msg.drone_id
+        # Only apply goals during OPERATIONS phase
+        if self.current_phase != 'OPERATIONS':
+            return
         if did in self.drones:
             # A.U.R.A. uses ENU, PX4 uses NED — convert when sending
             self.drones[did].goal_position = np.array([

@@ -66,8 +66,8 @@ class ActionConfig:
     position_delta_dim: int = 3      # dx, dy, dz
 
     # Action scaling
-    max_delta_xy: float = 3.0       # Max horizontal movement per step (m)
-    max_delta_z: float = 1.5         # Max vertical movement per step (m)
+    max_delta_xy: float = 1.5       # Max horizontal movement per step (m)
+    max_delta_z: float = 0.8         # Max vertical movement per step (m)
 
     # Position bounds
     min_altitude: float = 15.0       # Minimum flight altitude (m)

@@ -1,0 +1,127 @@
+Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                      
+udp   UNCONN 0      0         127.0.0.54:53         0.0.0.0:*                                                
+udp   UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*                                                
+udp   UNCONN 0      0            0.0.0.0:49539      0.0.0.0:*    users:(("gzclient",pid=339122,fd=26))       
+udp   UNCONN 0      0         10.90.15.8:49733      0.0.0.0:*    users:(("mission_control",pid=341933,fd=15))
+udp   UNCONN 0      0         10.90.15.8:50209      0.0.0.0:*    users:(("dead_zone_publi",pid=341802,fd=15))
+udp   UNCONN 0      0            0.0.0.0:34352      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=12)) 
+udp   UNCONN 0      0            0.0.0.0:51212      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=44)) 
+udp   UNCONN 0      0            0.0.0.0:18571      0.0.0.0:*    users:(("px4",pid=338095,fd=10))            
+udp   UNCONN 0      0            0.0.0.0:18572      0.0.0.0:*    users:(("px4",pid=338275,fd=10))            
+udp   UNCONN 0      0            0.0.0.0:18573      0.0.0.0:*    users:(("px4",pid=338447,fd=10))            
+udp   UNCONN 0      0            0.0.0.0:18574      0.0.0.0:*    users:(("px4",pid=338632,fd=10))            
+udp   UNCONN 0      0            0.0.0.0:18575      0.0.0.0:*    users:(("px4",pid=338808,fd=10))            
+udp   UNCONN 0      0            0.0.0.0:35092      0.0.0.0:*    users:(("gzserver",pid=337975,fd=41))       
+udp   UNCONN 0      0         10.90.15.8:51488      0.0.0.0:*    users:(("coverage_calcul",pid=341875,fd=15))
+udp   UNCONN 0      0            0.0.0.0:35826      0.0.0.0:*    users:(("px4_dds_bridge",pid=341205,fd=14)) 
+udp   UNCONN 0      0            0.0.0.0:36221      0.0.0.0:*    users:(("coverage_calcul",pid=341875,fd=14))
+udp   UNCONN 0      0            0.0.0.0:36985      0.0.0.0:*    users:(("gzclient",pid=339122,fd=22))       
+udp   UNCONN 0      0         10.90.15.8:37359      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=37)) 
+udp   UNCONN 0      0         10.90.15.8:37446      0.0.0.0:*    users:(("network_sim_nod",pid=341845,fd=15))
+udp   UNCONN 0      0         10.90.15.8:54377      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=21)) 
+udp   UNCONN 0      0        224.0.0.251:5353       0.0.0.0:*                                                
+udp   UNCONN 0      0        224.0.0.251:5353       0.0.0.0:*                                                
+udp   UNCONN 0      0            0.0.0.0:5353       0.0.0.0:*                                                
+udp   UNCONN 0      0            0.0.0.0:55557      0.0.0.0:*    users:(("network_sim_nod",pid=341845,fd=14))
+udp   UNCONN 0      0            0.0.0.0:39893      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=27)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=42)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=34)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=26)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=18)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=11)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("mission_control",pid=341933,fd=10))
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("coverage_calcul",pid=341875,fd=10))
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("network_sim_nod",pid=341845,fd=10))
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("dead_zone_publi",pid=341802,fd=10))
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("px4_dds_bridge",pid=341205,fd=10)) 
+udp   UNCONN 0      0            0.0.0.0:7400       0.0.0.0:*    users:(("python3",pid=293620,fd=10))        
+udp   UNCONN 0      0            0.0.0.0:7410       0.0.0.0:*    users:(("px4_dds_bridge",pid=341205,fd=11)) 
+udp   UNCONN 0      0            0.0.0.0:7411       0.0.0.0:*    users:(("px4_dds_bridge",pid=341205,fd=13)) 
+udp   UNCONN 0      0            0.0.0.0:7412       0.0.0.0:*    users:(("python3",pid=293620,fd=11))        
+udp   UNCONN 0      0            0.0.0.0:7413       0.0.0.0:*    users:(("python3",pid=293620,fd=13))        
+udp   UNCONN 0      0            0.0.0.0:7414       0.0.0.0:*    users:(("dead_zone_publi",pid=341802,fd=11))
+udp   UNCONN 0      0            0.0.0.0:7415       0.0.0.0:*    users:(("dead_zone_publi",pid=341802,fd=13))
+udp   UNCONN 0      0            0.0.0.0:7416       0.0.0.0:*    users:(("network_sim_nod",pid=341845,fd=11))
+udp   UNCONN 0      0            0.0.0.0:7417       0.0.0.0:*    users:(("network_sim_nod",pid=341845,fd=13))
+udp   UNCONN 0      0            0.0.0.0:7418       0.0.0.0:*    users:(("coverage_calcul",pid=341875,fd=11))
+udp   UNCONN 0      0            0.0.0.0:7419       0.0.0.0:*    users:(("coverage_calcul",pid=341875,fd=13))
+udp   UNCONN 0      0            0.0.0.0:7420       0.0.0.0:*    users:(("mission_control",pid=341933,fd=11))
+udp   UNCONN 0      0            0.0.0.0:7421       0.0.0.0:*    users:(("mission_control",pid=341933,fd=13))
+udp   UNCONN 0      0            0.0.0.0:7422       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=9))  
+udp   UNCONN 0      0            0.0.0.0:7423       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=10)) 
+udp   UNCONN 0      0            0.0.0.0:7424       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=17)) 
+udp   UNCONN 0      0            0.0.0.0:7425       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=20)) 
+udp   UNCONN 0      0            0.0.0.0:7426       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=25)) 
+udp   UNCONN 0      0            0.0.0.0:7427       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=28)) 
+udp   UNCONN 0      0            0.0.0.0:7428       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=33)) 
+udp   UNCONN 0      0            0.0.0.0:7429       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=36)) 
+udp   UNCONN 0      0            0.0.0.0:7430       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=41)) 
+udp   UNCONN 0      0            0.0.0.0:7431       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=43)) 
+udp   UNCONN 0      0         10.90.15.8:57083      0.0.0.0:*    users:(("px4_dds_bridge",pid=341205,fd=15)) 
+udp   UNCONN 0      0         10.90.15.8:40936      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=45)) 
+udp   UNCONN 0      0            0.0.0.0:57391      0.0.0.0:*    users:(("python3",pid=293620,fd=14))        
+udp   UNCONN 0      0            0.0.0.0:8888       0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=3))  
+udp   UNCONN 0      0         10.90.15.8:42066      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=29)) 
+udp   UNCONN 0      0            0.0.0.0:58879      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=19)) 
+udp   UNCONN 0      0            0.0.0.0:42995      0.0.0.0:*    users:(("mission_control",pid=341933,fd=14))
+udp   UNCONN 0      0            0.0.0.0:10317      0.0.0.0:*    users:(("gzclient",pid=339122,fd=21))       
+udp   UNCONN 0      0            0.0.0.0:10317      0.0.0.0:*    users:(("gzserver",pid=337975,fd=40))       
+udp   UNCONN 0      0            0.0.0.0:10318      0.0.0.0:*    users:(("gzclient",pid=339122,fd=25))       
+udp   UNCONN 0      0            0.0.0.0:10318      0.0.0.0:*    users:(("gzserver",pid=337975,fd=44))       
+udp   UNCONN 0      0            0.0.0.0:43592      0.0.0.0:*    users:(("gzserver",pid=337975,fd=45))       
+udp   UNCONN 0      0         10.90.15.8:60344      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=13)) 
+udp   UNCONN 0      0            0.0.0.0:60501      0.0.0.0:*    users:(("MicroXRCEAgent",pid=340444,fd=35)) 
+udp   UNCONN 0      0         10.90.15.8:44280      0.0.0.0:*    users:(("python3",pid=293620,fd=15))        
+udp   UNCONN 0      0            0.0.0.0:45032      0.0.0.0:*    users:(("dead_zone_publi",pid=341802,fd=14))
+udp   UNCONN 0      0            0.0.0.0:45264      0.0.0.0:*                                                
+udp   UNCONN 0      0            0.0.0.0:13031      0.0.0.0:*    users:(("px4",pid=338095,fd=13))            
+udp   UNCONN 0      0            0.0.0.0:13032      0.0.0.0:*    users:(("px4",pid=338275,fd=13))            
+udp   UNCONN 0      0            0.0.0.0:13033      0.0.0.0:*    users:(("px4",pid=338447,fd=13))            
+udp   UNCONN 0      0            0.0.0.0:13034      0.0.0.0:*    users:(("px4",pid=338632,fd=13))            
+udp   UNCONN 0      0            0.0.0.0:13035      0.0.0.0:*    users:(("px4",pid=338808,fd=13))            
+udp   UNCONN 0      0            0.0.0.0:14281      0.0.0.0:*    users:(("px4",pid=338095,fd=12))            
+udp   UNCONN 0      0            0.0.0.0:14282      0.0.0.0:*    users:(("px4",pid=338275,fd=12))            
+udp   UNCONN 0      0            0.0.0.0:14283      0.0.0.0:*    users:(("px4",pid=338447,fd=12))            
+udp   UNCONN 0      0            0.0.0.0:14284      0.0.0.0:*    users:(("px4",pid=338632,fd=12))            
+udp   UNCONN 0      0            0.0.0.0:14285      0.0.0.0:*    users:(("px4",pid=338808,fd=12))            
+udp   UNCONN 0      0            0.0.0.0:14581      0.0.0.0:*    users:(("px4",pid=338095,fd=11))            
+udp   UNCONN 0      0            0.0.0.0:14582      0.0.0.0:*    users:(("px4",pid=338275,fd=11))            
+udp   UNCONN 0      0            0.0.0.0:14583      0.0.0.0:*    users:(("px4",pid=338447,fd=11))            
+udp   UNCONN 0      0            0.0.0.0:14584      0.0.0.0:*    users:(("px4",pid=338632,fd=11))            
+udp   UNCONN 0      0            0.0.0.0:14585      0.0.0.0:*    users:(("px4",pid=338808,fd=11))            
+udp   UNCONN 0      0               [::]:5353          [::]:*                                                
+udp   UNCONN 0      0               [::]:38288         [::]:*                                                
+tcp   LISTEN 0      511        127.0.0.1:48674      0.0.0.0:*                                                
+tcp   LISTEN 0      100       172.17.0.1:41065      0.0.0.0:*    users:(("gzclient",pid=339122,fd=28))       
+tcp   LISTEN 0      511        127.0.0.1:46611      0.0.0.0:*                                                
+tcp   LISTEN 0      100       172.17.0.1:42575      0.0.0.0:*    users:(("gzclient",pid=339122,fd=27))       
+tcp   LISTEN 0      511        127.0.0.1:43943      0.0.0.0:*                                                
+tcp   LISTEN 0      511        127.0.0.1:11512      0.0.0.0:*                                                
+tcp   LISTEN 0      5          127.0.0.1:11511      0.0.0.0:*    users:(("python3",pid=293620,fd=3))         
+tcp   LISTEN 0      511        127.0.0.1:11346      0.0.0.0:*                                                
+tcp   LISTEN 0      100       172.17.0.1:45217      0.0.0.0:*    users:(("gzserver",pid=337975,fd=46))       
+tcp   LISTEN 0      4096         0.0.0.0:11345      0.0.0.0:*    users:(("gzserver",pid=337975,fd=7))        
+tcp   LISTEN 0      0            0.0.0.0:4561       0.0.0.0:*    users:(("gzserver",pid=337975,fd=89))       
+tcp   LISTEN 0      0            0.0.0.0:4562       0.0.0.0:*    users:(("gzserver",pid=337975,fd=93))       
+tcp   LISTEN 0      0            0.0.0.0:4563       0.0.0.0:*    users:(("gzserver",pid=337975,fd=97))       
+tcp   LISTEN 0      0            0.0.0.0:4564       0.0.0.0:*    users:(("gzserver",pid=337975,fd=101))      
+tcp   LISTEN 0      0            0.0.0.0:4565       0.0.0.0:*    users:(("gzserver",pid=337975,fd=105))      
+tcp   LISTEN 0      511        127.0.0.1:55615      0.0.0.0:*    users:(("node",pid=58535,fd=54))            
+tcp   LISTEN 0      511        127.0.0.1:55616      0.0.0.0:*                                                
+tcp   LISTEN 0      511        127.0.0.1:40716      0.0.0.0:*                                                
+tcp   LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*                                                
+tcp   LISTEN 0      100       172.17.0.1:36639      0.0.0.0:*    users:(("gzclient",pid=339122,fd=29))       
+tcp   LISTEN 0      100       172.17.0.1:36635      0.0.0.0:*    users:(("gzserver",pid=337975,fd=48))       
+tcp   LISTEN 0      511        127.0.0.1:40153      0.0.0.0:*    users:(("node",pid=575,fd=21))              
+tcp   LISTEN 0      511        127.0.0.1:4566       0.0.0.0:*                                                
+tcp   LISTEN 0      4096         0.0.0.0:40715      0.0.0.0:*    users:(("gzserver",pid=337975,fd=8))        
+tcp   LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*                                                
+tcp   LISTEN 0      511        127.0.0.1:35749      0.0.0.0:*                                                
+tcp   LISTEN 0      511        127.0.0.1:35344      0.0.0.0:*                                                
+tcp   LISTEN 0      100       172.17.0.1:39469      0.0.0.0:*    users:(("gzserver",pid=337975,fd=47))       
+tcp   LISTEN 0      511        127.0.0.1:35941      0.0.0.0:*                                                
+tcp   LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*                                                
+tcp   LISTEN 0      511        127.0.0.1:33197      0.0.0.0:*                                                
+tcp   LISTEN 0      4096         0.0.0.0:35343      0.0.0.0:*    users:(("gzclient",pid=339122,fd=7))        
+tcp   LISTEN 0      511        127.0.0.1:17758      0.0.0.0:*                                                
+tcp   LISTEN 0      4096           [::1]:631           [::]:*                                                

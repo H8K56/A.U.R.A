@@ -23,7 +23,7 @@ class RewardConfig:
     coverage_bonus_threshold: float = 90.0  # Bonus above this
 
     # Network quality rewards
-    connectivity_weight: float = 0.5        # Mesh connectivity (binary)
+    connectivity_weight: float = 1.0        # Mesh connectivity (binary)
     throughput_weight: float = 0.3
     latency_weight: float = 0.1
     signal_weight: float = 0.2

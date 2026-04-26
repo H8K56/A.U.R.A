@@ -407,7 +407,7 @@ def train(args):
     print(f"  Envs:       {args.num_envs}")
     print(f"  Batch size: {args.batch_size}")
     print(f"  Weather:    {args.weather}")
-    print(f"  Device:     cpu")  # GPU not compatible with sm_120
+    print(f"  Device:     {'CUDA' if torch.cuda.is_available() else 'CPU'}")
     print(f"  Save path:  {args.save_path}")
     print("=" * 60)
 
@@ -421,7 +421,7 @@ def train(args):
         lr=args.lr,
         ent_coef=args.ent_coef,
         weather=args.weather,
-        device='cpu',
+        device="cuda" if torch.cuda.is_available() else "cpu",
     )
 
     os.makedirs(args.save_path, exist_ok=True)

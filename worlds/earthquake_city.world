@@ -1,344 +1,3619 @@
-<?xml version="1.0" ?>
-<sdf version="1.6">
-  <world name="earthquake_city">
-
-    <!-- ═══ Physics ═══ -->
-    <physics type="ode">
+<sdf version='1.7'>
+  <world name='aura_disaster'>
+    <physics type='ode'>
       <max_step_size>0.004</max_step_size>
       <real_time_factor>1</real_time_factor>
       <real_time_update_rate>250</real_time_update_rate>
-      <ode>
-        <solver>
-          <type>quick</type>
-          <iters>50</iters>
-          <sor>1.3</sor>
-        </solver>
-      </ode>
     </physics>
-
-    <!-- ═══ Scene ═══ -->
     <scene>
-      <ambient>0.6 0.55 0.5 1</ambient>
-      <background>0.45 0.4 0.35 1</background>
-      <shadows>true</shadows>
-      <sky>
-        <clouds>
-          <speed>3</speed>
-          <direction>1.2</direction>
-          <humidity>0.7</humidity>
-          <mean_size>0.6</mean_size>
-          <ambient>0.5 0.45 0.4 1</ambient>
-        </clouds>
-      </sky>
-      <!-- Dusty/hazy atmosphere -->
-      <fog>
-        <color>0.7 0.65 0.6 1</color>
-        <type>linear</type>
-        <start>100</start>
-        <end>500</end>
-        <density>0.02</density>
-      </fog>
+      <ambient>0.6 0.6 0.6 1</ambient>
+      <background>0.4 0.6 0.8 1</background>
+      <shadows>0</shadows>
+      <grid>0</grid>
+      <origin_visual>0</origin_visual>
     </scene>
-
-    <!-- ═══ Sun — late afternoon, dramatic shadows ═══ -->
-    <light name="sun" type="directional">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 100 0 0 0</pose>
-      <diffuse>0.9 0.8 0.65 1</diffuse>
-      <specular>0.3 0.3 0.25 1</specular>
-      <direction>-0.4 0.3 -0.8</direction>
+    <light name='sun' type='directional'>
+      <cast_shadows>0</cast_shadows>
+      <pose>0 0 100 0 -0 0</pose>
+      <diffuse>0.9 0.85 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.3 0.4 -0.8</direction>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
     </light>
-
-    <!-- ═══ Ground Plane ═══ -->
-    <model name="ground_plane">
-      <static>true</static>
-      <link name="link">
-        <collision name="collision">
+    <model name='launch_pad'>
+      <static>1</static>
+      <pose>0 0 -0.5 0 -0 0</pose>
+      <link name='pad_link'>
+        <collision name='collision'>
           <geometry>
-            <plane><normal>0 0 1</normal><size>500 500</size></plane>
+            <box>
+              <size>20 20 1</size>
+            </box>
           </geometry>
+          <max_contacts>10</max_contacts>
           <surface>
-            <friction><ode><mu>100</mu><mu2>50</mu2></ode></friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
           </surface>
         </collision>
-        <visual name="visual">
+        <visual name='visual'>
           <geometry>
-            <plane><normal>0 0 1</normal><size>500 500</size></plane>
+            <box>
+              <size>20 20 1</size>
+            </box>
           </geometry>
           <material>
-            <ambient>0.4 0.35 0.3 1</ambient>
-            <diffuse>0.5 0.45 0.4 1</diffuse>
+            <ambient>0.3 0.3 0.35 1</ambient>
+            <diffuse>0.4 0.4 0.45 1</diffuse>
           </material>
         </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
     </model>
-
-    <!-- ═══════════════════════════════════════════════════
-         DEPLOYMENT ZONE — where drones spawn (0,0)
-         Marked with a visible landing pad
-    ═══════════════════════════════════════════════════ -->
-    <model name="deployment_pad">
-      <static>true</static>
-      <pose>0 0 0.02 0 0 0</pose>
-      <link name="link">
-        <visual name="pad">
-          <geometry><cylinder><radius>8</radius><length>0.04</length></cylinder></geometry>
+    <model name='h_marker'>
+      <static>1</static>
+      <pose>0 0 0.01 0 -0 0</pose>
+      <link name='link'>
+        <visual name='h_vis'>
+          <geometry>
+            <box>
+              <size>4 0.5 0.01</size>
+            </box>
+          </geometry>
           <material>
-            <ambient>0.2 0.2 0.2 1</ambient>
-            <diffuse>0.25 0.25 0.25 1</diffuse>
+            <ambient>0.9 0.9 0 1</ambient>
+            <diffuse>1 1 0 1</diffuse>
           </material>
         </visual>
-        <visual name="marking">
-          <pose>0 0 0.025 0 0 0</pose>
-          <geometry><cylinder><radius>1.5</radius><length>0.01</length></cylinder></geometry>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <model name='tent_2'>
+      <static>1</static>
+      <pose>25 -10 0 0 0 -0.2</pose>
+      <link name='link'>
+        <visual name='vis'>
+          <geometry>
+            <box>
+              <size>5 4 3</size>
+            </box>
+          </geometry>
           <material>
-            <ambient>0.9 0.5 0.0 1</ambient>
-            <diffuse>1.0 0.6 0.0 1</diffuse>
+            <ambient>0.1 0.3 0.7 1</ambient>
+            <diffuse>0.1 0.4 0.8 1</diffuse>
           </material>
         </visual>
+        <collision name='col'>
+          <geometry>
+            <box>
+              <size>5 4 3</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
     </model>
-
-    <!-- ═══════════════════════════════════════════════════
-         INTACT BUILDINGS — standing structures (reference)
-    ═══════════════════════════════════════════════════ -->
-
-    <!-- Hospital (Priority Zone 1) — large, intact -->
-    <model name="hospital">
-      <static>true</static>
-      <pose>60 40 0 0 0 0.1</pose>
-      <link name="link">
-        <visual name="main">
-          <geometry><box><size>30 20 12</size></box></geometry>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <audio>
+      <device>default</device>
+    </audio>
+    <wind/>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='collapsed_house'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>167.671 -127.096 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>168.534 -147.993 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>169.713 -170.96 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_1'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>171.862 -194.176 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_2'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>197.932 -204.613 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_3'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>196.689 -182.071 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_4'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>194.744 -157.512 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_5'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>190.287 -137.013 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_6'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>216.738 -156.103 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_7'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>220 -186.538 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_8'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>256.037 -198.638 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_9'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>222.374 -207.97 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_10'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>142.843 -192.42 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_11'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>143.242 -171.187 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_12'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>143.62 -148.384 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>143.702 -124.208 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_14'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-9.87725 -130.221 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_15'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-11 -117 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_16'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-13 -100 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_17'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>20.1213 -122.932 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_18'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>18.5486 -102.49 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_19'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>55.754 -98.5457 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_20'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>44.1621 -112.447 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_21'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>17.6216 -84.0275 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-21.5356 -221.453 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-52.0891 -206.658 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-83.7817 -193.232 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_1'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-114.123 -181.997 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_2'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-71.8971 -160.014 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_3'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-37.2017 -162.927 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_4'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-45.9202 -184.25 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_5'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-14.9955 -188.46 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_6'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-8.51092 -159.956 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_7'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>27.4985 -149.949 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_8'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>27 -183 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_9'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>17.1409 -217.467 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_10'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-175.812 -160.493 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_11'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-187.826 -139.74 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_12'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-199.845 -123.623 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_13'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-168 -106 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_14'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-135.443 -92 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_15'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-144.503 -131 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_16'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-165.134 -121.428 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_17'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-154 -148 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_industrial_clone_18'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://collapsed_industrial/meshes/collapsed_industrial.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-113.448 -109 0 0 -0 0</pose>
+    </model>
+    <model name='radio_tower'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-138.175 -162.68 0 0 -0 0</pose>
+    </model>
+    <model name='radio_tower_clone'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-210.526 -103.757 0 -1.18199 0.285021 -0.601513</pose>
+    </model>
+    <model name='radio_tower_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-133.109 -47.7983 0 -1.18199 0.285021 -0.601513</pose>
+    </model>
+    <model name='radio_tower_clone_1'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-317.979 1.3309 0 -1.18199 0.285021 -0.601513</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>145.789 -93.4623 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>167.467 -102.843 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_1'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>188.132 -109.567 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_2'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>207.71 -117.568 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_3'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>226.744 -135.677 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_4'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>121.901 -86.3751 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_5'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>76.6391 -90.044 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_6'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>36.4505 -84.0177 0 0 -0 0</pose>
+    </model>
+    <model name='collapsed_house_clone_13_clone_7'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>1.5 1.5 1.5</scale>
+              <uri>model://collapsed_house/meshes/collapsed_house.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>55.6671 -71.6986 0 0 -0 0</pose>
+    </model>
+    <model name='school'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>99.5848 -120.71 0 0 -0 0</pose>
+    </model>
+    <model name='school_clone'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>97.8289 -189.726 0 0 -0 0</pose>
+    </model>
+    <model name='school_clone_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://school/meshes/school.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>98.1873 -156.288 0 0 -0 0</pose>
+    </model>
+    <model name='water_tower_clone_5'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>1.96096 -105.128 0 0 -0 0</pose>
+    </model>
+    <model name='water_tower_clone_6'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>191.374 -89.7921 0 0 -0 0</pose>
+    </model>
+    <model name='water_tower_clone_7'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://water_tower/meshes/water_tower.dae</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>239.598 -200.299 0 0 -0 0</pose>
+    </model>
+    <model name='baylands_01'>
+      <pose>33.2105 -105.762 -1.3 0 -0 0</pose>
+      <static>1</static>
+      <link name='body'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_01.DAE</uri>
+            </mesh>
+          </geometry>
           <material>
-            <ambient>0.85 0.85 0.85 1</ambient>
-            <diffuse>0.9 0.9 0.9 1</diffuse>
+            <script>
+              <uri>model://baylands/media/scripts/</uri>
+              <uri>model://baylands/media/Textures/</uri>
+              <name>OakTree/Branch</name>
+            </script>
           </material>
         </visual>
-        <collision name="col"><geometry><box><size>30 20 12</size></box></geometry></collision>
-        <!-- Red cross marking -->
-        <visual name="cross_h">
-          <pose>15.05 0 8 0 1.5708 0</pose>
-          <geometry><box><size>4 1 0.1</size></box></geometry>
-          <material><diffuse>0.9 0.1 0.1 1</diffuse></material>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_01.DAE</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='body2'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_02.DAE</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://baylands/media/scripts/</uri>
+              <uri>model://baylands/media/Textures/</uri>
+              <name>OakTree/Branch</name>
+            </script>
+          </material>
         </visual>
-        <visual name="cross_v">
-          <pose>15.05 0 8 0 1.5708 1.5708</pose>
-          <geometry><box><size>4 1 0.1</size></box></geometry>
-          <material><diffuse>0.9 0.1 0.1 1</diffuse></material>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_02.DAE</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='body3'>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_03.DAE</uri>
+            </mesh>
+          </geometry>
         </visual>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://baylands/media/baylands_03.DAE</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
     </model>
-
-    <!-- Rescue Staging Area (Priority Zone 2) -->
-    <model name="rescue_staging">
-      <static>true</static>
-      <pose>-50 -30 0 0 0 0</pose>
-      <link name="link">
-        <visual name="tent1">
-          <pose>0 0 1.5 0 0 0</pose>
-          <geometry><box><size>8 5 3</size></box></geometry>
-          <material><diffuse>0.1 0.5 0.1 1</diffuse></material>
+    <model name='powerplant'>
+      <static>1</static>
+      <link name='link'>
+        <pose>0 0 0.01 0 -0 0</pose>
+        <collision name='wall1'>
+          <geometry>
+            <mesh>
+              <uri>model://powerplant/meshes/powerplant.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual1'>
+          <geometry>
+            <mesh>
+              <uri>model://powerplant/meshes/powerplant.dae</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <visual name="tent2">
-          <pose>10 0 1.5 0 0 0.2</pose>
-          <geometry><box><size>8 5 3</size></box></geometry>
-          <material><diffuse>0.1 0.5 0.1 1</diffuse></material>
-        </visual>
-        <visual name="tent3">
-          <pose>5 8 1.5 0 0 -0.1</pose>
-          <geometry><box><size>8 5 3</size></box></geometry>
-          <material><diffuse>0.15 0.55 0.15 1</diffuse></material>
-        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
+      <pose>-346.98 19.3188 0 0 -0 0</pose>
     </model>
-
-    <!-- ═══════════════════════════════════════════════════
-         COLLAPSED / DAMAGED BUILDINGS
-    ═══════════════════════════════════════════════════ -->
-
-    <!-- Collapsed apartment block — tilted, partially fallen -->
-    <model name="collapsed_apt_1">
-      <static>true</static>
-      <pose>30 -20 3 0.15 0.08 0.3</pose>
-      <link name="link">
-        <visual name="main">
-          <geometry><box><size>15 10 8</size></box></geometry>
-          <material><diffuse>0.6 0.55 0.5 1</diffuse></material>
+    <model name='reactor'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://reactor/meshes/reactor.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://reactor/meshes/reactor.dae</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <collision name="col"><geometry><box><size>15 10 8</size></box></geometry></collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
+      <pose>-272.888 68.4343 0 0 -0 0</pose>
     </model>
-
-    <!-- Pancaked building — floors stacked -->
-    <model name="pancaked_bldg">
-      <static>true</static>
-      <pose>-30 25 0 0 0 0.5</pose>
-      <link name="link">
-        <visual name="slab1">
-          <pose>0 0 0.3 0.05 -0.03 0</pose>
-          <geometry><box><size>18 12 0.5</size></box></geometry>
-          <material><diffuse>0.55 0.5 0.45 1</diffuse></material>
+    <model name='radio_tower_clone_2'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <visual name="slab2">
-          <pose>0.5 -0.3 1.2 -0.08 0.04 0.02</pose>
-          <geometry><box><size>17 11 0.5</size></box></geometry>
-          <material><diffuse>0.5 0.45 0.4 1</diffuse></material>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>79.1836 -172.413 0 -1.02342 -0.347034 0.508977</pose>
+    </model>
+    <model name='radio_tower_clone_3'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <visual name="slab3">
-          <pose>-0.3 0.5 2.0 0.03 -0.06 -0.01</pose>
-          <geometry><box><size>16 11 0.5</size></box></geometry>
-          <material><diffuse>0.52 0.47 0.42 1</diffuse></material>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>115.24 -144.021 0 -1.02342 -0.347034 0.508977</pose>
+    </model>
+    <model name='radio_tower_clone_4'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://radio_tower/meshes/radio_tower.dae</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <collision name="col"><geometry><box><size>18 12 2.5</size></box></geometry></collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
+      <pose>-5.99725 -187.83 0 -1.02342 -0.347034 0.508977</pose>
     </model>
-
-    <!-- Severely tilted tower -->
-    <model name="tilted_tower">
-      <static>true</static>
-      <pose>-60 60 5 0 0.25 0.8</pose>
-      <link name="link">
-        <visual name="main">
-          <geometry><box><size>8 8 20</size></box></geometry>
-          <material><diffuse>0.5 0.5 0.55 1</diffuse></material>
+    <model name='bus'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <scale>0.01 0.01 0.01</scale>
+              <uri>model://bus/meshes/bus.obj</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <scale>0.01 0.01 0.01</scale>
+              <uri>model://bus/meshes/bus.obj</uri>
+            </mesh>
+          </geometry>
         </visual>
-        <collision name="col"><geometry><box><size>8 8 20</size></box></geometry></collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
+      <pose>109.781 -288.717 0 0 -0 0</pose>
     </model>
-
-    <!-- Half-collapsed warehouse -->
-    <model name="collapsed_warehouse">
-      <static>true</static>
-      <pose>50 -60 0 0 0 -0.4</pose>
-      <link name="link">
-        <visual name="standing">
-          <pose>-5 0 4 0 0 0</pose>
-          <geometry><box><size>12 20 8</size></box></geometry>
-          <material><diffuse>0.45 0.4 0.38 1</diffuse></material>
-        </visual>
-        <visual name="fallen_wall">
-          <pose>6 0 1.5 0 0.6 0</pose>
-          <geometry><box><size>12 20 0.3</size></box></geometry>
-          <material><diffuse>0.45 0.4 0.38 1</diffuse></material>
-        </visual>
-        <visual name="roof_debris">
-          <pose>3 2 2 0.1 0.3 0.2</pose>
-          <geometry><box><size>10 8 0.4</size></box></geometry>
-          <material><diffuse>0.4 0.38 0.35 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- ═══════════════════════════════════════════════════
-         RUBBLE AND DEBRIS FIELD
-    ═══════════════════════════════════════════════════ -->
-
-    <!-- Scattered concrete chunks near collapsed apt -->
-    <model name="rubble_cluster_1">
-      <static>true</static>
-      <pose>25 -15 0 0 0 0</pose>
-      <link name="link">
-        <visual name="r1"><pose>0 0 0.4 0.2 0.3 0.5</pose><geometry><box><size>2.5 1.8 1.2</size></box></geometry><material><diffuse>0.55 0.5 0.45 1</diffuse></material></visual>
-        <visual name="r2"><pose>3 1 0.3 0.4 -0.1 0.8</pose><geometry><box><size>1.5 2.0 0.8</size></box></geometry><material><diffuse>0.5 0.48 0.42 1</diffuse></material></visual>
-        <visual name="r3"><pose>-2 2 0.25 -0.15 0.25 1.2</pose><geometry><box><size>1.8 1.2 0.6</size></box></geometry><material><diffuse>0.52 0.47 0.43 1</diffuse></material></visual>
-        <visual name="r4"><pose>1 -2 0.5 0.3 0.2 0.1</pose><geometry><cylinder><radius>0.8</radius><length>1.2</length></cylinder></geometry><material><diffuse>0.48 0.44 0.4 1</diffuse></material></visual>
-        <visual name="r5"><pose>4 -1 0.2 0 0 0.7</pose><geometry><box><size>3 0.6 0.4</size></box></geometry><material><diffuse>0.6 0.55 0.5 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <model name="rubble_cluster_2">
-      <static>true</static>
-      <pose>-35 30 0 0 0 0</pose>
-      <link name="link">
-        <visual name="r1"><pose>0 0 0.3 0.15 0.2 0.4</pose><geometry><box><size>2 1.5 0.8</size></box></geometry><material><diffuse>0.53 0.48 0.44 1</diffuse></material></visual>
-        <visual name="r2"><pose>2 -1 0.2 0.3 0.1 0.9</pose><geometry><box><size>1.2 2.5 0.5</size></box></geometry><material><diffuse>0.5 0.46 0.41 1</diffuse></material></visual>
-        <visual name="r3"><pose>-1.5 1.5 0.4 0 0.3 0</pose><geometry><cylinder><radius>0.6</radius><length>1.5</length></cylinder></geometry><material><diffuse>0.55 0.5 0.45 1</diffuse></material></visual>
-      </link>
-    </model>
-
-    <!-- Fallen power lines / poles -->
-    <model name="fallen_pole_1">
-      <static>true</static>
-      <pose>10 30 0 0 0 0</pose>
-      <link name="link">
-        <visual name="pole">
-          <pose>0 0 0.15 0 1.4 0.3</pose>
-          <geometry><cylinder><radius>0.15</radius><length>10</length></cylinder></geometry>
-          <material><diffuse>0.4 0.35 0.3 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="fallen_pole_2">
-      <static>true</static>
-      <pose>-15 -45 0 0 0 0</pose>
-      <link name="link">
-        <visual name="pole">
-          <pose>0 0 0.15 0 1.35 -0.5</pose>
-          <geometry><cylinder><radius>0.15</radius><length>8</length></cylinder></geometry>
-          <material><diffuse>0.4 0.35 0.3 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- Damaged road segments -->
-    <model name="cracked_road">
-      <static>true</static>
-      <pose>0 -50 0.01 0 0 0</pose>
-      <link name="link">
-        <visual name="road">
-          <geometry><box><size>80 8 0.02</size></box></geometry>
-          <material><diffuse>0.3 0.3 0.3 1</diffuse></material>
-        </visual>
-        <!-- Uplift crack -->
-        <visual name="crack">
-          <pose>15 0 0.3 0 0 0.1</pose>
-          <geometry><box><size>2 8 0.6</size></box></geometry>
-          <material><diffuse>0.35 0.3 0.25 1</diffuse></material>
-        </visual>
-      </link>
-    </model>
-
-    <!-- ═══════════════════════════════════════════════════
-         STANDING BUILDINGS (signal blockers / reference)
-    ═══════════════════════════════════════════════════ -->
-
-    <model name="office_1">
-      <static>true</static>
-      <pose>-70 -20 0 0 0 0.2</pose>
-      <link name="link">
-        <visual name="v"><geometry><box><size>12 10 15</size></box></geometry><material><diffuse>0.6 0.6 0.65 1</diffuse></material></visual>
-        <collision name="c"><geometry><box><size>12 10 15</size></box></geometry></collision>
-      </link>
-    </model>
-
-    <model name="office_2">
-      <static>true</static>
-      <pose>70 70 0 0 0 -0.3</pose>
-      <link name="link">
-        <visual name="v"><geometry><box><size>10 14 10</size></box></geometry><material><diffuse>0.55 0.55 0.6 1</diffuse></material></visual>
-        <collision name="c"><geometry><box><size>10 14 10</size></box></geometry></collision>
-      </link>
-    </model>
-
-    <model name="residential_1">
-      <static>true</static>
-      <pose>40 60 0 0 0 0.6</pose>
-      <link name="link">
-        <visual name="v"><geometry><box><size>8 8 6</size></box></geometry><material><diffuse>0.65 0.55 0.5 1</diffuse></material></visual>
-        <collision name="c"><geometry><box><size>8 8 6</size></box></geometry></collision>
-      </link>
-    </model>
-
-    <model name="residential_2">
-      <static>true</static>
-      <pose>-45 70 0 0 0 -0.1</pose>
-      <link name="link">
-        <visual name="v"><geometry><box><size>10 7 5</size></box></geometry><material><diffuse>0.7 0.6 0.55 1</diffuse></material></visual>
-        <collision name="c"><geometry><box><size>10 7 5</size></box></geometry></collision>
-      </link>
-    </model>
-
+    <state world_name='aura_disaster'>
+      <sim_time>613 8000000</sim_time>
+      <real_time>869 102819534</real_time>
+      <wall_time>1777153621 184079117</wall_time>
+      <iterations>153252</iterations>
+      <model name='baylands_01'>
+        <pose>-3.10749 0.584354 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='body'>
+          <pose>-3.10749 0.584354 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='body2'>
+          <pose>-3.10749 0.584354 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='body3'>
+          <pose>-3.10749 0.584354 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='bus'>
+        <pose>103.001 -293.857 1.45142 0.005894 0.16386 1.42261</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>103.001 -293.857 1.45142 0.005894 0.16386 1.42261</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house'>
+        <pose>167.671 -127.096 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>167.671 -127.096 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone'>
+        <pose>168.534 -147.993 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>168.534 -147.993 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_0'>
+        <pose>169.713 -170.96 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>169.713 -170.96 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_1'>
+        <pose>171.862 -194.176 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>171.862 -194.176 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_10'>
+        <pose>142.843 -192.42 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>142.843 -192.42 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_11'>
+        <pose>143.242 -171.187 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>143.242 -171.187 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_12'>
+        <pose>143.62 -148.384 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>143.62 -148.384 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13'>
+        <pose>143.702 -124.208 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>143.702 -124.208 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone'>
+        <pose>145.789 -93.4623 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>145.789 -93.4623 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_0'>
+        <pose>167.467 -102.843 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>167.467 -102.843 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_1'>
+        <pose>188.132 -109.567 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>188.132 -109.567 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_2'>
+        <pose>207.71 -117.568 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>207.71 -117.568 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_3'>
+        <pose>226.744 -135.677 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>226.744 -135.677 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_4'>
+        <pose>121.901 -86.3751 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>121.901 -86.3751 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_5'>
+        <pose>76.6391 -90.044 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>76.6391 -90.044 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_6'>
+        <pose>36.4505 -84.0177 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>36.4505 -84.0177 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_13_clone_7'>
+        <pose>55.6671 -71.6986 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>55.6671 -71.6986 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_14'>
+        <pose>-9.87725 -130.221 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-9.87725 -130.221 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_15'>
+        <pose>-11 -117 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-11 -117 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_16'>
+        <pose>-13 -100 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-13 -100 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_17'>
+        <pose>20.1213 -122.932 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>20.1213 -122.932 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_18'>
+        <pose>18.5486 -102.49 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>18.5486 -102.49 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_19'>
+        <pose>55.754 -98.5457 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>55.754 -98.5457 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_2'>
+        <pose>197.932 -204.613 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>197.932 -204.613 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_20'>
+        <pose>44.1621 -112.447 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>44.1621 -112.447 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_21'>
+        <pose>17.6216 -84.0275 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>17.6216 -84.0275 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_3'>
+        <pose>196.689 -182.071 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>196.689 -182.071 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_4'>
+        <pose>194.744 -157.512 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>194.744 -157.512 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_5'>
+        <pose>190.287 -137.013 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>190.287 -137.013 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_6'>
+        <pose>216.738 -156.103 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>216.738 -156.103 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_7'>
+        <pose>220 -186.538 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>220 -186.538 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_8'>
+        <pose>256.037 -198.638 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>256.037 -198.638 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_house_clone_9'>
+        <pose>222.374 -207.97 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>222.374 -207.97 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial'>
+        <pose>-21.5356 -221.453 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-21.5356 -221.453 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone'>
+        <pose>-52.0891 -206.658 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-52.0891 -206.658 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_0'>
+        <pose>-83.7817 -193.232 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-83.7817 -193.232 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_1'>
+        <pose>-114.123 -181.997 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-114.123 -181.997 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_10'>
+        <pose>-175.812 -160.493 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-175.812 -160.493 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_11'>
+        <pose>-187.826 -139.74 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-187.826 -139.74 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_12'>
+        <pose>-199.845 -123.623 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-199.845 -123.623 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_13'>
+        <pose>-168 -106 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-168 -106 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_14'>
+        <pose>-135.443 -92 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-135.443 -92 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_15'>
+        <pose>-144.503 -131 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-144.503 -131 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_16'>
+        <pose>-165.134 -121.428 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-165.134 -121.428 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_17'>
+        <pose>-154 -148 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-154 -148 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_18'>
+        <pose>-113.448 -109 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-113.448 -109 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_2'>
+        <pose>-71.8971 -160.014 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-71.8971 -160.014 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_3'>
+        <pose>-37.2017 -162.927 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-37.2017 -162.927 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_4'>
+        <pose>-45.9202 -184.25 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-45.9202 -184.25 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_5'>
+        <pose>-14.9955 -188.46 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-14.9955 -188.46 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_6'>
+        <pose>-8.51092 -159.956 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-8.51092 -159.956 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_7'>
+        <pose>27.4985 -149.949 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>27.4985 -149.949 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_8'>
+        <pose>27 -183 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>27 -183 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='collapsed_industrial_clone_9'>
+        <pose>17.1409 -217.467 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>17.1409 -217.467 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='h_marker'>
+        <pose>0 0 0.01 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0 0 0.01 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='launch_pad'>
+        <pose>0 34.6274 -0.191721 -0.003289 0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='pad_link'>
+          <pose>0 34.6274 -0.191721 -0.003289 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='powerplant'>
+        <pose>-332.912 31.1269 0 0 -0 0.609678</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-332.912 31.1269 0.01 0 -0 0.609678</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower'>
+        <pose>-138.175 -162.68 0 -1.02342 -0.347034 0.508977</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-138.175 -162.68 0 -1.02342 -0.347034 0.508977</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone'>
+        <pose>-210.526 -103.757 0 -1.18199 0.285021 -0.601513</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-210.526 -103.757 0 -1.18199 0.285021 -0.601513</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone_0'>
+        <pose>-181.191 -45.759 0 -1.18199 0.285021 -0.601513</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-181.191 -45.759 0 -1.18199 0.285021 -0.601513</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone_1'>
+        <pose>-317.979 1.3309 0 -1.18199 0.285021 -0.601513</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-317.979 1.3309 0 -1.18199 0.285021 -0.601513</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone_2'>
+        <pose>79.1836 -172.413 0 -1.02342 -0.347034 0.508977</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>79.1836 -172.413 0 -1.02342 -0.347034 0.508977</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone_3'>
+        <pose>115.24 -144.021 0 -1.02342 -0.347034 0.508977</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>115.24 -144.021 0 -1.02342 -0.347034 0.508977</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='radio_tower_clone_4'>
+        <pose>-5.99725 -187.83 0 -1.02342 -0.347034 0.508977</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-5.99725 -187.83 0 -1.02342 -0.347034 0.508977</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='reactor'>
+        <pose>-272.888 68.4343 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>-272.888 68.4343 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='school'>
+        <pose>99.5848 -120.71 0 0.419169 0.129624 -0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>99.5848 -120.71 0 0.419169 0.129624 -0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='school_clone'>
+        <pose>97.8289 -189.726 0 -1.87281 1.23756 -1.35221</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>97.8289 -189.726 0 -1.87281 1.23756 -1.35221</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='school_clone_0'>
+        <pose>98.1873 -156.288 0 -0.164627 -0.447717 -0.762238</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>98.1873 -156.288 0 -0.164627 -0.447717 -0.762238</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='tent_2'>
+        <pose>25 -10 0 0 0 -0.2</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>25 -10 0 0 0 -0.2</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='water_tower_clone_5'>
+        <pose>1.96096 -105.128 0 0.978169 -1.01109 -0.899347</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>1.96096 -105.128 0 0.978169 -1.01109 -0.899347</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='water_tower_clone_6'>
+        <pose>191.374 -89.7921 0 0 -1.39955 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>191.374 -89.7921 0 0 -1.39955 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='water_tower_clone_7'>
+        <pose>239.598 -200.299 0 -1.37253 0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>239.598 -200.299 0 -1.37253 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose>0 0 100 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>23.5951 429.135 424.592 0 0.61609 -1.76543</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
   </world>
 </sdf>

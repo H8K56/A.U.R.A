@@ -94,6 +94,13 @@ def launch_setup(context, *args, **kwargs):
             'PX4_HOME_LAT': '0.0',
             'PX4_HOME_LON': '0.0',
             'PX4_HOME_ALT': '0.0',
+            '__NV_PRIME_RENDER_OFFLOAD': '1',
+            'OPENBLAS_NUM_THREADS': '1',
+            'OMP_NUM_THREADS': '1',
+            'OPENBLAS_NUM_THREADS': '1',
+            'OMP_NUM_THREADS': '1',
+            '__GLX_VENDOR_LIBRARY_NAME': 'nvidia',
+            'MESA_GL_VERSION_OVERRIDE': '3.3',
         },
     ))
 
@@ -103,7 +110,7 @@ def launch_setup(context, *args, **kwargs):
     # The agent bridges PX4 uORB topics to ROS 2 DDS.
     # All PX4 instances share the same agent.
     actions.append(TimerAction(
-        period=15.0,
+        period=90.0,  # Wait for Gazebo to fully load
         actions=[ExecuteProcess(
             cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
             output='screen',
@@ -114,7 +121,7 @@ def launch_setup(context, *args, **kwargs):
     #
     # Wait for PX4 + agent to establish topics (~25s)
     actions.append(TimerAction(
-        period=35.0,
+        period=120.0,  # Wait for PX4 to stabilize
         actions=[Node(
             package='aura_simulation',
             executable='px4_dds_bridge',
@@ -128,16 +135,13 @@ def launch_setup(context, *args, **kwargs):
     ))
 
     # ═══ 4. A.U.R.A. STACK ═══════════════════════════════
-    aura_start = 38.0
+    aura_start = 150.0  # Wait for everything
 
     aura_nodes = [
         ('aura_simulation', 'dead_zone_publisher', 'dead_zone_publisher', 0.0),
         ('aura_network_sim', 'network_sim_node', 'network_sim', 0.5),
         ('aura_network_sim', 'coverage_calculator_node', 'coverage_calculator', 1.0),
-        ('aura_strategic_rl', 'strategic_rl_node', 'strategic_rl', 1.5, {
-            'model_path': '/home/aura/ws/models/strategic_rl_v2/best_policy.pt',
-            'use_baseline': False,
-        }),
+        # strategic_rl launched separately in another terminal
         ('aura_mission_control', 'mission_control_node', 'mission_control', 2.0),
     ]
 

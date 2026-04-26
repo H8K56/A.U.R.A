@@ -13,9 +13,9 @@
     publish_rate_hz: 10.0
     spawn_radius_m: 5.0           # Initial cluster radius
     spawn_altitude_m: 0.5         # Ground level start
-    deploy_zone_x: 0.0            # Target deployment area
-    deploy_zone_y: 0.0
-    takeoff_altitude_m: 15.0
+    deploy_zone_x: 80.0            # Target deployment area
+    deploy_zone_y: -150.0
+    takeoff_altitude_m: 20.0
     max_speed_m_s: 5.0
     hub_drone_id: 0               # Drone 0 is the hub
 

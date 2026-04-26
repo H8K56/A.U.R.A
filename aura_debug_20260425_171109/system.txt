@@ -1,0 +1,99 @@
+===== DATE =====
+Sat Apr 25 05:11:09 PM UTC 2026
+===== OS =====
+Linux drty-hry-Legion-5-15IRX10 6.17.0-22-generic #22~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Mar 26 15:25:54 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.5 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+===== CPU =====
+Architecture:                            x86_64
+CPU op-mode(s):                          32-bit, 64-bit
+Address sizes:                           39 bits physical, 48 bits virtual
+Byte Order:                              Little Endian
+CPU(s):                                  20
+On-line CPU(s) list:                     0-19
+Vendor ID:                               GenuineIntel
+BIOS Vendor ID:                          Intel(R) Corporation
+Model name:                              13th Gen Intel(R) Core(TM) i7-13650HX
+BIOS Model name:                         13th Gen Intel(R) Core(TM) i7-13650HX
+CPU family:                              6
+Model:                                   183
+Thread(s) per core:                      2
+Core(s) per socket:                      14
+Socket(s):                               1
+Stepping:                                1
+CPU max MHz:                             4900.0000
+CPU min MHz:                             800.0000
+BogoMIPS:                                5606.40
+Flags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsaves split_lock_detect user_shstk avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku ospke waitpkg gfni vaes vpclmulqdq rdpid movdiri movdir64b fsrm md_clear serialize arch_lbr ibt flush_l1d arch_capabilities
+Virtualization:                          VT-x
+L1d cache:                               544 KiB (14 instances)
+L1i cache:                               704 KiB (14 instances)
+L2 cache:                                11.5 MiB (8 instances)
+L3 cache:                                24 MiB (1 instance)
+NUMA node(s):                            1
+NUMA node0 CPU(s):                       0-19
+Vulnerability Gather data sampling:      Not affected
+Vulnerability Ghostwrite:                Not affected
+Vulnerability Indirect target selection: Not affected
+Vulnerability Itlb multihit:             Not affected
+Vulnerability L1tf:                      Not affected
+Vulnerability Mds:                       Not affected
+Vulnerability Meltdown:                  Not affected
+Vulnerability Mmio stale data:           Not affected
+Vulnerability Old microcode:             Not affected
+Vulnerability Reg file data sampling:    Mitigation; Clear Register File
+Vulnerability Retbleed:                  Not affected
+Vulnerability Spec rstack overflow:      Not affected
+Vulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS SW sequence; BHI BHI_DIS_S
+Vulnerability Srbds:                     Not affected
+Vulnerability Tsa:                       Not affected
+Vulnerability Tsx async abort:           Not affected
+Vulnerability Vmscape:                   Mitigation; IBPB before exit to userspace
+===== MEMORY =====
+               total        used        free      shared  buff/cache   available
+Mem:            23Gi        10Gi       2.0Gi       293Mi        10Gi        12Gi
+Swap:          8.0Gi       1.0Mi       8.0Gi
+===== GPU =====
+Sat Apr 25 17:11:09 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.126.09             Driver Version: 580.126.09     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 5050 ...    Off |   00000000:01:00.0 Off |                  N/A |
+| N/A   56C    P4             11W /   40W |    1149MiB /   8151MiB |      2%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A          325188      C   python3                                 140MiB |
+|    0   N/A  N/A          325278      C   python3                                 140MiB |
+|    0   N/A  N/A          337975      G   gzserver                                  4MiB |
+|    0   N/A  N/A          339122      G   gzclient                                 31MiB |
++-----------------------------------------------------------------------------------------+
+===== DISK =====
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         937G  186G  704G  21% /
+tmpfs            64M     0   64M   0% /dev
+tmpfs           2.4G  4.4M  2.4G   1% /run/nvidia-persistenced/socket
+/dev/nvme0n1p2  937G  186G  704G  21% /tmp/.X11-unix
+tmpfs            12G  203M   12G   2% /dev/shm
+tmpfs           4.0K  4.0K     0 100% /run/nvidia-ctk-hook26b1acd2-991f-449c-84c2-047f09a0add5

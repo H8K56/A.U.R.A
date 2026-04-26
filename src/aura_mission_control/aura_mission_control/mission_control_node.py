@@ -144,7 +144,7 @@ class MissionControlNode(Node):
         # Takeoff
         self.declare_parameter('takeoff_altitude_m', 15.0)
         self.declare_parameter('takeoff_altitude_tolerance_m', 2.0)
-        self.declare_parameter('takeoff_timeout_sec', 60.0)
+        self.declare_parameter('takeoff_timeout_sec', 120.0)
 
         # Transit
         self.declare_parameter('deploy_zone_x', 0.0)

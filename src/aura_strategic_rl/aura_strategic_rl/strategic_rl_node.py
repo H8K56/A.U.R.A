@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 Strategic RL Node
@@ -8,7 +9,9 @@ trajectory planner.
 """
 
 import rclpy
+import os
 from rclpy.node import Node
+import os
 import numpy as np
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
@@ -207,6 +210,22 @@ class StrategicRLNode(Node):
         num_drones = self.get_parameter('num_drones').value
         action_rate = self.get_parameter('action_rate_hz').value
         model_path = self.get_parameter('model_path').value
+        
+        # Auto-select policy based on drone count if no specific path given
+        if model_path and not os.path.exists(model_path):
+            self.get_logger().warn(f'Policy not found: {model_path}')
+            model_path = ''
+        if not model_path:
+            policy_map = {
+                2: os.path.expanduser('~/ws/models/rl_2drones/best_policy.pt'),
+                3: os.path.expanduser('~/ws/models/rl_3drones/best_policy.pt'),
+                4: os.path.expanduser('~/ws/models/rl_4drones/best_policy.pt'),
+                5: os.path.expanduser('~/ws/models/rl_5drones_tight/best_policy.pt'),
+            }
+            auto_path = policy_map.get(num_drones, '')
+            if auto_path and os.path.exists(auto_path):
+                model_path = auto_path
+                self.get_logger().info(f'Auto-selected policy for {num_drones} drones: {model_path}')
         self.use_baseline = self.get_parameter('use_baseline').value
         self.deterministic = self.get_parameter('deterministic').value
         
@@ -230,7 +249,19 @@ class StrategicRLNode(Node):
         if model_path:
             try:
                 self.policy, meta = PolicyCheckpoint.load(model_path, device='cpu')
-                self.use_baseline = False
+                # Verify observation dimension matches
+                policy_obs = meta.get('obs_dim', 0)
+                obs_config = ObservationConfig(num_drones=num_drones)
+                expected_obs = obs_config.total_obs_dim
+                if policy_obs != expected_obs:
+                    self.get_logger().warn(
+                        f'Policy obs_dim ({policy_obs}) != expected ({expected_obs}) for {num_drones} drones. Using baseline.')
+                    self.policy = None
+                    self.use_baseline = True
+                else:
+                    self.use_baseline = False
+                self.policy.eval()
+                self.policy.eval()
                 self.get_logger().info(
                     f'Loaded trained policy from {model_path} '
                     f'(obs={meta.get("obs_dim")}, act={meta.get("action_dim")}, '
@@ -272,14 +303,12 @@ class StrategicRLNode(Node):
         )
         
         # Publishers - one per drone
+        # Single coverage goals topic (matches px4_dds_bridge subscriber)
+        self.goal_pub = self.create_publisher(
+            CoverageGoal, '/coverage/goals', 10)
         self.goal_pubs: Dict[int, rclpy.publisher.Publisher] = {}
         for i in range(num_drones):
-            pub = self.create_publisher(
-                CoverageGoal, 
-                f'/drone_{i}/coverage_goal', 
-                10
-            )
-            self.goal_pubs[i] = pub
+            self.goal_pubs[i] = self.goal_pub  # All drones use same publisher
         
         # Action timer
         self.action_timer = self.create_timer(
@@ -315,6 +344,10 @@ class StrategicRLNode(Node):
             return
         
         if len(self.latest_swarm.drones) == 0:
+            return
+        
+        # Only publish goals during OPERATIONS phase
+        if self.latest_swarm.mission_state != 5:  # 5 = OPERATIONS
             return
         
         if self.use_baseline:
@@ -362,7 +395,7 @@ class StrategicRLNode(Node):
         # Run policy
         with torch.no_grad():
             obs_tensor = torch.FloatTensor(obs).unsqueeze(0)
-            actions = self.policy.get_action(obs_tensor, self.deterministic)
+            actions, _, _ = self.policy.get_action(obs_tensor, self.deterministic)
             actions = actions.squeeze(0).numpy()
         
         # Convert actions to goal positions
@@ -391,58 +424,127 @@ class StrategicRLNode(Node):
     
     def _compute_baseline_goals(self) -> Dict[int, np.ndarray]:
         """
-        Compute goals using simple baseline strategy.
-        Spreads drones out to maximize coverage area.
+        Collision-aware baseline planner.
+
+        Features:
+        - Global optimal slot assignment (Hungarian algorithm)
+        - Circular coverage formation
+        - Altitude-separated transit lanes
+        - Weather zone avoidance
         """
+
+        from scipy.optimize import linear_sum_assignment
+
         goals = {}
-        num_drones = len(self.latest_swarm.drones)
-        
+        drones = self.latest_swarm.drones
+        num_drones = len(drones)
+
         if num_drones == 0:
             return goals
-        
-        # Simple grid formation
-        # Compute centroid of current positions
-        positions = []
-        for drone in self.latest_swarm.drones:
-            positions.append([
-                drone.position.x,
-                drone.position.y,
-                drone.position.z
-            ])
-        positions = np.array(positions)
-        centroid = np.mean(positions, axis=0)
-        
-        # Spread in a circle around centroid
-        radius = 50.0  # meters
-        altitude = 25.0  # meters
-        
-        for i, drone in enumerate(self.latest_swarm.drones):
-            angle = 2 * np.pi * i / num_drones
-            
-            goal_x = centroid[0] + radius * np.cos(angle)
-            goal_y = centroid[1] + radius * np.sin(angle)
-            goal_z = altitude
-            
-            # Avoid weather zones
+
+        # ---------------------------------
+        # Current positions
+        # ---------------------------------
+        positions = np.array([
+            [d.position.x, d.position.y, d.position.z]
+            for d in drones
+        ])
+
+        centroid = np.mean(positions[:, :2], axis=0)
+        # Override with deploy zone if available (disaster area center)
+        deploy_x = 80.0   # Center of disaster zone
+        deploy_y = -150.0
+        centroid = np.array([deploy_x, deploy_y])
+
+        # ---------------------------------
+        # Formation parameters
+        # ---------------------------------
+        radius = max(35.0, 12.0 * num_drones)
+        cruise_alt = 25.0
+
+        # ---------------------------------
+        # Generate circular slots
+        # ---------------------------------
+        slots = []
+        for i in range(num_drones):
+            angle = 2.0 * np.pi * i / num_drones
+            sx = centroid[0] + radius * np.cos(angle)
+            sy = centroid[1] + radius * np.sin(angle)
+            slots.append([sx, sy, cruise_alt])
+
+        slots = np.array(slots)
+
+        # ---------------------------------
+        # Global assignment (optimal)
+        # ---------------------------------
+        cost = np.zeros((num_drones, num_drones))
+
+        for i in range(num_drones):
+            for j in range(num_drones):
+                cost[i, j] = np.linalg.norm(
+                    positions[i, :2] - slots[j, :2]
+                )
+
+        rows, cols = linear_sum_assignment(cost)
+
+        assignments = {}
+        for r, c in zip(rows, cols):
+            assignments[drones[r].drone_id] = c
+
+        # ---------------------------------
+        # Build final goals
+        # ---------------------------------
+        for idx, drone in enumerate(drones):
+
+            slot_idx = assignments[drone.drone_id]
+
+            goal_x = slots[slot_idx][0]
+            goal_y = slots[slot_idx][1]
+
+            current_xy = positions[idx, :2]
+            goal_xy = np.array([goal_x, goal_y])
+
+            dist = np.linalg.norm(goal_xy - current_xy)
+
+            # ---------------------------------
+            # Transit altitude lanes
+            # ---------------------------------
+            if dist > 8.0:
+                goal_z = cruise_alt + (idx * 12.0)
+            else:
+                goal_z = cruise_alt
+
+            # ---------------------------------
+            # Weather avoidance
+            # ---------------------------------
             for zone in self.weather_zones:
                 if zone.no_fly and zone.is_active:
-                    zone_pos = np.array([zone.center.x, zone.center.y])
-                    goal_pos = np.array([goal_x, goal_y])
-                    
-                    dist = np.linalg.norm(goal_pos - zone_pos)
-                    if dist < zone.radius_meters:
-                        # Push away from zone
-                        direction = goal_pos - zone_pos
-                        if np.linalg.norm(direction) > 0:
-                            direction = direction / np.linalg.norm(direction)
-                        else:
-                            direction = np.array([1, 0])
-                        
-                        goal_x = zone.center.x + direction[0] * (zone.radius_meters + 10)
-                        goal_y = zone.center.y + direction[1] * (zone.radius_meters + 10)
-            
-            goals[drone.drone_id] = np.array([goal_x, goal_y, goal_z])
-        
+
+                    zone_xy = np.array([
+                        zone.center.x,
+                        zone.center.y
+                    ])
+
+                    v = goal_xy - zone_xy
+                    d = np.linalg.norm(v)
+
+                    if d < zone.radius_meters + 10.0:
+                        if d < 1e-3:
+                            v = np.array([1.0, 0.0])
+                            d = 1.0
+
+                        v = v / d
+
+                        safe = zone.radius_meters + 15.0
+                        goal_x = zone_xy[0] + v[0] * safe
+                        goal_y = zone_xy[1] + v[1] * safe
+
+            goals[drone.drone_id] = np.array([
+                goal_x,
+                goal_y,
+                goal_z
+            ])
+
         return goals
 
 

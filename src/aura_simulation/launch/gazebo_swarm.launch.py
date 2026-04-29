@@ -110,7 +110,7 @@ def launch_setup(context, *args, **kwargs):
     # The agent bridges PX4 uORB topics to ROS 2 DDS.
     # All PX4 instances share the same agent.
     actions.append(TimerAction(
-        period=90.0,  # Wait for Gazebo to fully load
+        period=15.0,
         actions=[ExecuteProcess(
             cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
             output='screen',
@@ -121,7 +121,7 @@ def launch_setup(context, *args, **kwargs):
     #
     # Wait for PX4 + agent to establish topics (~25s)
     actions.append(TimerAction(
-        period=120.0,  # Wait for PX4 to stabilize
+        period=35.0,
         actions=[Node(
             package='aura_simulation',
             executable='px4_dds_bridge',
@@ -135,7 +135,7 @@ def launch_setup(context, *args, **kwargs):
     ))
 
     # ═══ 4. A.U.R.A. STACK ═══════════════════════════════
-    aura_start = 150.0  # Wait for everything
+    aura_start = 45.0
 
     aura_nodes = [
         ('aura_simulation', 'dead_zone_publisher', 'dead_zone_publisher', 0.0),

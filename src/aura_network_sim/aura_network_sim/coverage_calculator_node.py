@@ -279,8 +279,8 @@ def main(args=None):
     node = CoverageCalculatorNode()
     
     # Add some example priority zones
-    node.add_priority_zone(99, -155, 40, weight=3.0, name="School Zone")
-    node.add_priority_zone(170, -165, 50, weight=2.0, name="Residential Zone")
+    node.add_priority_zone(196, -150, 40, weight=3.0, name="School Zone")
+    node.add_priority_zone(280, -220, 50, weight=2.5, name="Residential East")
     
     try:
         rclpy.spin(node)

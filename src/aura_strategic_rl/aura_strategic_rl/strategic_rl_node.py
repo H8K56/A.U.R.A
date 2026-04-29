@@ -219,8 +219,8 @@ class StrategicRLNode(Node):
             policy_map = {
                 2: os.path.expanduser('~/ws/models/rl_2drones/best_policy.pt'),
                 3: os.path.expanduser('~/ws/models/rl_3drones/best_policy.pt'),
-                4: os.path.expanduser('~/ws/models/rl_4drones/best_policy.pt'),
-                5: os.path.expanduser('~/ws/models/rl_5drones_tight/best_policy.pt'),
+                4: os.path.expanduser('~/ws/models/rl_4drones_newworld_v2/best_policy.pt'),
+                5: os.path.expanduser('~/ws/models/rl_5drones_newworld/best_policy.pt'),
             }
             auto_path = policy_map.get(num_drones, '')
             if auto_path and os.path.exists(auto_path):
@@ -452,8 +452,8 @@ class StrategicRLNode(Node):
 
         centroid = np.mean(positions[:, :2], axis=0)
         # Override with deploy zone if available (disaster area center)
-        deploy_x = 80.0   # Center of disaster zone
-        deploy_y = -150.0
+        deploy_x = 120.0   # Center of disaster zone
+        deploy_y = -170.0
         centroid = np.array([deploy_x, deploy_y])
 
         # ---------------------------------

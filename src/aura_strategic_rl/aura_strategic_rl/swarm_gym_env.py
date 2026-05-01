@@ -40,12 +40,16 @@ class EnvConfig:
 
     # Simulation
     num_drones: int = 5
-    max_steps: int = 200
+    max_steps: int = 500
     dt: float = 0.5  # Time step (seconds)
 
     # Area
     area_size: float = 200.0
     grid_resolution: float = 10.0
+
+    # World center — disaster zone centroid in Gazebo world frame
+    world_center_x: float = 120.0
+    world_center_y: float = -170.0
 
     # Drone dynamics
     max_velocity: float = 5.0   # m/s
@@ -116,8 +120,15 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         # Create configs
         self.obs_config = ObservationConfig(num_drones=self.config.num_drones)
-        self.action_config = ActionConfig(num_drones=self.config.num_drones)
-        self.reward_config = RewardConfig()
+        self.action_config = ActionConfig(
+            num_drones=self.config.num_drones,
+            world_center_x=self.config.world_center_x,
+            world_center_y=self.config.world_center_y,
+        )
+        self.reward_config = RewardConfig(
+            world_center_x=self.config.world_center_x,
+            world_center_y=self.config.world_center_y,
+        )
 
         # Create helpers
         self.obs_builder = ObservationBuilder(self.obs_config)
@@ -149,12 +160,37 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         # Coverage grid
         self._init_coverage_grid()
 
+    # Disaster structure positions from earthquake_city.world (x, y in Gazebo ENU)
+    _DISASTER_STRUCTURES = [
+        (121, -106), (68, -88),  (45, -118), (87,  -142),   # western cluster
+        (155, -228), (155, -194), (78, -216), (115, -237),  # central-south
+        (291, -243), (290, -219), (290, -193), (315, -243), # eastern cluster
+        (313, -218), (263, -237),
+        (196, -150), (195, -240), (179, -287),              # school / police / playground
+    ]
+
     def _init_coverage_grid(self):
-        """Initialize coverage grid for simulation"""
+        """Initialize coverage grid and importance map for disaster structures"""
         size = int(2 * self.config.area_size / self.config.grid_resolution)
         self.grid_size = size
         self.coverage_grid = np.zeros((size, size), dtype=np.float32)
         self.signal_grid = np.full((size, size), -200.0, dtype=np.float32)
+
+        # Build importance grid: 3× weight for cells within 50 m of a disaster structure
+        half = self.config.area_size
+        res = self.config.grid_resolution
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
+        IMPORTANCE_RADIUS = 50.0
+        self.importance_grid = np.ones((size, size), dtype=np.float32)
+        for gy in range(size):
+            for gx in range(size):
+                cell_x = wx - half + (gx + 0.5) * res
+                cell_y = wy - half + (gy + 0.5) * res
+                for sx, sy in self._DISASTER_STRUCTURES:
+                    if math.sqrt((cell_x - sx) ** 2 + (cell_y - sy) ** 2) < IMPORTANCE_RADIUS:
+                        self.importance_grid[gy, gx] = 3.0
+                        break
 
     def reset(self, seed: int = None, options: Dict = None) -> Tuple[np.ndarray, Dict]:
         """Reset environment to initial state"""
@@ -283,13 +319,15 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         half = self.config.area_size
         res = self.config.grid_resolution
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
 
         for drone in self.drones:
-            # Compute signal at each grid cell
+            # Compute signal at each grid cell (grid is centered on disaster zone)
             for gy in range(self.grid_size):
                 for gx in range(self.grid_size):
-                    cell_x = -half + (gx + 0.5) * res
-                    cell_y = -half + (gy + 0.5) * res
+                    cell_x = wx - half + (gx + 0.5) * res
+                    cell_y = wy - half + (gy + 0.5) * res
 
                     dx = cell_x - drone.position[0]
                     dy = cell_y - drone.position[1]
@@ -359,11 +397,11 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
                 drone.latency_ms = 999.0
 
     def _compute_coverage_percent(self) -> float:
-        """Compute percentage of area with usable coverage"""
-        total_cells = self.grid_size * self.grid_size
-        if total_cells == 0:
+        """Compute importance-weighted coverage percentage (disaster structures count 3×)"""
+        total_weight = np.sum(self.importance_grid)
+        if total_weight == 0:
             return 0.0
-        return 100.0 * np.sum(self.coverage_grid) / total_cells
+        return 100.0 * np.sum(self.coverage_grid * self.importance_grid) / total_weight
 
     def _check_mesh_connected(self) -> bool:
         """Check if all drones form a connected mesh (BFS)"""

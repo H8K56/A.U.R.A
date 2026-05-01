@@ -65,6 +65,22 @@ done
 # ═══ Phase 3: Spawn + PX4 one at a time ═══
 echo "[Phase 3] Spawning drones sequentially..."
 for i in $(seq 1 $NUM_DRONES); do
+  # Guard: ensure MAVLink TCP port is free before the plugin tries to bind it
+  PORT=$((4560+i))
+  for t in $(seq 1 20); do
+    if ! ss -tlnp 2>/dev/null | grep -q ":${PORT} "; then
+      break
+    fi
+    if [ $t -eq 20 ]; then
+      echo "  [Drone $i] Port $PORT still bound after 20s, force-releasing..."
+      fuser -k ${PORT}/tcp 2>/dev/null || true
+      ss -K "sport = :${PORT}" 2>/dev/null || true
+      sleep 2
+    fi
+    echo "  [Drone $i] Waiting for port $PORT to be free... (${t}s)"
+    sleep 1
+  done
+
   echo "  [Drone $i] Spawning model..."
   gz model --spawn-file /tmp/iris_${i}.sdf \
     --model-name iris_${i} \

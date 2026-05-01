@@ -23,7 +23,7 @@ class RewardConfig:
     coverage_bonus_threshold: float = 90.0  # Bonus above this
 
     # Network quality rewards
-    connectivity_weight: float = 1.0        # Mesh connectivity (binary)
+    connectivity_weight: float = 3.0        # Mesh connectivity (binary) — high to keep swarm linked
     throughput_weight: float = 0.3
     latency_weight: float = 0.1
     signal_weight: float = 0.2
@@ -34,18 +34,26 @@ class RewardConfig:
 
     # Safety penalties
     collision_penalty: float = 2.0         # Drones too close
-    boundary_penalty: float = 1.0           # Near area boundary
+    boundary_penalty: float = 0.5           # Near area boundary (mild — clip prevents escape)
     altitude_penalty: float = 2.0           # Outside altitude bounds
 
     # Safety thresholds
     min_separation_m: float = 5.0           # Minimum drone separation
     boundary_margin_m: float = 20.0         # Warn zone near boundary
-    area_bound: float = 200.0               # Area boundary (m)
+    area_bound: float = 250.0               # Max distance from world center (m)
     min_altitude: float = 15.0
     max_altitude: float = 80.0
 
+    # World center — disaster zone centroid (must match ObservationBuilder)
+    world_center_x: float = 120.0
+    world_center_y: float = -170.0
+
     # Shaping
     coverage_improvement_bonus: float = 0.5  # Bonus for improving coverage
+
+    # Proximity reward — incentivize moving toward disaster zone
+    proximity_weight: float = 0.5            # Max proximity reward per step
+    proximity_scale_m: float = 300.0         # Distance at which reward reaches zero
 
     # Priority zones
     priority_zone_weight: float = 1.5       # Extra weight for priority areas
@@ -120,6 +128,10 @@ class RewardCalculator:
             priority_bonus = (priority_zone_coverage / 100.0) * self.config.priority_zone_weight
         components['priority_bonus'] = priority_bonus
 
+        # 7. Proximity reward — guide drones toward disaster zone
+        proximity_reward = self._compute_proximity_reward(drone_positions)
+        components['proximity'] = proximity_reward
+
         # Total reward
         total = (
             coverage_reward +
@@ -128,7 +140,8 @@ class RewardCalculator:
             throughput_reward +
             latency_reward +
             improvement_bonus +
-            priority_bonus -
+            priority_bonus +
+            proximity_reward -
             movement_penalty -
             safety_penalty
         )
@@ -216,11 +229,14 @@ class RewardCalculator:
                     severity = 1.0 - (dist / self.config.min_separation_m)
                     penalty += severity * self.config.collision_penalty
 
-            # Boundary penalty
-            dist_from_origin = np.linalg.norm(pos_i[:2])
-            boundary_dist = self.config.area_bound - dist_from_origin
+            # Boundary penalty (distance from world center, not origin)
+            center_2d = np.array([self.config.world_center_x, self.config.world_center_y])
+            dist_from_center = np.linalg.norm(pos_i[:2] - center_2d)
+            boundary_dist = self.config.area_bound - dist_from_center
             if boundary_dist < self.config.boundary_margin_m:
-                severity = 1.0 - (boundary_dist / self.config.boundary_margin_m)
+                # Clamped to [0,1] — circular clip in ActionProcessor prevents escape,
+                # but ROS inference can still send drones near the edge.
+                severity = np.clip(1.0 - (boundary_dist / self.config.boundary_margin_m), 0.0, 1.0)
                 penalty += severity * self.config.boundary_penalty
 
             # Altitude penalty
@@ -238,3 +254,16 @@ class RewardCalculator:
         if improvement > 0:
             return improvement / 100.0 * self.config.coverage_improvement_bonus
         return 0.0
+
+    def _compute_proximity_reward(self,
+                                  drone_positions: List[Tuple[float, float, float]]
+                                  ) -> float:
+        """Reward for being near the disaster zone — guides transit phase learning."""
+        if not drone_positions:
+            return 0.0
+        center = np.array([self.config.world_center_x, self.config.world_center_y])
+        avg_dist = np.mean([
+            np.linalg.norm(np.array(p[:2]) - center)
+            for p in drone_positions
+        ])
+        return self.config.proximity_weight * max(0.0, 1.0 - avg_dist / self.config.proximity_scale_m)

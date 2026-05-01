@@ -136,6 +136,10 @@ class PX4DDSBridge(Node):
         hub_id = self.get_parameter('hub_drone_id').value
         self.setpoint_rate = self.get_parameter('setpoint_rate_hz').value
         self.takeoff_alt = self.get_parameter('takeoff_altitude_m').value
+        self.declare_parameter('deploy_zone_x', 120.0)
+        self.declare_parameter('deploy_zone_y', -170.0)
+        self.deploy_x = self.get_parameter('deploy_zone_x').value
+        self.deploy_y = self.get_parameter('deploy_zone_y').value
         self.auto_arm = self.get_parameter('auto_arm').value
 
         self.current_phase = 'IDLE'
@@ -248,9 +252,9 @@ class PX4DDSBridge(Node):
 
     def _local_pos_cb(self, msg: VehicleLocalPosition, idx: int):
         d = self.drones[idx]
-        # PX4 uses NED, A.U.R.A. uses ENU
-        d.position = np.array([msg.x, -msg.y, -msg.z])
-        d.velocity = np.array([msg.vx, -msg.vy, -msg.vz])
+        # PX4 NED (North=x, East=y, Down=z) → ENU (East=x, North=y, Up=z)
+        d.position = np.array([msg.y, msg.x, -msg.z])
+        d.velocity = np.array([msg.vy, msg.vx, -msg.vz])
         d.connected = True  # If we get data, PX4 is alive
 
     def _status_cb(self, msg: VehicleStatus, idx: int):
@@ -305,6 +309,8 @@ class PX4DDSBridge(Node):
                 self._start_offboard_sequence()
             elif new_phase == 'TAKEOFF':
                 self._takeoff_all()
+            elif new_phase == 'TRANSIT':
+                self._transit_to_deploy_zone()
             elif new_phase == 'RTL':
                 self._rtl_all()
 
@@ -356,6 +362,15 @@ class PX4DDSBridge(Node):
                 d.position[0], d.position[1], self.takeoff_alt])
             d.sending_setpoints = True
 
+    def _transit_to_deploy_zone(self):
+        """Hold position at takeoff altitude — RL moves drones to target during OPERATIONS."""
+        for i in range(self.num_drones):
+            d = self.drones[i]
+            d.goal_position = np.array([d.position[0], d.position[1], self.takeoff_alt])
+            d.sending_setpoints = True
+        self.get_logger().info(
+            f'Transit: {self.num_drones} drones holding position at takeoff altitude')
+
     def _rtl_all(self):
         for i in range(self.num_drones):
             self._publish_vehicle_command(
@@ -381,10 +396,11 @@ class PX4DDSBridge(Node):
             self.offboard_mode_pubs[i].publish(ocm)
 
             # Publish TrajectorySetpoint (ENU → NED conversion)
+            # ENU: x=East, y=North, z=Up  →  NED: x=North, y=East, z=Down
             sp = TrajectorySetpoint()
-            sp.position[0] = float(d.goal_position[0])   # x (ENU) → x (NED)
-            sp.position[1] = float(-d.goal_position[1])   # y (ENU) → -y (NED)
-            sp.position[2] = float(-d.goal_position[2])   # z (ENU) → -z (NED)
+            sp.position[0] = float(d.goal_position[1])    # NED North = ENU y
+            sp.position[1] = float(d.goal_position[0])    # NED East  = ENU x
+            sp.position[2] = float(-d.goal_position[2])   # NED Down  = -ENU z
             sp.yaw = float('nan')  # Let PX4 handle yaw
             sp.timestamp = int(self.get_clock().now().nanoseconds / 1000)
             self.setpoint_pubs[i].publish(sp)

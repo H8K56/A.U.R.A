@@ -37,22 +37,22 @@ class RLConfig:
     
     # Action space
     action_type: str = 'continuous'  # 'continuous' or 'discrete'
-    max_move_distance: float = 10.0  # meters per step
-    
+    max_move_distance: float = 2.0   # meters per step — must match ActionConfig.max_delta_xy
+
     # Policy parameters
     hidden_dim: int = 256
     num_layers: int = 3
-    
+
     # Reward weights
     reward_coverage: float = 1.0
     reward_network_quality: float = 0.5
     reward_energy: float = 0.1
     reward_connectivity: float = 2.0  # Penalty for disconnected mesh
-    
+
     # Deployment
-    action_rate_hz: float = 1.0  # How often to compute new goals
-    min_altitude: float = 10.0
-    max_altitude: float = 50.0
+    action_rate_hz: float = 2.0  # How often to compute new goals (2 Hz matches training dt=0.5s)
+    min_altitude: float = 15.0
+    max_altitude: float = 80.0
 
 
 class PolicyNetwork(nn.Module):
@@ -202,14 +202,20 @@ class StrategicRLNode(Node):
         
         # Parameters
         self.declare_parameter('num_drones', 5)
-        self.declare_parameter('action_rate_hz', 1.0)
+        self.declare_parameter('action_rate_hz', 2.0)
         self.declare_parameter('model_path', '')
         self.declare_parameter('use_baseline', True)  # Use HHO baseline if no trained model
         self.declare_parameter('deterministic', True)
-        
+        self.declare_parameter('deploy_zone_x', 0.0)
+        self.declare_parameter('deploy_zone_y', 0.0)
+        self.declare_parameter('rl_target_x', 120.0)
+        self.declare_parameter('rl_target_y', -170.0)
+
         num_drones = self.get_parameter('num_drones').value
         action_rate = self.get_parameter('action_rate_hz').value
         model_path = self.get_parameter('model_path').value
+        self.deploy_x = self.get_parameter('rl_target_x').value
+        self.deploy_y = self.get_parameter('rl_target_y').value
         
         # Auto-select policy based on drone count if no specific path given
         if model_path and not os.path.exists(model_path):
@@ -231,20 +237,11 @@ class StrategicRLNode(Node):
         
         # Configuration
         self.config = RLConfig(num_drones=num_drones)
-        
-        # Observation builder — use the trained spaces when loading a trained policy
-        if model_path and not self.use_baseline:
-            obs_config = ObservationConfig(num_drones=num_drones)
-            self.obs_builder = TrainedObsBuilder(obs_config)
-            self.obs_builder.obs_dim = obs_config.total_obs_dim  # compatibility
-            self.get_logger().info(f'Using trained observation space (dim={obs_config.total_obs_dim})')
-        else:
-            self.obs_builder = ObservationBuilder(self.config)
-        
+
         # Policy network
         action_dim = num_drones * 3  # dx, dy, dz per drone
         self.policy = None
-        
+
         # Load trained model if available
         if model_path:
             try:
@@ -261,7 +258,6 @@ class StrategicRLNode(Node):
                 else:
                     self.use_baseline = False
                 self.policy.eval()
-                self.policy.eval()
                 self.get_logger().info(
                     f'Loaded trained policy from {model_path} '
                     f'(obs={meta.get("obs_dim")}, act={meta.get("action_dim")}, '
@@ -269,7 +265,17 @@ class StrategicRLNode(Node):
             except Exception as e:
                 self.get_logger().warn(f'Failed to load model: {e}. Using baseline.')
                 self.use_baseline = True
-        
+
+        # Select observation builder based on final policy state — must be after model load
+        # because loading can override use_baseline even when the param said True.
+        if self.policy is not None and not self.use_baseline:
+            obs_config = ObservationConfig(num_drones=num_drones)
+            self.obs_builder = TrainedObsBuilder(obs_config)
+            self.obs_builder.obs_dim = obs_config.total_obs_dim
+            self.get_logger().info(f'Using trained observation space (dim={obs_config.total_obs_dim})')
+        else:
+            self.obs_builder = ObservationBuilder(self.config)
+
         # Fallback to old PolicyNetwork if no trained model
         if self.policy is None and not self.use_baseline:
             self.policy = PolicyNetwork(
@@ -400,26 +406,50 @@ class StrategicRLNode(Node):
         
         # Convert actions to goal positions
         goals = {}
-        for i, drone in enumerate(self.latest_swarm.drones[:self.config.num_drones]):
+        drones = self.latest_swarm.drones[:self.config.num_drones]
+        for i, drone in enumerate(drones):
             delta = actions[i*3:(i+1)*3] * self.config.max_move_distance
-            
             current_pos = np.array([
                 drone.position.x,
                 drone.position.y,
                 drone.position.z
             ])
-            
             goal_pos = current_pos + delta
-            
-            # Clamp altitude
             goal_pos[2] = np.clip(
                 goal_pos[2],
                 self.config.min_altitude,
                 self.config.max_altitude
             )
-            
             goals[drone.drone_id] = goal_pos
-        
+
+        # Collision avoidance: push apart any goals that are too close horizontally,
+        # then stagger altitude so no two drones share the same vertical band.
+        MIN_SEP_XY = 8.0   # metres horizontal clearance
+        ALT_STEP   = 3.0   # metres between altitude bands
+        drone_ids = [d.drone_id for d in drones]
+        for _ in range(5):  # iterate to let repulsions settle
+            for a in range(len(drone_ids)):
+                for b in range(a + 1, len(drone_ids)):
+                    id_a, id_b = drone_ids[a], drone_ids[b]
+                    diff_xy = goals[id_a][:2] - goals[id_b][:2]
+                    dist = np.linalg.norm(diff_xy)
+                    if dist < MIN_SEP_XY:
+                        if dist < 1e-3:
+                            diff_xy = np.array([1.0, 0.0])
+                            dist = 1.0
+                        push = (diff_xy / dist) * (MIN_SEP_XY - dist) / 2.0
+                        goals[id_a][:2] += push
+                        goals[id_b][:2] -= push
+
+        # Unique altitude band per drone index so vertically stacked drones clear each other
+        for i, drone in enumerate(drones):
+            base_alt = self.config.min_altitude + i * ALT_STEP
+            goals[drone.drone_id][2] = np.clip(
+                goals[drone.drone_id][2],
+                base_alt,
+                base_alt + ALT_STEP * (len(drones) - 1)
+            )
+
         return goals
     
     def _compute_baseline_goals(self) -> Dict[int, np.ndarray]:
@@ -450,11 +480,7 @@ class StrategicRLNode(Node):
             for d in drones
         ])
 
-        centroid = np.mean(positions[:, :2], axis=0)
-        # Override with deploy zone if available (disaster area center)
-        deploy_x = 120.0   # Center of disaster zone
-        deploy_y = -170.0
-        centroid = np.array([deploy_x, deploy_y])
+        centroid = np.array([self.deploy_x, self.deploy_y])
 
         # ---------------------------------
         # Formation parameters

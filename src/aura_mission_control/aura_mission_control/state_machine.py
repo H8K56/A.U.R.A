@@ -211,6 +211,15 @@ class MissionStateMachine:
                 and r.min_battery_percent >= self.config.min_battery_for_launch):
             return self._transition(MissionPhase.TAKEOFF, "Preflight checks passed")
 
+        # After 30s, accept N-1 drones (tolerate 1 failure)
+        if (self.phase_elapsed > 30.0
+                and r.num_drones_reporting >= max(r.num_drones_expected - 1, 1)
+                and r.num_drones_reporting > 0
+                and r.all_armed
+                and r.min_battery_percent >= self.config.min_battery_for_launch):
+            r.num_drones_expected = r.num_drones_reporting
+            return self._transition(MissionPhase.TAKEOFF,
+                f"Preflight passed with {r.num_drones_reporting} drones - tolerance mode")
         return self.phase
 
     def _update_takeoff(self) -> MissionPhase:

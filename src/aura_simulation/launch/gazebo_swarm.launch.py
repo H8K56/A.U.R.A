@@ -82,12 +82,16 @@ def launch_setup(context, *args, **kwargs):
     actions = []
 
     # ═══ 1. PX4 MULTI-DRONE SITL ═════════════════════════
+    # Run clean_sim.sh first so any previous gzserver (which holds MAVLink
+    # TCP ports) is fully killed before sitl_multiple_run.sh starts a fresh
+    # gzserver. Without this, the old gzserver's model plugins keep the ports
+    # (e.g. 4563) bound, causing "bind skipped: Address already in use".
+    clean_script = os.path.expanduser('~/ws/scripts/clean_sim.sh')
     actions.append(ExecuteProcess(
         cmd=[
-            'bash', multi_script,
-            '-n', str(num_drones),
-            '-m', 'iris',
-            '-w', world,
+            'bash', '-c',
+            f'bash {clean_script}; exec bash {multi_script}'
+            f' -n {num_drones} -m iris -w {world}',
         ],
         output='screen',
         additional_env={

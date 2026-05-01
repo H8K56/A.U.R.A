@@ -13,8 +13,11 @@
     publish_rate_hz: 10.0
     spawn_radius_m: 5.0           # Initial cluster radius
     spawn_altitude_m: 0.5         # Ground level start
-    deploy_zone_x: 120.0            # Target deployment area
-    deploy_zone_y: -170.0
+    deploy_zone_x: 0.0              # Transit arrival zone = spawn area (drones hover here after takeoff)
+    deploy_zone_y: 0.0
+    deploy_zone_radius_m: 20.0      # Spawn radius is 5m so 20m is generous
+    rl_target_x: 125.0
+    rl_target_y: -164.0
     takeoff_altitude_m: 20.0
     max_speed_m_s: 5.0
     hub_drone_id: 0               # Drone 0 is the hub
@@ -52,7 +55,7 @@
     # ── Strategic RL ──────────────────────────────
     use_baseline: true            # Use baseline controller (no trained policy)
     baseline_type: 'grid'         # grid | spread | hho
-    rl_update_rate_hz: 1.0
+    action_rate_hz: 2.0           # RL goal update rate — 2 Hz matches training dt=0.5s → 4 m/s transit
 
     # ── Scenario Runner ───────────────────────────
     auto_start_delay_sec: 5.0

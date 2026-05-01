@@ -66,13 +66,17 @@ class ActionConfig:
     position_delta_dim: int = 3      # dx, dy, dz
 
     # Action scaling
-    max_delta_xy: float = 1.5       # Max horizontal movement per step (m)
+    max_delta_xy: float = 2.0        # Max horizontal movement per step (m)
     max_delta_z: float = 0.8         # Max vertical movement per step (m)
 
     # Position bounds
     min_altitude: float = 15.0       # Minimum flight altitude (m)
     max_altitude: float = 80.0       # Maximum flight altitude (m)
-    area_bound: float = 200.0        # Max distance from origin (m)
+    area_bound: float = 250.0        # Max distance from world center (m)
+
+    # World center — must match ObservationBuilder constants
+    world_center_x: float = 120.0
+    world_center_y: float = -170.0
 
     @property
     def action_dim(self) -> int:
@@ -93,6 +97,10 @@ class ObservationBuilder:
     VELOCITY_SCALE = 5.0         # m/s
     RSSI_OFFSET = 90.0           # shift so -90 dBm -> 0
     RSSI_SCALE = 40.0            # range width
+
+    # World center — disaster zone centroid in Gazebo world frame
+    WORLD_CENTER_X = 120.0
+    WORLD_CENTER_Y = -170.0
 
     def __init__(self, config: ObservationConfig = None):
         self.config = config or ObservationConfig()
@@ -139,8 +147,9 @@ class ObservationBuilder:
 
         # 1. Drone states
         drone_obs = np.zeros((self.config.num_drones, self.config.drone_obs_dim))
+        world_center = np.array([self.WORLD_CENTER_X, self.WORLD_CENTER_Y, 0.0])
         for i, drone in enumerate(drones[:self.config.num_drones]):
-            pos = drone.position / self.POSITION_SCALE
+            pos = (drone.position - world_center) / self.POSITION_SCALE
             vel = drone.velocity / self.VELOCITY_SCALE
 
             drone_obs[i, 0:3] = pos
@@ -182,8 +191,8 @@ class ObservationBuilder:
         if weather_zones:
             for i, zone in enumerate(weather_zones[:self.config.num_weather_zones]):
                 idx = i * self.config.weather_zone_dim
-                weather_obs[idx] = zone.center[0] / self.POSITION_SCALE
-                weather_obs[idx + 1] = zone.center[1] / self.POSITION_SCALE
+                weather_obs[idx] = (zone.center[0] - self.WORLD_CENTER_X) / self.POSITION_SCALE
+                weather_obs[idx + 1] = (zone.center[1] - self.WORLD_CENTER_Y) / self.POSITION_SCALE
                 weather_obs[idx + 2] = zone.radius / self.POSITION_SCALE
                 weather_obs[idx + 3] = zone.attenuation_db / 20.0
                 weather_obs[idx + 4] = 1.0 if zone.is_active else 0.0
@@ -199,9 +208,9 @@ class ObservationBuilder:
             return obs.flatten()
 
         for i, drone in enumerate(swarm_state.drones[:self.config.num_drones]):
-            # Position (normalized)
-            obs[i, 0] = drone.position.x / self.POSITION_SCALE
-            obs[i, 1] = drone.position.y / self.POSITION_SCALE
+            # Position normalized relative to world center (disaster zone)
+            obs[i, 0] = (drone.position.x - self.WORLD_CENTER_X) / self.POSITION_SCALE
+            obs[i, 1] = (drone.position.y - self.WORLD_CENTER_Y) / self.POSITION_SCALE
             obs[i, 2] = drone.position.z / self.POSITION_SCALE
 
             # Velocity
@@ -273,8 +282,8 @@ class ObservationBuilder:
         for i, zone in enumerate(weather_zones[:self.config.num_weather_zones]):
             idx = i * self.config.weather_zone_dim
             try:
-                obs[idx] = zone.center.x / self.POSITION_SCALE
-                obs[idx + 1] = zone.center.y / self.POSITION_SCALE
+                obs[idx] = (zone.center.x - self.WORLD_CENTER_X) / self.POSITION_SCALE
+                obs[idx + 1] = (zone.center.y - self.WORLD_CENTER_Y) / self.POSITION_SCALE
                 obs[idx + 2] = zone.radius_meters / self.POSITION_SCALE
                 obs[idx + 3] = zone.signal_attenuation_db / 20.0
                 obs[idx + 4] = 1.0 if zone.is_active else 0.0
@@ -326,9 +335,17 @@ class ActionProcessor:
             else:
                 goal = delta
 
-            # Clip to bounds
-            goal[0] = np.clip(goal[0], -self.config.area_bound, self.config.area_bound)
-            goal[1] = np.clip(goal[1], -self.config.area_bound, self.config.area_bound)
+            # Circular clip relative to world center — keeps drones inside the disk
+            # that the reward function enforces (avoids square-corner penalty spikes)
+            cx = self.config.world_center_x
+            cy = self.config.world_center_y
+            bound = self.config.area_bound
+            dx, dy = goal[0] - cx, goal[1] - cy
+            dist_xy = np.sqrt(dx * dx + dy * dy)
+            if dist_xy > bound:
+                scale = bound / dist_xy
+                goal[0] = cx + dx * scale
+                goal[1] = cy + dy * scale
             goal[2] = np.clip(goal[2], self.config.min_altitude, self.config.max_altitude)
 
             goals.append(goal)

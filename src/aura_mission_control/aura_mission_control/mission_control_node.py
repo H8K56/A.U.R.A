@@ -259,11 +259,15 @@ class MissionControlNode(Node):
         )
 
         # ── Deploy zone check (transit complete) ────────────────
+        # Check swarm centroid rather than each drone individually: the transit
+        # formation spreads drones across the zone, so outer drones are always
+        # outside a per-drone radius check even though the swarm has arrived.
         cx, cy = config.deploy_zone_center
         radius = config.deploy_zone_radius_m
-        r.all_at_deploy_zone = all(
-            np.sqrt((d.position.x - cx) ** 2 + (d.position.y - cy) ** 2) < radius
-            for d in drones
+        mean_x = sum(d.position.x for d in drones) / n
+        mean_y = sum(d.position.y for d in drones) / n
+        r.all_at_deploy_zone = (
+            np.sqrt((mean_x - cx) ** 2 + (mean_y - cy) ** 2) < radius
         )
 
         # ── Formation convergence ───────────────────────────────

@@ -1,3 +1,0 @@
-PX4_HOME=/home/aura/PX4-Autopilot
-RMW_IMPLEMENTATION=rmw_fastrtps_cpp
-ROS_DOMAIN_ID=0

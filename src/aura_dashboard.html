@@ -411,23 +411,56 @@ function AURADashboard() {
   }, [logEvent]);
 
   // Simulation mode (demo data when no rosbridge)
+  const simDrones = useRef([
+    { x: 40, y: 0 }, { x: 12, y: 38 }, { x: -32, y: 23 }, { x: -32, y: -24 }, { x: 12, y: -38 }
+  ]);
   useEffect(() => {
     if (!simMode) return;
+    const R = 55;
+    const angles = [0, 2*Math.PI/5, 4*Math.PI/5, 6*Math.PI/5, 8*Math.PI/5];
+    const bats = [92, 88, 91, 85, 89];
+    const sigs = [-68, -72, -71, -73, -70];
+    const roles = [1, 0, 0, 0, 0];
     const iv = setInterval(() => {
-      setTick(t => t + 1);
-      setPhase(5); // OPERATIONS
+      setTick(tk => tk + 1);
+      setPhase(5);
       setCoverage(prev => Math.min(100, prev + (prev < 95 ? 2 : 0.1)));
-      setDrones([
-        { id: 0, x: 40, y: 0, z: 25, battery_percent: 92, flight_mode: 3, signal_strength_dbm: -68, role: 1, position: { x: 40, y: 0, z: 25 }, drone_id: 0 },
-        { id: 1, x: 12, y: 38, z: 15, battery_percent: 88, flight_mode: 3, signal_strength_dbm: -72, role: 0, position: { x: 12, y: 38, z: 15 }, drone_id: 1 },
-        { id: 2, x: -32, y: 23, z: 15, battery_percent: 91, flight_mode: 3, signal_strength_dbm: -71, role: 0, position: { x: -32, y: 23, z: 15 }, drone_id: 2 },
-        { id: 3, x: -32, y: -24, z: 15, battery_percent: 85, flight_mode: 3, signal_strength_dbm: -73, role: 0, position: { x: -32, y: -24, z: 15 }, drone_id: 3 },
-        { id: 4, x: 12, y: -38, z: 15, battery_percent: 89, flight_mode: 3, signal_strength_dbm: -70, role: 0, position: { x: 12, y: -38, z: 15 }, drone_id: 4 },
-      ]);
+      const now = Date.now() / 1000;
+      const sd = simDrones.current;
+      const dz = deadZones;
+      const newDrones = angles.map((baseAngle, i) => {
+        const a = baseAngle + now * 0.08;
+        const r = R + Math.sin(now * 0.3 + i) * 10;
+        let targetX = r * Math.cos(a);
+        let targetY = r * Math.sin(a);
+        if (dz.length > 0) {
+          let closestDist = Infinity, closestZone = null;
+          dz.forEach(z => {
+            const d = Math.sqrt((targetX - z.cx) ** 2 + (targetY - z.cy) ** 2);
+            if (d < closestDist) { closestDist = d; closestZone = z; }
+          });
+          if (closestZone) {
+            const pull = Math.max(0, 1 - closestDist / 180) * 0.5;
+            targetX += (closestZone.cx - targetX) * pull;
+            targetY += (closestZone.cy - targetY) * pull;
+          }
+        }
+        sd[i].x += (targetX - sd[i].x) * 0.04;
+        sd[i].y += (targetY - sd[i].y) * 0.04;
+        const x = sd[i].x, y = sd[i].y;
+        const z = roles[i] === 1 ? 25 : 15 + Math.sin(now * 0.2 + i * 2) * 2;
+        const nearDZ = dz.some(zn => Math.sqrt((x - zn.cx) ** 2 + (y - zn.cy) ** 2) < (zn.radius || 30) + 20);
+        return {
+          id: i, x, y, z, battery_percent: Math.max(10, bats[i] - (now * 0.005) % 5),
+          flight_mode: 3, signal_strength_dbm: sigs[i] + Math.sin(now + i) * 3 + (nearDZ ? -10 : 0),
+          role: roles[i], position: { x, y, z }, drone_id: i
+        };
+      });
+      setDrones(newDrones);
       setNetwork({ coverage: 100, signal: -73.9, throughput: 103.8, latency: 6.0, links: 10, mesh: true });
-    }, 1000);
+    }, 50);
     return () => clearInterval(iv);
-  }, [simMode]);
+  }, [simMode, deadZones]);
 
   const handleAddZone = async () => {
     try {
@@ -468,7 +501,7 @@ function AURADashboard() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap');
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; } div { min-width: 0; min-height: 0; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: ${T.border}; border-radius: 2px; }
       `}</style>
 
@@ -485,12 +518,24 @@ function AURADashboard() {
             <span style={{ fontSize: 11, color: rosStatus === "connected" ? T.green : T.dim }}>
               {rosStatus === "connected" ? "LIVE" : simMode ? "DEMO" : "OFFLINE"}
             </span>
+            <button onClick={() => { bridge.current?.disconnect(); setTimeout(() => bridge.current?.connect(), 500); }}
+              style={{ fontSize: 10, padding: "4px 10px", background: rosStatus === "connected" ? "transparent" : T.accent,
+                color: rosStatus === "connected" ? T.dim : "#000", border: "1px solid " + T.border,
+                borderRadius: 4, cursor: "pointer", fontWeight: 700 }}>
+              {rosStatus === "connected" ? "RECONNECT" : "CONNECT"}
+            </button>
+            <button onClick={() => setSimMode(m => !m)}
+              style={{ fontSize: 10, padding: "4px 10px", background: simMode ? T.blue + "30" : "transparent",
+                color: simMode ? T.blue : T.dim, border: "1px solid " + T.border,
+                borderRadius: 4, cursor: "pointer", fontWeight: 700 }}>
+              {simMode ? "DEMO ON" : "DEMO OFF"}
+            </button>
           </div>
         </div>
       </div>
 
       {/* TOP METRICS ROW — large, visible from distance */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 10, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gap: 10, marginBottom: 16 }}>
         <MetricCard label="Coverage" value={coverage.toFixed(1)} unit="%" color={covColor} icon="📡"
           alert={coverage < 80} sub={coverage < 80 ? "Below target!" : "Target: 80%"} />
         <MetricCard label="Signal" value={(network.signal || -80).toFixed(1)} unit="dBm" color={T.blue} icon="📶" />
@@ -502,12 +547,12 @@ function AURADashboard() {
       </div>
 
       {/* MAIN CONTENT — 3 columns */}
-      <div style={{ display: "grid", gridTemplateColumns: "280px 1fr 280px", gap: 12, height: "calc(100vh - 220px)", minHeight: 400 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "280px minmax(0, 1fr) 280px", gap: 12, height: "calc(100vh - 220px)", minHeight: 400 }}>
 
         {/* LEFT COLUMN — Drones + Dead Zones */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Drones */}
-          <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 8, padding: 12, flex: 1 }}>
+          <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 8, padding: 12, flex: 1, overflow: "auto" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: T.accent, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8, paddingBottom: 6, borderBottom: `1px solid ${T.border}` }}>
               SWARM STATUS ({drones.length} drones)
             </div>
@@ -541,7 +586,7 @@ function AURADashboard() {
               COVERAGE ANALYSIS
             </div>
             <CoverageBar value={coverage} target={80} label="Total Coverage" />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 8, marginTop: 10 }}>
               <div style={{ background: `${T.blue}10`, border: `1px solid ${T.blue}20`, borderRadius: 4, padding: 8, textAlign: "center" }}>
                 <div style={{ fontSize: 9, color: T.dim, marginBottom: 2 }}>DRONES UP</div>
                 <div style={{ fontSize: 22, fontWeight: 800, color: T.blue }}>{drones.length}</div>
@@ -582,7 +627,7 @@ function AURADashboard() {
               PPO · γ=0.99 · GAE λ=0.95 · Tanh-Gaussian
             </div>
             {/* Training results */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: 6 }}>
               <div style={{ background: "#a78bfa08", border: "1px solid #a78bfa15", borderRadius: 4, padding: "6px 8px", textAlign: "center" }}>
                 <div style={{ fontSize: 8, color: T.dim, marginBottom: 2 }}>BASELINE</div>
                 <div style={{ fontSize: 18, fontWeight: 800, color: T.dim }}>26<span style={{ fontSize: 10 }}>%</span></div>
@@ -613,7 +658,7 @@ function AURADashboard() {
           </div>
 
           {/* Event Log */}
-          <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 8, padding: 12, flex: 1 }}>
+          <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 8, padding: 12, flex: 1, overflow: "auto" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: T.dim, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 8, paddingBottom: 6, borderBottom: `1px solid ${T.border}` }}>
               EVENT LOG
             </div>

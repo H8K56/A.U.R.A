@@ -9,9 +9,8 @@ trajectory planner.
 """
 
 import rclpy
-import os
 from rclpy.node import Node
-import os
+from std_srvs.srv import Trigger
 import numpy as np
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
@@ -256,7 +255,7 @@ class StrategicRLNode(Node):
                     self.policy = None
                     self.use_baseline = True
                 else:
-                    self.use_baseline = False
+                    pass  # Keep use_baseline from parameter
                 self.policy.eval()
                 self.get_logger().info(
                     f'Loaded trained policy from {model_path} '
@@ -303,8 +302,9 @@ class StrategicRLNode(Node):
             self.network_callback, 10
         )
         
+        self.create_service(Trigger, '~/toggle_mode', self._toggle_mode_cb)
         self.weather_sub = self.create_subscription(
-            WeatherZone, '/weather/zones',
+            WeatherZone, '/network/dead_zones',
             self.weather_callback, 10
         )
         
@@ -336,6 +336,18 @@ class StrategicRLNode(Node):
     def network_callback(self, msg: NetworkMetrics):
         self.latest_network = msg
     
+    def _toggle_mode_cb(self, request, response):
+        if self.policy is None:
+            response.success = False
+            response.message = "No RL policy loaded"
+            return response
+        self.use_baseline = not self.use_baseline
+        mode = "BASELINE" if self.use_baseline else "RL"
+        self.get_logger().info(f"Mode switched to {mode}")
+        response.success = True
+        response.message = f"Switched to {mode}"
+        return response
+
     def weather_callback(self, msg: WeatherZone):
         # Update or add weather zone
         for i, zone in enumerate(self.weather_zones):
@@ -343,6 +355,21 @@ class StrategicRLNode(Node):
                 self.weather_zones[i] = msg
                 return
         self.weather_zones.append(msg)
+        # Auto-switch to dead-zone RL policy when zones detected
+        # Only switch during OPERATIONS (phase 5) — let baseline handle transit first
+        in_operations = (self.latest_swarm is not None and 
+                        self.latest_swarm.mission_state == 5)
+        if len(self.weather_zones) > 0 and self.use_baseline and in_operations:
+            dz_path = os.path.expanduser("~/ws/models/rl_5drones_deadzone_v2/best_policy.pt")
+            if os.path.exists(dz_path):
+                try:
+                    self.policy, _ = PolicyCheckpoint.load(dz_path, device="cpu")
+                    self.policy.eval()
+                    pass  # Keep use_baseline from parameter
+                    self.get_logger().info(
+                        f"Dead zone detected — loaded dead-zone RL policy ({len(self.weather_zones)} zones)")
+                except Exception as e:
+                    self.get_logger().warn(f"Failed to load dead-zone policy: {e}")
     
     def compute_and_publish_goals(self):
         """Compute optimal positions and publish goals"""
@@ -544,7 +571,7 @@ class StrategicRLNode(Node):
             # Weather avoidance
             # ---------------------------------
             for zone in self.weather_zones:
-                if zone.no_fly and zone.is_active:
+                if zone.is_active:
 
                     zone_xy = np.array([
                         zone.center.x,

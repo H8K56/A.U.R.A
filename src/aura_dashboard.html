@@ -196,20 +196,32 @@ function TacticalMap({ drones, deadZones, coverage }) {
     const ctx = c.getContext("2d"); ctx.scale(dpr, dpr);
     const w = rect.width, h = rect.height, cx = w / 2, cy = h / 2;
     const R = Math.min(cx, cy) - 12;
-    const AREA = 200;
-    const toScreen = (wx, wy) => [cx + (wx / AREA) * R, cy - (wy / AREA) * R];
+    const AREA = 250;
+    // Auto-center on drone centroid
+    let camX = 0, camY = 0;
+    if (drones.length > 0) {
+      camX = drones.reduce((s, d) => s + (d.x || 0), 0) / drones.length;
+      camY = drones.reduce((s, d) => s + (d.y || 0), 0) / drones.length;
+    }
+    const toScreen = (wx, wy) => [cx + ((wx - camX) / AREA) * R, cy - ((wy - camY) / AREA) * R];
 
     // Background
     ctx.fillStyle = "#060a10"; ctx.fillRect(0, 0, w, h);
 
     // Grid
     ctx.strokeStyle = "#1a2430"; ctx.lineWidth = 0.5;
-    for (let i = -200; i <= 200; i += 50) {
-      const [x1, y1] = toScreen(i, -200);
-      const [x2, y2] = toScreen(i, 200);
+    const gridStart = Math.floor((camX - AREA) / 50) * 50;
+    const gridEnd = Math.ceil((camX + AREA) / 50) * 50;
+    const gridStartY = Math.floor((camY - AREA) / 50) * 50;
+    const gridEndY = Math.ceil((camY + AREA) / 50) * 50;
+    for (let i = gridStart; i <= gridEnd; i += 50) {
+      const [x1, y1] = toScreen(i, camY - AREA);
+      const [x2, y2] = toScreen(i, camY + AREA);
       ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
-      const [x3, y3] = toScreen(-200, i);
-      const [x4, y4] = toScreen(200, i);
+    }
+    for (let i = gridStartY; i <= gridEndY; i += 50) {
+      const [x3, y3] = toScreen(camX - AREA, i);
+      const [x4, y4] = toScreen(camX + AREA, i);
       ctx.beginPath(); ctx.moveTo(x3, y3); ctx.lineTo(x4, y4); ctx.stroke();
     }
 
@@ -221,10 +233,10 @@ function TacticalMap({ drones, deadZones, coverage }) {
 
     // Axis labels
     ctx.fillStyle = "#475569"; ctx.font = "10px monospace"; ctx.textAlign = "center";
-    [-200, -100, 0, 100, 200].forEach(v => {
-      const [x] = toScreen(v, -200);
-      ctx.fillText(`${v}m`, x, cy + R + 10);
-    });
+    for (let v = gridStart; v <= gridEnd; v += 100) {
+      const [x] = toScreen(v, camY - AREA);
+      ctx.fillText(v + "m", x, cy + R + 10);
+    }
 
     // Dead zones (draw BEFORE drones)
     deadZones.forEach(z => {
@@ -245,6 +257,21 @@ function TacticalMap({ drones, deadZones, coverage }) {
       ctx.fillText(`-${(z.attenuation_db || 0).toFixed(0)}dB`, zx, zy + 4);
     });
 
+    // Disaster structures
+    const structures = [
+      [45,-88],[62,-110],[80,-130],[121,-142],[99,-95],[108,-115],
+      [263,-193],[282,-210],[290,-230],[305,-220],[315,-243],[155,-210],
+      [-37,-191],[8,-210],[45,-230],[75,-256],[115,-245],
+      [196,-150],[195,-240],[202,-115],[-112,-78],
+      [179,-287],[244,-239],[-2,-116]
+    ];
+    ctx.fillStyle = "#f59e0b80";
+    structures.forEach(([sx, sy]) => {
+      const [px, py] = toScreen(sx, sy);
+      ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#f59e0b40"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.stroke();
+    });
     // Mesh links
     if (drones.length > 1) {
       ctx.strokeStyle = "#10b98130"; ctx.lineWidth = 1;
@@ -384,7 +411,7 @@ function AURADashboard() {
             links: msg.link_from_drone?.length || 0, mesh: msg.mesh_connected,
           });
         });
-        b.subscribe("/weather/zones", "aura_msgs/msg/WeatherZone", (msg) => {
+        b.subscribe("/network/dead_zones", "aura_msgs/msg/WeatherZone", (msg) => {
           if (!msg.is_active) {
             setDeadZones(prev => prev.filter(z => !(Math.abs(z.cx - (msg.center?.x||0)) < 1 && Math.abs(z.cy - (msg.center?.y||0)) < 1)));
           } else {
@@ -396,7 +423,17 @@ function AURADashboard() {
             });
           }
         });
-        // Query RL controller mode
+        // Query RL controller mode (poll every 3s)
+        const modePoller = setInterval(() => {
+          try {
+            b.callService("/strategic_rl/get_parameters", "rcl_interfaces/srv/GetParameters", 
+              { names: ["use_baseline"] }).then(res => {
+              const val = res?.values?.[0]?.bool_value;
+              setRlMode(val === false ? "rl" : "baseline");
+            }).catch(() => {});
+          } catch {}
+        }, 3000);
+        // Initial query
         try {
           b.callService("/strategic_rl/get_parameters", "rcl_interfaces/srv/GetParameters", 
             { names: ["use_baseline"] }).then(res => {

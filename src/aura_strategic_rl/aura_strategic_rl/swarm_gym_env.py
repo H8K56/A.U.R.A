@@ -70,8 +70,8 @@ class EnvConfig:
 
     # Randomization
     randomize_initial_positions: bool = True
-    randomize_weather: bool = False
-    weather_probability: float = 0.3
+    randomize_weather: bool = True
+    weather_probability: float = 0.6
 
 
 class DroneState:

@@ -1,7 +1,11 @@
-# A.U.R.A. — Autonomous Urban Reconnaissance Array
+<p align="center">
+  <img src="worlds/aura_logo.svg" alt="A.U.R.A Logo" width="75%"/>
+</p>
+
+# A.U.R.A — Autonomous Urban Reconnaissance Array
 
 ## Overview
-**A.U.R.A.** is a ROS 2-based drone swarm system designed for **post-earthquake disaster relief**. When terrestrial communication infrastructure collapses, A.U.R.A. deploys a coordinated swarm of 5 UAVs that autonomously establish a WiFi mesh network, providing connectivity to civilians and first responders in the affected area.
+**A.U.R.A** is a ROS 2-based drone swarm system designed for **post-earthquake disaster relief**. When terrestrial communication infrastructure collapses, A.U.R.A deploys a coordinated swarm of 5 UAVs that autonomously establish a WiFi mesh network, providing connectivity to civilians and first responders in the affected area.
 
 The system integrates **Gazebo Classic** for multi-drone physics simulation, **PX4 SITL** for realistic autopilot behaviour, a custom **log-distance path loss network simulator**, and **reinforcement learning** (PPO) for intelligent swarm positioning — all orchestrated through **ROS 2 Humble**.
 
@@ -114,7 +118,7 @@ The recommended workflow uses **Zed editor on the host** with file sync to the c
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    A.U.R.A. Architecture                     │
+│                    A.U.R.A Architecture                     │
 ├─────────────┬───────────────┬────────────────┬──────────────┤
 │  Simulation │   Middleware  │  Intelligence  │  Monitoring  │
 │             │               │                │              │
@@ -305,4 +309,4 @@ MIT License — open for academic and research collaboration.
 
 ---
 
-> *A.U.R.A.: Restoring connectivity when the ground network falls silent.*
+> *A.U.R.A: Restoring connectivity when the ground network falls silent.*

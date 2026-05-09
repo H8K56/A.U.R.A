@@ -24,6 +24,92 @@ There is a critical need for a **rapidly deployable, autonomous aerial communica
 
 ---
 
+## Docker Setup
+
+### Prerequisites
+- Ubuntu 22.04 host (or compatible Linux distribution)
+- Docker Engine 24.0+
+- NVIDIA GPU with driver 530+ and CUDA 12.0+
+- NVIDIA Container Toolkit (`nvidia-docker2`)
+- X11 display server (for Gazebo GUI)
+
+### Building the Container
+
+```bash
+git clone https://github.com/YOUR_USERNAME/AURA.git
+cd AURA
+docker build -t aura:latest -f docker/Dockerfile .
+```
+
+### Running the Container
+
+```bash
+# Allow X11 forwarding for Gazebo GUI
+xhost +local:docker
+
+# Run with GPU support, display forwarding, and volume mounts
+docker run -it --rm \
+  --name aura \
+  --gpus all \
+  --privileged \
+  --network host \
+  -e DISPLAY=$DISPLAY \
+  -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -v $HOME/A.U.R.A/worlds:/home/aura/ws/worlds \
+  -v $HOME/A.U.R.A/models:/home/aura/ws/models \
+  -v $HOME/A.U.R.A/src:/home/aura/ws/src \
+  aura:latest
+```
+
+### Container Contents
+
+The Docker image includes:
+- **Ubuntu 22.04** base with build essentials
+- **ROS 2 Humble** (full desktop install)
+- **Gazebo Classic 11** with plugins and model database
+- **PX4 Autopilot v1.14** (pre-built SITL target)
+- **Micro-XRCE-DDS Agent** for PX4 ↔ ROS 2 communication
+- **PyTorch 2.x + CUDA** for RL training on GPU
+- **Python packages**: gymnasium, numpy, scipy, fast_simplification
+- **ROS Bridge Suite** for web dashboard connectivity
+- **NS-3.40** (optional, for future high-fidelity network simulation)
+
+### Volume Mounts
+
+| Host Path | Container Path | Purpose |
+|-----------|---------------|---------|
+| `~/A.U.R.A/worlds` | `/home/aura/ws/worlds` | Gazebo world files and terrain models |
+| `~/A.U.R.A/models` | `/home/aura/ws/models` | Trained RL policies and drone models |
+| `~/A.U.R.A/src` | `/home/aura/ws/src` | ROS 2 package source code |
+
+### First-Time Setup Inside Container
+
+```bash
+# Build all ROS 2 packages
+cd ~/ws
+colcon build
+source install/setup.bash
+
+# Set kernel parameters for multi-drone socket management
+sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+sudo sysctl -w net.ipv4.tcp_fin_timeout=5
+
+# Verify PX4 build
+cd ~/PX4-Autopilot && make px4_sitl_default gazebo-classic
+```
+
+### Development Workflow
+
+The recommended workflow uses **Zed editor on the host** with file sync to the container via volume mounts:
+
+1. Edit source files on the host in `~/A.U.R.A/src/`
+2. Changes appear instantly in the container at `/home/aura/ws/src/`
+3. Build inside the container: `cd ~/ws && colcon build --packages-select <package>`
+4. Run inside the container: `ros2 launch aura_simulation gazebo_swarm.launch.py`
+
+---
+
 ## System Architecture
 
 ```
@@ -59,24 +145,9 @@ There is a critical need for a **rapidly deployable, autonomous aerial communica
 /network/coverage_map ← Coverage Calculator (grid-based coverage data)
 /coverage/goals       ← Strategic RL Node → PX4 DDS Bridge (position commands)
 /mission/status       ← Mission Control (phase, alerts, drone counts)
-/weather/zones        ← Dead Zone Publisher (signal attenuation regions)
+/network/dead_zones   ← Dead Zone Publisher (signal attenuation regions)
 /network/viz/*        ← Mesh Visualizer (RViz markers for drones, links, coverage)
 ```
-
----
-
-## Tech Stack
-
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| Middleware | ROS 2 Humble | Pub/sub communication between all nodes |
-| Physics Sim | Gazebo Classic 11 | Multi-drone flight simulation with earthquake world |
-| Autopilot | PX4 SITL v1.14 | Realistic flight controller with lockstep physics |
-| RL Training | PyTorch + CUDA (RTX 5050) | PPO policy training with GPU acceleration |
-| Training Env | Gymnasium (custom) | Standalone vectorised environment for fast training |
-| Network Sim | Custom Python | Log-distance path loss, BFS mesh routing, coverage grids |
-| Dashboard | React + ROS Bridge | Real-time tactical operations monitoring |
-| Container | Docker (Ubuntu 22.04) | Reproducible development environment |
 
 ---
 
@@ -98,27 +169,23 @@ A custom Gazebo earthquake world (450m × 260m) containing:
 - **Action:** 15-dim continuous (dx, dy, dz per drone × 5 drones)
 - **Reward:** Multi-objective combining coverage (weight 2.0), connectivity (weight 3.0), signal quality, proximity to disaster zone, and safety penalties
 - **Architecture:** MLP actor-critic with LayerNorm and tanh-squashed Gaussian actions
-- **Best result:** Reward 1060, 45.5% coverage (4-drone policy, 300k steps)
+- **Best result:** Reward 1971, 100% connectivity (5-drone dead-zone-aware policy, 1M steps)
 
-### Harris Hawks Optimisation (HHO) Baseline
-- Bio-inspired metaheuristic mimicking cooperative hawk hunting
-- Exploration/exploitation phases with Lévy flight patterns
-- Fitness function balancing coverage spread, connectivity, collision avoidance
-
-### Baseline Controller
+### Baseline Controller (Hungarian + Circular Formation)
 - Hungarian assignment algorithm for optimal drone-to-slot matching
 - Circular formation centred on disaster zone (125, -164)
 - Achieves 96–99% coverage with deterministic positioning
+- Dead zone avoidance: pushes drones away from active attenuation zones
+
+### Context-Dependent Policy Switching
+- **Normal operations:** Baseline controller (reliable, immediate coverage)
+- **Dead zone detected:** Auto-switches to dead-zone-aware RL policy
+- **Manual toggle:** `ros2 service call /strategic_rl/toggle_mode std_srvs/srv/Trigger`
+- Dashboard shows current mode in real-time ("BASELINE (HHO)" or "TRAINED POLICY")
 
 ---
 
 ## Quick Start
-
-### Prerequisites
-- Docker with NVIDIA GPU support
-- ROS 2 Humble
-- PX4 Autopilot (v1.14+)
-- Gazebo Classic 11
 
 ### Launch
 
@@ -145,14 +212,40 @@ ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 # Open http://localhost:8080/aura_dashboard.html in browser
 ```
 
+### Runtime Commands
+
+```bash
+# Inject a dead zone (triggers auto-switch to RL)
+ros2 service call /dead_zone_publisher/add_random_zone std_srvs/srv/Trigger
+
+# Clear all dead zones
+ros2 service call /dead_zone_publisher/clear_zones std_srvs/srv/Trigger
+
+# Toggle between baseline and RL manually
+ros2 service call /strategic_rl/toggle_mode std_srvs/srv/Trigger
+
+# Abort mission
+ros2 topic pub /mission/command std_msgs/msg/String "data: 'abort'" --once
+```
+
 ### Train RL Policy
+
 ```bash
 cd ~/ws && source install/setup.bash
+
+# Standard training (no dead zones)
 python3 -m aura_strategic_rl.train_policy \
   --timesteps 500000 --num-envs 8 \
   --lr 5e-5 --ent-coef 0.0005 \
   --num-drones 5 \
   --save-path ~/ws/models/rl_5drones
+
+# Training with dead zone awareness
+python3 -m aura_strategic_rl.train_policy \
+  --timesteps 1000000 --num-envs 8 \
+  --lr 3e-5 --ent-coef 0.0005 --weather \
+  --num-drones 5 \
+  --save-path ~/ws/models/rl_5drones_deadzone
 ```
 
 ---

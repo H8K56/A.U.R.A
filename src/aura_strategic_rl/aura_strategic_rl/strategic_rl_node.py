@@ -342,6 +342,10 @@ class StrategicRLNode(Node):
             response.message = "No RL policy loaded"
             return response
         self.use_baseline = not self.use_baseline
+        if not self.use_baseline:
+            obs_config = ObservationConfig(num_drones=self.config.num_drones)
+            self.obs_builder = TrainedObsBuilder(obs_config)
+            self.obs_builder.obs_dim = obs_config.total_obs_dim
         mode = "BASELINE" if self.use_baseline else "RL"
         self.get_logger().info(f"Mode switched to {mode}")
         response.success = True

@@ -8,6 +8,8 @@ pkill -f "px4_dds_bridge\|network_sim\|coverage_calc\|mission_control\|dead_zone
 
 sleep 2
 
+fuser -k 9090/tcp 2>/dev/null; sleep 2
+
 for port in $(seq 14540 14560) $(seq 18570 18580) $(seq 4560 4570) 11345 8888; do
   fuser -k ${port}/tcp 2>/dev/null
   fuser -k ${port}/udp 2>/dev/null

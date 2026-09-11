@@ -2,6 +2,9 @@
   <img src="worlds/aura_logo.svg" alt="A.U.R.A Logo" width="75%"/>
 </p>
 
+## 🎥 Demo
+[▶ Watch the demo sim-flight video](https://github.com/H8K56/A.U.R.A/blob/main/aura_test_simflight.mp4)
+
 # A.U.R.A — Autonomous Urban Reconnaissance Array
 
 ## Overview

@@ -200,9 +200,11 @@ RUN pip3 install --ignore-installed \
 # Everything else pinned together. Installing as one resolve is what prevents a
 # later package silently upgrading an earlier pin, which is how the old
 # numpy==1.24.3 pin ended up as 1.26.4 at runtime.
-COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install --ignore-installed -r /tmp/requirements.txt \
-    && rm /tmp/requirements.txt
+COPY requirements.txt requirements-baseline-extra.txt /tmp/
+RUN pip3 install --ignore-installed \
+        -r /tmp/requirements.txt \
+        -r /tmp/requirements-baseline-extra.txt \
+    && rm /tmp/requirements.txt /tmp/requirements-baseline-extra.txt
 
 # ==============================================================================
 # C++ LIBRARIES FOR MINCO

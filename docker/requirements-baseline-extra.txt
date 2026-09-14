@@ -1,0 +1,15 @@
+# A.U.R.A. — packages present in the frozen baseline image that no AURA code
+# imports.
+#
+# Kept so a rebuilt image matches `camad-2026-baseline` exactly, but split out
+# of requirements.txt so CI does not have to install them. pufferlib in
+# particular ships a 60 MB sdist that downloads Raylib and Box2D binaries during
+# its build step — that is a CI failure waiting to happen (and was one: HTTP 504
+# on the Raylib fetch), for a dependency nothing uses.
+#
+# If any of these ever gets imported, promote it to requirements.txt.
+
+pufferlib==3.0.0
+stable-baselines3==2.2.1
+tensorboard==2.15.1
+wandb==0.16.1

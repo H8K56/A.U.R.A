@@ -31,12 +31,10 @@ scikit-learn==1.3.2
 sympy==1.13.1
 mpmath==1.3.0
 
-# RL stack
+# RL stack. train_policy implements PPO directly on torch + gymnasium; the
+# rest of the baseline image's RL packages are in
+# requirements-baseline-extra.txt because nothing imports them.
 gymnasium==0.29.1
-stable-baselines3==2.2.1
-pufferlib==3.0.0
-tensorboard==2.15.1
-wandb==0.16.1
 
 # Tooling
 pyyaml==6.0.1

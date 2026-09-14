@@ -57,11 +57,25 @@ jobs:
             --index-url https://download.pytorch.org/whl/cpu \
             torch==2.6.0
 
+      - name: Fetch LBFGS-Lite
+        run: |
+          # aura_trajectory hardcodes include_directories(/opt/LBFGS-Lite/include),
+          # so the headers must land at exactly that path — the same one the
+          # Dockerfile uses. Header-only; upstream publishes no tags.
+          git clone --depth 1 https://github.com/ZJU-FAST-Lab/LBFGS-Lite.git \
+            /opt/LBFGS-Lite
+
       - name: Fetch px4_msgs
         run: |
-          git clone https://github.com/PX4/px4_msgs.git src/px4_msgs
-          git -C src/px4_msgs checkout "$PX4_MSGS_REV" 2>/dev/null \
-            || echo "Pinned revision unavailable; building px4_msgs from default branch."
+          # Same shallow fetch-by-SHA the Dockerfile uses: exact revision, no
+          # full history. A silent fallback to the default branch would defeat
+          # the point of pinning, so this fails loudly instead.
+          mkdir -p src/px4_msgs
+          cd src/px4_msgs
+          git init -q .
+          git remote add origin https://github.com/PX4/px4_msgs.git
+          git fetch -q --depth 1 origin "$PX4_MSGS_REV"
+          git checkout -q FETCH_HEAD
 
       - name: Build
         shell: bash
@@ -99,8 +113,9 @@ jobs:
   lint:
     name: Style linters (advisory)
     runs-on: ubuntu-latest
-    container:
-      image: ros:humble-ros-base
+    # No container: this job lints Python source and needs no ROS environment,
+    # so pulling the ROS image would cost more than the job.
+    #
     # The tree currently has a large backlog of ament style findings. Surfacing
     # them without failing the build keeps the signal visible while it is worked
     # down; flip this to false once the backlog is clear.
@@ -110,12 +125,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install linters
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends python3-pip
-          # Plain flake8 rather than the ament_* wrappers: this job needs no ROS
-          # environment, and the apt package names for them are not stable.
-          pip install --no-cache-dir flake8 pydocstyle
+        run: pip install --no-cache-dir flake8 pydocstyle
 
       - name: Python style
         run: |

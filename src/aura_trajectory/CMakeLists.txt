@@ -20,9 +20,6 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(Eigen3 REQUIRED)
 
-# LBFGS-Lite (header-only)
-include_directories(/opt/LBFGS-Lite/include)
-
 # Include directories
 include_directories(include)
 
@@ -37,6 +34,16 @@ target_include_directories(minco_trajectory PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   ${EIGEN3_INCLUDE_DIRS}
+)
+
+# LBFGS-Lite: header-only, vendored under third_party/ so this package builds
+# anywhere. It used to be include_directories(/opt/LBFGS-Lite/include), an
+# absolute container path that broke every build outside the dev image.
+# PRIVATE — only trajectory_optimizer.cpp uses it, no public header exposes it.
+# SYSTEM — third-party code should not trip this package's -Wall -Wextra
+# -Wpedantic.
+target_include_directories(minco_trajectory SYSTEM PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lbfgs-lite/include
 )
 target_link_libraries(minco_trajectory Eigen3::Eigen)
 

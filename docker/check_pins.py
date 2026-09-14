@@ -16,7 +16,7 @@ import sys
 HERE = pathlib.Path(__file__).resolve().parent
 
 # versions.env keys that are not Dockerfile ARGs (documentation only).
-NOT_ARGS = {'UBUNTU_VERSION', 'ROS_DISTRO', 'GAZEBO_VERSION', 'LBFGS_LITE_REV'}
+NOT_ARGS = {'UBUNTU_VERSION', 'ROS_DISTRO', 'GAZEBO_VERSION'}
 
 
 def read_versions_env(path):

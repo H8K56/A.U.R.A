@@ -218,9 +218,9 @@ RUN apt-get update && apt-get install -y \
     libsuitesparse-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Header-only; upstream publishes no tags, so this tracks the default branch.
-# If MINCO results ever shift unexpectedly, pin this to a SHA first.
-RUN git clone https://github.com/ZJU-FAST-Lab/LBFGS-Lite.git /opt/LBFGS-Lite
+# LBFGS-Lite is no longer cloned here: the single header it provides is
+# vendored at src/aura_trajectory/third_party/lbfgs-lite/, so the package
+# builds without an image-specific path. See that directory's README.
 
 # ==============================================================================
 # CREATE USER

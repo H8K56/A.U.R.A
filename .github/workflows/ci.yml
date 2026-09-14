@@ -57,14 +57,6 @@ jobs:
             --index-url https://download.pytorch.org/whl/cpu \
             torch==2.6.0
 
-      - name: Fetch LBFGS-Lite
-        run: |
-          # aura_trajectory hardcodes include_directories(/opt/LBFGS-Lite/include),
-          # so the headers must land at exactly that path — the same one the
-          # Dockerfile uses. Header-only; upstream publishes no tags.
-          git clone --depth 1 https://github.com/ZJU-FAST-Lab/LBFGS-Lite.git \
-            /opt/LBFGS-Lite
-
       - name: Fetch px4_msgs
         run: |
           # Same shallow fetch-by-SHA the Dockerfile uses: exact revision, no

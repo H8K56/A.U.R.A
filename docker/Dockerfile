@@ -134,7 +134,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # ==============================================================================
-# PX4 ROS 2 INTERFACE (from source - main branch)
+# PX4 ROS 2 INTERFACE (from source, pinned revisions)
 # ==============================================================================
 WORKDIR /opt/px4_ros/src
 # Pinned to exact revisions. A shallow fetch of a specific SHA keeps this as

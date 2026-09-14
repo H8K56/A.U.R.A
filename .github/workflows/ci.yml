@@ -87,8 +87,14 @@ jobs:
         if: always()
         shell: bash
         run: |
-          source /opt/ros/humble/setup.bash
-          colcon test-result --all --verbose
+          # Runs even when an earlier step failed, so `build/` may not exist —
+          # do not mask the real failure with a spurious one here.
+          if [ -d build ]; then
+            source /opt/ros/humble/setup.bash
+            colcon test-result --all --verbose
+          else
+            echo "No build directory — the build step did not get far enough."
+          fi
 
   lint:
     name: Style linters (advisory)

@@ -24,8 +24,11 @@ Usage:
 
 import argparse
 import os
+import random
+import subprocess
 import time
 import json
+from dataclasses import asdict
 from typing import Dict, List, Tuple
 
 import numpy as np
@@ -36,6 +39,105 @@ import torch.optim as optim
 from .swarm_gym_env import SwarmGymEnv, EnvConfig
 from .policy import MLPPolicy, PolicyCheckpoint
 from .spaces import ObservationConfig, ActionConfig
+
+
+
+def resolve_device(requested: str = 'auto') -> str:
+    """Pick a device that can actually run kernels.
+
+    torch.cuda.is_available() only reports that a driver and device exist, not
+    that this torch build has kernels for the device's compute capability. On a
+    newer GPU than the wheel targets (e.g. Blackwell sm_120 against a cu124
+    build) it returns True and then every kernel launch fails partway into
+    training. Check the arch list up front and fall back instead.
+    """
+    if requested == 'cpu':
+        return 'cpu'
+
+    if not torch.cuda.is_available():
+        if requested == 'cuda':
+            print("  [device] CUDA requested but unavailable — using CPU.")
+        return 'cpu'
+
+    major, minor = torch.cuda.get_device_capability(0)
+    cap = f'sm_{major}{minor}'
+    supported = [a for a in torch.cuda.get_arch_list() if a.startswith('sm_')]
+
+    if cap in supported:
+        return 'cuda'
+
+    msg = (f"  [device] {torch.cuda.get_device_name(0)} is {cap}, but this "
+           f"torch {torch.__version__} build only has kernels for "
+           f"{', '.join(supported)}.")
+    if requested == 'cuda':
+        raise RuntimeError(
+            msg.strip() + " Install a torch build targeting this GPU, or pass "
+            "--device cpu.")
+    print(msg)
+    print("  [device] Falling back to CPU. Install a matching torch build "
+          "for GPU training.")
+    return 'cpu'
+
+
+def set_global_seeds(seed: int, deterministic: bool = False) -> None:
+    """Seed every RNG the training run touches.
+
+    Without this a run cannot be repeated: PPO draws actions from a torch
+    Normal, shuffles minibatch indices with numpy, and the environments
+    randomise drone start positions and weather.
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+    if deterministic:
+        # Costs throughput and raises on ops with no deterministic kernel,
+        # so it stays opt-in.
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.use_deterministic_algorithms(True, warn_only=True)
+
+
+def _git_revision() -> str:
+    """Short commit of the tree being trained, or 'unknown' outside a repo."""
+    try:
+        return subprocess.check_output(
+            ['git', 'rev-parse', '--short', 'HEAD'],
+            cwd=os.path.dirname(os.path.abspath(__file__)),
+            stderr=subprocess.DEVNULL,
+        ).decode().strip()
+    except (subprocess.CalledProcessError, OSError):
+        return 'unknown'
+
+
+def save_run_config(args, trainer, path: str) -> str:
+    """Write the full resolved configuration next to the checkpoints.
+
+    training_log.json holds per-update metrics only; this is what makes the
+    run repeatable, so it is written before training starts rather than at
+    the end (a crashed run still leaves its config behind).
+    """
+    cfg = {
+        'seed': args.seed,
+        'deterministic': args.deterministic,
+        'git_revision': _git_revision(),
+        'torch_version': torch.__version__,
+        'numpy_version': np.__version__,
+        'device': trainer.device,
+        'gpu_present': (torch.cuda.get_device_name(0)
+                        if torch.cuda.is_available() else None),
+        'args': vars(args),
+        'obs_dim': trainer.obs_dim,
+        'action_dim': trainer.action_dim,
+        'env_config': asdict(trainer.envs[0].config),
+        'reward_config': asdict(trainer.envs[0].reward_config),
+    }
+    out = os.path.join(path, 'run_config.json')
+    with open(out, 'w') as f:
+        json.dump(cfg, f, indent=2, default=str)
+    return out
 
 
 class RolloutBuffer:
@@ -114,7 +216,8 @@ class PPOTrainer:
                  vf_coef: float = 0.5,
                  max_grad_norm: float = 0.5,
                  weather: bool = False,
-                 device: str = 'cpu'):
+                 device: str = 'cpu',
+                 seed: int = None):
 
         self.num_envs = num_envs
         self.n_steps = n_steps
@@ -127,6 +230,7 @@ class PPOTrainer:
         self.vf_coef = vf_coef
         self.max_grad_norm = max_grad_norm
         self.device = device
+        self.seed = seed
 
         # Create environments
         env_config = EnvConfig(
@@ -137,13 +241,19 @@ class PPOTrainer:
             weather_probability=0.5 if weather else 0.0,
         )
 
-        self.envs = [SwarmGymEnv(config=env_config) for _ in range(num_envs)]
+        # Each env gets its own stream, offset from the run seed, so parallel
+        # envs explore different starts while the run as a whole repeats.
+        self.envs = [
+            SwarmGymEnv(config=env_config,
+                        seed=None if seed is None else seed + i)
+            for i in range(num_envs)
+        ]
         self.eval_env = SwarmGymEnv(config=EnvConfig(
             num_drones=num_drones,
             max_steps=500,
             randomize_initial_positions=True,
             randomize_weather=False,
-        ))
+        ), seed=None if seed is None else seed + num_envs)
 
         # Get dimensions
         obs_config = ObservationConfig(num_drones=num_drones)
@@ -399,6 +509,9 @@ class PPOTrainer:
 
 def train(args):
     """Main training loop."""
+    set_global_seeds(args.seed, deterministic=args.deterministic)
+    device = resolve_device(args.device)
+
     print("=" * 60)
     print("A.U.R.A. Strategic RL Training — PPO")
     print("=" * 60)
@@ -407,7 +520,8 @@ def train(args):
     print(f"  Envs:       {args.num_envs}")
     print(f"  Batch size: {args.batch_size}")
     print(f"  Weather:    {args.weather}")
-    print(f"  Device:     {'CUDA' if torch.cuda.is_available() else 'CPU'}")
+    print(f"  Seed:       {args.seed}{' (deterministic)' if args.deterministic else ''}")
+    print(f"  Device:     {device.upper()}")
     print(f"  Save path:  {args.save_path}")
     print("=" * 60)
 
@@ -421,10 +535,13 @@ def train(args):
         lr=args.lr,
         ent_coef=args.ent_coef,
         weather=args.weather,
-        device="cuda" if torch.cuda.is_available() else "cpu",
+        device=device,
+        seed=args.seed,
     )
 
     os.makedirs(args.save_path, exist_ok=True)
+    cfg_path = save_run_config(args, trainer, args.save_path)
+    print(f"  Run config: {cfg_path}")
 
     # Training loop
     n_updates = args.timesteps // (args.n_steps * args.num_envs)
@@ -535,6 +652,13 @@ def main():
                         help="Entropy coefficient")
     parser.add_argument("--weather", action="store_true",
                         help="Enable weather randomization")
+    parser.add_argument("--device", choices=["auto", "cpu", "cuda"],
+                        default="auto",
+                        help="Compute device; auto falls back to CPU if the GPU is unsupported")
+    parser.add_argument("--seed", type=int, default=42,
+                        help="Random seed for python, numpy, torch and the envs")
+    parser.add_argument("--deterministic", action="store_true",
+                        help="Force deterministic cuDNN/torch kernels (slower)")
     parser.add_argument("--save-path", type=str,
                         default=os.path.expanduser("~/ws/models/strategic_rl"),
                         help="Save directory")

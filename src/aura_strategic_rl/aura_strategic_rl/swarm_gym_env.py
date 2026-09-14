@@ -112,11 +112,18 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
     metadata = {'render_modes': ['human', 'rgb_array']}
 
-    def __init__(self, config: EnvConfig = None, render_mode: str = None):
+    def __init__(self, config: EnvConfig = None, render_mode: str = None,
+                 seed: int = None):
         super().__init__()
 
         self.config = config or EnvConfig()
         self.render_mode = render_mode
+
+        # Per-instance RNG. Parallel envs must not share the global numpy
+        # stream, or seeding one reseeds them all and runs stop being
+        # reproducible.
+        self.np_random = np.random.default_rng(seed)
+        self._seed = seed
 
         # Create configs
         self.obs_config = ObservationConfig(num_drones=self.config.num_drones)
@@ -195,7 +202,8 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
     def reset(self, seed: int = None, options: Dict = None) -> Tuple[np.ndarray, Dict]:
         """Reset environment to initial state"""
         if seed is not None:
-            np.random.seed(seed)
+            self.np_random = np.random.default_rng(seed)
+            self._seed = seed
 
         self.step_count = 0
         self.coverage_history = []
@@ -206,11 +214,11 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         for i in range(self.config.num_drones):
             if self.config.randomize_initial_positions:
                 angle = 2 * np.pi * i / self.config.num_drones
-                r = self.config.initial_radius * (0.8 + 0.4 * np.random.random())
+                r = self.config.initial_radius * (0.8 + 0.4 * self.np_random.random())
                 pos = np.array([
                     r * np.cos(angle),
                     r * np.sin(angle),
-                    self.config.initial_altitude + np.random.uniform(-5, 5)
+                    self.config.initial_altitude + self.np_random.uniform(-5, 5)
                 ])
             else:
                 angle = 2 * np.pi * i / self.config.num_drones
@@ -224,11 +232,11 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         # Weather zones
         self.weather_zones = []
-        if self.config.randomize_weather and np.random.random() < self.config.weather_probability:
-            wx = np.random.uniform(-100, 100)
-            wy = np.random.uniform(-100, 100)
-            wr = np.random.uniform(30, 80)
-            wa = np.random.uniform(5, 15)
+        if self.config.randomize_weather and self.np_random.random() < self.config.weather_probability:
+            wx = self.np_random.uniform(-100, 100)
+            wy = self.np_random.uniform(-100, 100)
+            wr = self.np_random.uniform(30, 80)
+            wa = self.np_random.uniform(5, 15)
             self.weather_zones.append(WeatherZone(wx, wy, wr, wa))
 
         # Compute initial state

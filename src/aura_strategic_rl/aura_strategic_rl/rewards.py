@@ -214,8 +214,13 @@ class RewardCalculator:
         """Compute safety-related penalties"""
         penalty = 0.0
         n = len(drone_positions)
-        if n < 2:
+        if n == 0:
             return penalty
+
+        # Note: the pairwise collision loop below is naturally empty for a
+        # single drone. Returning early on n < 2 would also skip the per-drone
+        # altitude and boundary checks, so a swarm degraded to one surviving
+        # drone would fly unconstrained.
 
         for i in range(n):
             pos_i = np.array(drone_positions[i])

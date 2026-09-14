@@ -50,7 +50,7 @@ class HarrisHawksOptimizer:
     and rapid dives.
     """
     
-    def __init__(self, config: HHOConfig, num_drones: int):
+    def __init__(self, config: HHOConfig, num_drones: int, seed: int = None):
         self.config = config
         self.num_drones = num_drones
         self.dim = num_drones * 3  # x, y, z per drone
@@ -67,7 +67,9 @@ class HarrisHawksOptimizer:
         self.lower_bounds = np.tile([config.x_min, config.y_min, config.z_min], num_drones)
         self.upper_bounds = np.tile([config.x_max, config.y_max, config.z_max], num_drones)
         
-        self.rng = np.random.default_rng()
+        # Seedable so baseline comparisons against the RL policy are
+        # reproducible; None keeps the previous nondeterministic behaviour.
+        self.rng = np.random.default_rng(seed)
     
     def initialize_population(self):
         """Initialize hawk population randomly"""
@@ -236,14 +238,17 @@ class HHOBaselineNode(Node):
         self.declare_parameter('num_drones', 5)
         self.declare_parameter('optimization_rate_hz', 0.2)  # Every 5 seconds
         self.declare_parameter('max_iterations', 50)
+        self.declare_parameter('seed', -1)  # -1 = nondeterministic
         
         num_drones = self.get_parameter('num_drones').value
         opt_rate = self.get_parameter('optimization_rate_hz').value
         max_iter = self.get_parameter('max_iterations').value
+        seed = self.get_parameter('seed').value
+        seed = None if seed is None or seed < 0 else int(seed)
         
         # HHO optimizer
         config = HHOConfig(max_iterations=max_iter)
-        self.optimizer = HarrisHawksOptimizer(config, num_drones)
+        self.optimizer = HarrisHawksOptimizer(config, num_drones, seed=seed)
         
         # State
         self.latest_swarm: Optional[SwarmState] = None

@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  aura-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${UID:-1000}
+        GROUP_ID: ${GID:-1000}
+    image: aura-dev:latest
+    container_name: aura-dev
+    
+    stdin_open: true
+    tty: true
+    network_mode: host
+    privileged: true
+    
+    volumes:
+      # Whole repo, including .git — single clone, shared host <-> container.
+      # Git runs in the container; the host sees the same working tree.
+      - /home/drty-hry/A.U.R.A:/home/aura/ws:rw
+
+      # Build cache (named volumes, layered on top of the repo mount)
+      - aura-build:/home/aura/ws/build
+      - aura-install:/home/aura/ws/install
+      - aura-log:/home/aura/ws/log
+
+      # ssh-agent forwarded from the host: the private key never enters
+      # the container. Directory (not socket file) so it survives the
+      # keyring recreating its socket.
+      - ${XDG_RUNTIME_DIR:-/run/user/1000}/keyring:/run/user/1000/keyring:rw
+
+      # X11 display
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}/.Xauthority:/home/aura/.Xauthority:rw
+      
+      # Shared memory for ROS 2
+      - /dev/shm:/dev/shm
+    
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/home/aura/.Xauthority
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+      - SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    
+    # GPU support
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    
+    working_dir: /home/aura/ws
+
+volumes:
+  aura-build:
+  aura-install:
+  aura-log:

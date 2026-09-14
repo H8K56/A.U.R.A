@@ -16,6 +16,14 @@ env:
   PX4_MSGS_REV: 31147daec8fae45e0cfe265d9dfe426e7d6fcf86
 
 jobs:
+  pins:
+    name: Pinned versions agree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Dockerfile ARGs against versions.env
+        run: python3 docker/check_pins.py
+
   build-and-test:
     name: Build and test
     runs-on: ubuntu-latest

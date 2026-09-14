@@ -1,11 +1,30 @@
 # ==============================================================================
 # A.U.R.A. Development Container
-# Ubuntu 22.04 + ROS 2 Humble + Gazebo Classic + PX4 SITL + NS-3 + PufferLib
-# 
-# GPU: RTX 5050 / CUDA 13.0 / Driver 580.x supported via nvidia-container-toolkit
+# Ubuntu 22.04 + ROS 2 Humble + Gazebo Classic 11 + PX4 SITL + NS-3 + PufferLib
+#
+# Every external source is pinned to an exact revision from versions.env. It
+# used to clone default branches with --depth 1, so two builds of this same
+# file produced different stacks — see roadmap 0.2.
+#
+# GPU: the pinned torch is a cu124 build, which carries kernels for sm_50-sm_90.
+# On an sm_120 (Blackwell) card such as the RTX 5050, torch.cuda.is_available()
+# returns True and kernels then fail to launch; train_policy's resolve_device()
+# detects that and falls back to CPU. Overriding TORCH_CUDA_CHANNEL to cu128 is
+# the modernization step (roadmap 0.6), deliberately NOT done on the frozen
+# baseline.
 # ==============================================================================
 
 FROM ubuntu:22.04
+
+# ── Pinned revisions (defaults mirror versions.env) ──────────────────────────
+ARG PX4_AUTOPILOT_REV=7b7233587665c93fb6eb7e68d3d43035293d8af4
+ARG PX4_MSGS_REV=31147daec8fae45e0cfe265d9dfe426e7d6fcf86
+ARG PX4_ROS_COM_REV=86e9aeb20e55a4673fa8a9f1c29ea06a6c5ad1af
+ARG NS3_VERSION=3.40
+ARG TORCH_VERSION=2.6.0
+ARG TORCHVISION_VERSION=0.21.0
+ARG TORCHAUDIO_VERSION=2.6.0
+ARG TORCH_CUDA_CHANNEL=cu124
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC
@@ -118,9 +137,17 @@ RUN apt-get update && apt-get install -y \
 # PX4 ROS 2 INTERFACE (from source - main branch)
 # ==============================================================================
 WORKDIR /opt/px4_ros/src
-# Clone PX4 ROS message and ROS communication packages (shallow)
-RUN git clone --depth 1 https://github.com/PX4/px4_msgs.git \
-    && git clone --depth 1 https://github.com/PX4/px4_ros_com.git
+# Pinned to exact revisions. A shallow fetch of a specific SHA keeps this as
+# fast as --depth 1 while making the result reproducible.
+RUN for repo in "px4_msgs:${PX4_MSGS_REV}" "px4_ros_com:${PX4_ROS_COM_REV}"; do \
+        name="${repo%%:*}"; rev="${repo##*:}"; \
+        mkdir -p "$name" && cd "$name" \
+        && git init -q . \
+        && git remote add origin "https://github.com/PX4/${name}.git" \
+        && git fetch -q --depth 1 origin "$rev" \
+        && git checkout -q FETCH_HEAD \
+        && cd ..; \
+    done
 
 SHELL ["/bin/bash", "-c"]
 WORKDIR /opt/px4_ros
@@ -142,13 +169,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt
-RUN wget https://www.nsnam.org/releases/ns-allinone-3.40.tar.bz2 \
-    && tar xjf ns-allinone-3.40.tar.bz2 \
-    && rm ns-allinone-3.40.tar.bz2 \
-    && cd ns-allinone-3.40 \
+RUN wget https://www.nsnam.org/releases/ns-allinone-${NS3_VERSION}.tar.bz2 \
+    && tar xjf ns-allinone-${NS3_VERSION}.tar.bz2 \
+    && rm ns-allinone-${NS3_VERSION}.tar.bz2 \
+    && cd ns-allinone-${NS3_VERSION} \
     && ./build.py --enable-examples --enable-tests
 
-ENV NS3_HOME=/opt/ns-allinone-3.40/ns-3.40
+ENV NS3_HOME=/opt/ns-allinone-${NS3_VERSION}/ns-${NS3_VERSION}
 ENV PYTHONPATH=${NS3_HOME}/build/bindings/python:${PYTHONPATH}
 ENV LD_LIBRARY_PATH=${NS3_HOME}/build/lib:${LD_LIBRARY_PATH}
 
@@ -157,35 +184,25 @@ ENV LD_LIBRARY_PATH=${NS3_HOME}/build/lib:${LD_LIBRARY_PATH}
 # ==============================================================================
 RUN pip3 install --upgrade pip setuptools wheel
 
-RUN pip3 install \
-    numpy==1.24.3 \
-    scipy==1.11.4 \
-    pandas==2.0.3 \
-    matplotlib==3.7.5 \
-    seaborn==0.13.0 \
-    scikit-learn==1.3.2
-
+# apt's python3-sympy shadows the version the PX4 build needs
 RUN apt-get update && apt-get remove -y python3-sympy || true \
     && rm -rf /usr/lib/python3/dist-packages/sympy* || true \
-    && pip3 install --ignore-installed sympy mpmath \
     && rm -rf /var/lib/apt/lists/*
-# PyTorch with CUDA (bundles own CUDA runtime - works with any driver)
-RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
-RUN pip3 install \
-    pufferlib \
-    gymnasium==0.29.1 \
-    stable-baselines3==2.2.1 \
-    tensorboard==2.15.1 \
-    wandb==0.16.1
+# PyTorch first, from the CUDA channel (needs its own index URL, so it cannot
+# live in requirements.txt). It bundles its own CUDA runtime.
+RUN pip3 install --ignore-installed \
+    torch==${TORCH_VERSION} \
+    torchvision==${TORCHVISION_VERSION} \
+    torchaudio==${TORCHAUDIO_VERSION} \
+    --index-url https://download.pytorch.org/whl/${TORCH_CUDA_CHANNEL}
 
-RUN pip3 install \
-    pyyaml==6.0.1 \
-    rich==13.7.0 \
-    typer==0.9.0 \
-    pytest==7.4.3 \
-    black==23.12.1 \
-    ruff==0.1.8
+# Everything else pinned together. Installing as one resolve is what prevents a
+# later package silently upgrading an earlier pin, which is how the old
+# numpy==1.24.3 pin ended up as 1.26.4 at runtime.
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --ignore-installed -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
 
 # ==============================================================================
 # C++ LIBRARIES FOR MINCO
@@ -199,6 +216,8 @@ RUN apt-get update && apt-get install -y \
     libsuitesparse-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Header-only; upstream publishes no tags, so this tracks the default branch.
+# If MINCO results ever shift unexpectedly, pin this to a SHA first.
 RUN git clone https://github.com/ZJU-FAST-Lab/LBFGS-Lite.git /opt/LBFGS-Lite
 
 # ==============================================================================
@@ -223,7 +242,16 @@ ENV HOME=/home/aura
 # PX4 AUTOPILOT
 # PX4 setup script needs HOME set properly, and we skip its bashrc modifications
 # ==============================================================================
-RUN git clone https://github.com/PX4/PX4-Autopilot.git --depth 1 --recursive /home/aura/PX4-Autopilot
+# Pinned. This is PX4 *main* on the v1.16.0-rc line, NOT the v1.14 that
+# CLAUDE.md and the roadmap describe — the previous unpinned clone of the
+# default branch is how they drifted apart. Documentation follows the running
+# system, not the other way round (roadmap 0.5).
+RUN mkdir -p /home/aura/PX4-Autopilot && cd /home/aura/PX4-Autopilot \
+    && git init -q . \
+    && git remote add origin https://github.com/PX4/PX4-Autopilot.git \
+    && git fetch -q --depth 1 origin ${PX4_AUTOPILOT_REV} \
+    && git checkout -q FETCH_HEAD \
+    && git submodule update --init --recursive --depth 1
 
 # Run PX4 dependencies installer with HOME explicitly set
 # The script tries to modify .bashrc, so we ensure it exists and is writable
@@ -235,7 +263,9 @@ RUN touch /home/aura/.bashrc \
 RUN cd /home/aura/PX4-Autopilot \
     && make px4_sitl_default
 
-ENV PX4_HOME=/home/aura/PX4-Autopilot #==============================================================================
+ENV PX4_HOME=/home/aura/PX4-Autopilot
+
+# ==============================================================================
 # ENVIRONMENT SETUP
 # ==============================================================================
 RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc \
@@ -243,7 +273,7 @@ RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc \
     && echo '[ -f /home/aura/ws/install/setup.bash ] && source /home/aura/ws/install/setup.bash' >> ~/.bashrc \
     && echo 'export PX4_HOME=/home/aura/PX4-Autopilot' >> ~/.bashrc \
     && echo 'source $PX4_HOME/Tools/simulation/gazebo-classic/setup_gazebo.bash $PX4_HOME $PX4_HOME/build/px4_sitl_default' >> ~/.bashrc \
-    && echo 'export NS3_HOME=/opt/ns-allinone-3.40/ns-3.40' >> ~/.bashrc \
+    && echo "export NS3_HOME=${NS3_HOME}" >> ~/.bashrc \
     && echo 'export PYTHONPATH=$NS3_HOME/build/bindings/python:$PYTHONPATH' >> ~/.bashrc \
     && echo 'export GAZEBO_MODEL_PATH=/home/aura/ws/models:$GAZEBO_MODEL_PATH' >> ~/.bashrc \
     && echo 'alias cb="cd /home/aura/ws && colcon build --symlink-install"' >> ~/.bashrc \

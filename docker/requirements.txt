@@ -11,6 +11,14 @@
 # Full environment record: requirements.lock.txt
 # Non-pip components (PX4, px4_msgs, ns-3, ...): versions.env
 
+# Build backend. pip freeze omits setuptools by default, so these were missing
+# from the first cut of this file — and CI promptly broke on it: a modern
+# setuptools against Jammy's apt packaging (21.3) raises
+# "canonicalize_version() got an unexpected keyword argument
+# 'strip_trailing_zero'" while building the ament Python eggs. Pin both.
+setuptools==80.10.2
+packaging==26.0
+
 # Scientific stack
 numpy==1.26.4
 scipy==1.11.4

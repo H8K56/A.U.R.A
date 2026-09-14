@@ -46,11 +46,16 @@ jobs:
 
       - name: Install Python dependencies
         run: |
+          # Install the same pins the container uses, so CI cannot drift from
+          # the dev environment. An ad-hoc list here is what let CI pick up
+          # Jammy's apt packaging and break the ament egg build.
+          pip install --no-cache-dir -r src/aura/docker/requirements.txt
           # CPU-only torch: CI has no GPU, and the wheel is a fraction of the
-          # CUDA build's size.
+          # CUDA build's size. Version matches versions.env; only the channel
+          # differs.
           pip install --no-cache-dir \
-            --index-url https://download.pytorch.org/whl/cpu torch
-          pip install --no-cache-dir numpy scipy gymnasium
+            --index-url https://download.pytorch.org/whl/cpu \
+            torch==2.6.0
 
       - name: Fetch px4_msgs
         run: |
@@ -101,18 +106,15 @@ jobs:
       - name: Install linters
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            ros-humble-ament-lint ros-humble-ament-cmake-lint \
-            ros-humble-ament-flake8 ros-humble-ament-pep257 \
-            ros-humble-ament-copyright python3-pip
-          pip install --no-cache-dir flake8 pep257
+          apt-get install -y --no-install-recommends python3-pip
+          # Plain flake8 rather than the ament_* wrappers: this job needs no ROS
+          # environment, and the apt package names for them are not stable.
+          pip install --no-cache-dir flake8 pydocstyle
 
       - name: Python style
-        shell: bash
         run: |
-          source /opt/ros/humble/setup.bash
-          ament_flake8 src/ || true
-          ament_pep257 src/ || true
+          flake8 src/ --max-line-length=120 --count --statistics || true
+          pydocstyle src/ --count || true
 
       - name: Summarise
         run: echo "Advisory only — see the step logs above for findings."

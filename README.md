@@ -51,8 +51,17 @@ There is a critical need for a **rapidly deployable, autonomous aerial communica
 ```bash
 git clone https://github.com/H8K56/A.U.R.A.git
 cd A.U.R.A/docker
-docker compose build
+docker compose --env-file versions.env build
 ```
+
+Every external component is pinned: `versions.env` holds the exact PX4,
+px4_msgs, px4_ros_com, ns-3 and PyTorch revisions, `requirements.txt` the Python
+pins, and `requirements.lock.txt` a full record of the known-good environment. A
+plain `docker compose build` also works — the Dockerfile's `ARG` defaults mirror
+`versions.env`, and `docker/check_pins.py` fails CI if the two ever disagree.
+
+The environment that produced the published results is tagged
+[`camad-2026-baseline`](https://github.com/H8K56/A.U.R.A/releases/tag/camad-2026-baseline).
 
 ### Running the Container
 
@@ -78,9 +87,11 @@ The Docker image includes:
 - **Ubuntu 22.04** base with build essentials
 - **ROS 2 Humble** (full desktop install)
 - **Gazebo Classic 11** with plugins and model database
-- **PX4 Autopilot v1.14** (pre-built SITL target)
+- **PX4 Autopilot** `7b72335` — main, on the v1.16.0-rc line (pre-built SITL target)
 - **Micro-XRCE-DDS Agent** for PX4 ↔ ROS 2 communication
-- **PyTorch 2.x + CUDA** for RL training on GPU
+- **PyTorch 2.6.0+cu124** for RL training. Note: cu124 carries kernels for
+  sm_50-sm_90 only, so on a Blackwell card (sm_120, e.g. RTX 5050) CUDA
+  reports as available and then fails to launch; training falls back to CPU.
 - **Python packages**: gymnasium, numpy, scipy, fast_simplification
 - **ROS Bridge Suite** for web dashboard connectivity
 - **NS-3.40** (optional, for future high-fidelity network simulation)

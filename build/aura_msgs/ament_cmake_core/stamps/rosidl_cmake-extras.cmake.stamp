@@ -1,4 +1,0 @@
-# generated from rosidl_cmake/cmake/rosidl_cmake-extras.cmake.in
-
-set(aura_msgs_IDL_FILES "msg/DroneState.idl;msg/SwarmState.idl;msg/TrajectoryBroadcast.idl;msg/NetworkMetrics.idl;msg/CoverageGoal.idl;msg/CoverageMap.idl;msg/WeatherZone.idl;msg/MissionStatus.idl;srv/RequestTrajectory.idl;srv/EmergencyStop.idl;srv/SetFormation.idl;srv/GetNetworkStatus.idl;action/ExecuteMission.idl")
-set(aura_msgs_INTERFACE_FILES "msg/DroneState.msg;msg/SwarmState.msg;msg/TrajectoryBroadcast.msg;msg/NetworkMetrics.msg;msg/CoverageGoal.msg;msg/CoverageMap.msg;msg/WeatherZone.msg;msg/MissionStatus.msg;srv/RequestTrajectory.srv;srv/RequestTrajectory_Request.msg;srv/RequestTrajectory_Response.msg;srv/EmergencyStop.srv;srv/EmergencyStop_Request.msg;srv/EmergencyStop_Response.msg;srv/SetFormation.srv;srv/SetFormation_Request.msg;srv/SetFormation_Response.msg;srv/GetNetworkStatus.srv;srv/GetNetworkStatus_Request.msg;srv/GetNetworkStatus_Response.msg;action/ExecuteMission.action")

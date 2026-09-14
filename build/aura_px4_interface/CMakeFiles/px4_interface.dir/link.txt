@@ -1,2 +1,0 @@
-/usr/bin/ar qc libpx4_interface.a CMakeFiles/px4_interface.dir/src/px4_interface.cpp.o CMakeFiles/px4_interface.dir/src/offboard_controller.cpp.o CMakeFiles/px4_interface.dir/src/vehicle_state.cpp.o
-/usr/bin/ranlib libpx4_interface.a

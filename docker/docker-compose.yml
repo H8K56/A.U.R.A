@@ -1,4 +1,7 @@
-version: '3.8'
+# Build with the pinned stack:
+#   docker compose --env-file versions.env build
+# A plain `docker compose build` also works — the Dockerfile's ARG defaults
+# mirror versions.env, and docker/check_pins.py fails CI if they drift apart.
 
 services:
   aura-dev:
@@ -8,6 +11,17 @@ services:
       args:
         USER_ID: ${UID:-1000}
         GROUP_ID: ${GID:-1000}
+        # Valueless entries pass through from the environment when set and are
+        # omitted when not, so the Dockerfile's ARG defaults still apply to a
+        # plain `docker compose build`.
+        PX4_AUTOPILOT_REV:
+        PX4_MSGS_REV:
+        PX4_ROS_COM_REV:
+        NS3_VERSION:
+        TORCH_VERSION:
+        TORCHVISION_VERSION:
+        TORCHAUDIO_VERSION:
+        TORCH_CUDA_CHANNEL:
     image: aura-dev:latest
     container_name: aura-dev
     

@@ -1,0 +1,48 @@
+# A.U.R.A. — direct Python dependencies, pinned to the known-good container.
+#
+# Versions are what the working aura-dev container actually runs, captured
+# 2026-09-14 — not aspirational pins. The previous Dockerfile asked for
+# numpy==1.24.3 and got 1.26.4, because a later unpinned install overrode it;
+# pinning the whole set together is what stops that.
+#
+# torch is NOT listed here: it needs --index-url for the CUDA variant, so the
+# Dockerfile installs it separately from TORCH_* in versions.env.
+#
+# Full environment record: requirements.lock.txt
+# Non-pip components (PX4, px4_msgs, ns-3, ...): versions.env
+
+# Build backend. CI broke building the ament Python eggs with
+# "canonicalize_version() got an unexpected keyword argument
+# 'strip_trailing_zero'": setuptools passes that keyword, and Jammy's
+# apt-provided packaging (21.3) predates it. packaging >= 24 is the fix.
+#
+# setuptools is deliberately NOT pinned. The dev container runs 80.10.2, but
+# pinning that broke pip's resolver on the ros:humble CI image, whose
+# colcon-core 0.21.1 requires setuptools<80. Each environment's own setuptools
+# is fine once packaging is new enough — setuptools was never the cause.
+packaging==26.0
+
+# Scientific stack
+numpy==1.26.4
+scipy==1.11.4
+pandas==2.0.3
+matplotlib==3.7.5
+seaborn==0.13.0
+scikit-learn==1.3.2
+
+# sympy/mpmath are installed over the apt versions, which the PX4 build needs
+sympy==1.13.1
+mpmath==1.3.0
+
+# RL stack. train_policy implements PPO directly on torch + gymnasium; the
+# rest of the baseline image's RL packages are in
+# requirements-baseline-extra.txt because nothing imports them.
+gymnasium==0.29.1
+
+# Tooling
+pyyaml==6.0.1
+rich==13.7.0
+typer==0.9.0
+pytest==7.4.3
+black==23.12.1
+ruff==0.1.8

@@ -2,6 +2,12 @@
   <img src="worlds/aura_logo.svg" alt="A.U.R.A Logo" width="75%"/>
 </p>
 
+## 📄 Paper
+
+Accepted at **IEEE CAMAD 2026** — Session 05, *Smart Cities, Public Safety &
+Resilient Communications*. Paper ID **1571300267**.
+*(DOI will be added here once the proceedings appear on IEEE Xplore.)*
+
 ## 🎥 Demo
 [▶ Watch the demo sim-flight video](https://github.com/H8K56/A.U.R.A/blob/main/aura_test_simflight.mp4)
 
@@ -43,10 +49,19 @@ There is a critical need for a **rapidly deployable, autonomous aerial communica
 ### Building the Container
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AURA.git
-cd AURA
-docker build -t aura:latest -f docker/Dockerfile .
+git clone https://github.com/H8K56/A.U.R.A.git
+cd A.U.R.A/docker
+docker compose --env-file versions.env build
 ```
+
+Every external component is pinned: `versions.env` holds the exact PX4,
+px4_msgs, px4_ros_com, ns-3 and PyTorch revisions, `requirements.txt` the Python
+pins, and `requirements.lock.txt` a full record of the known-good environment. A
+plain `docker compose build` also works — the Dockerfile's `ARG` defaults mirror
+`versions.env`, and `docker/check_pins.py` fails CI if the two ever disagree.
+
+The environment that produced the published results is tagged
+[`camad-2026-baseline`](https://github.com/H8K56/A.U.R.A/releases/tag/camad-2026-baseline).
 
 ### Running the Container
 
@@ -54,20 +69,17 @@ docker build -t aura:latest -f docker/Dockerfile .
 # Allow X11 forwarding for Gazebo GUI
 xhost +local:docker
 
-# Run with GPU support, display forwarding, and volume mounts
-docker run -it --rm \
-  --name aura \
-  --gpus all \
-  --privileged \
-  --network host \
-  -e DISPLAY=$DISPLAY \
-  -e QT_X11_NO_MITSHM=1 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-  -v $HOME/A.U.R.A/worlds:/home/aura/ws/worlds \
-  -v $HOME/A.U.R.A/models:/home/aura/ws/models \
-  -v $HOME/A.U.R.A/src:/home/aura/ws/src \
-  aura:latest
+# Start the container (GPU, host networking, X11 and ssh-agent forwarding)
+cd docker
+docker compose up -d
+docker compose exec aura-dev bash
 ```
+
+The compose file mounts the repository root at `/home/aura/ws`, so there is a
+single clone shared between host and container: edits are visible from both, and
+Git runs inside the container against the host's `.git`. The SSH **private key is
+never copied into the container** — `SSH_AUTH_SOCK` forwards the host's
+ssh-agent instead.
 
 ### Container Contents
 
@@ -75,9 +87,11 @@ The Docker image includes:
 - **Ubuntu 22.04** base with build essentials
 - **ROS 2 Humble** (full desktop install)
 - **Gazebo Classic 11** with plugins and model database
-- **PX4 Autopilot v1.14** (pre-built SITL target)
+- **PX4 Autopilot** `7b72335` — main, on the v1.16.0-rc line (pre-built SITL target)
 - **Micro-XRCE-DDS Agent** for PX4 ↔ ROS 2 communication
-- **PyTorch 2.x + CUDA** for RL training on GPU
+- **PyTorch 2.6.0+cu124** for RL training. Note: cu124 carries kernels for
+  sm_50-sm_90 only, so on a Blackwell card (sm_120, e.g. RTX 5050) CUDA
+  reports as available and then fails to launch; training falls back to CPU.
 - **Python packages**: gymnasium, numpy, scipy, fast_simplification
 - **ROS Bridge Suite** for web dashboard connectivity
 - **NS-3.40** (optional, for future high-fidelity network simulation)
@@ -86,9 +100,17 @@ The Docker image includes:
 
 | Host Path | Container Path | Purpose |
 |-----------|---------------|---------|
-| `~/A.U.R.A/worlds` | `/home/aura/ws/worlds` | Gazebo world files and terrain models |
-| `~/A.U.R.A/models` | `/home/aura/ws/models` | Trained RL policies and drone models |
-| `~/A.U.R.A/src` | `/home/aura/ws/src` | ROS 2 package source code |
+| repository root | `/home/aura/ws` | Whole workspace, including `.git` — single shared clone |
+| `aura-build` (volume) | `/home/aura/ws/build` | colcon build cache, kept out of the repo |
+| `aura-install` (volume) | `/home/aura/ws/install` | colcon install space |
+| `aura-log` (volume) | `/home/aura/ws/log` | colcon logs |
+| `$XDG_RUNTIME_DIR/keyring` | `/run/user/1000/keyring` | Forwarded ssh-agent socket (no private key in the image) |
+| `/tmp/.X11-unix` | `/tmp/.X11-unix` | X11 display socket for the Gazebo GUI |
+| `/dev/shm` | `/dev/shm` | Shared memory for ROS 2 DDS transport |
+
+`build/`, `install/` and `log/` are named volumes layered on top of the
+repository mount, so build artifacts stay inside Docker and never reach the host
+working tree or the index.
 
 ### First-Time Setup Inside Container
 

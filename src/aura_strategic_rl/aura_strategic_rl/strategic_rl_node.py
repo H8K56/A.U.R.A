@@ -17,7 +17,12 @@ from dataclasses import dataclass
 import torch
 import torch.nn as nn
 from .policy import MLPPolicy, PolicyCheckpoint
-from .spaces import ObservationBuilder as TrainedObsBuilder, ObservationConfig
+from .spaces import (
+    ActionConfig,
+    ActionProcessor,
+    ObservationBuilder as TrainedObsBuilder,
+    ObservationConfig,
+)
 
 from geometry_msgs.msg import Point
 from aura_msgs.msg import (
@@ -36,7 +41,9 @@ class RLConfig:
     
     # Action space
     action_type: str = 'continuous'  # 'continuous' or 'discrete'
-    max_move_distance: float = 2.0   # meters per step — must match ActionConfig.max_delta_xy
+    # Movement and altitude limits are NOT duplicated here: they live in
+    # spaces.ActionConfig, which both training and inference share. A second
+    # copy is how the deployed z-step drifted to 2.5x the trained one.
 
     # Policy parameters
     hidden_dim: int = 256
@@ -50,8 +57,6 @@ class RLConfig:
 
     # Deployment
     action_rate_hz: float = 2.0  # How often to compute new goals (2 Hz matches training dt=0.5s)
-    min_altitude: float = 15.0
-    max_altitude: float = 80.0
 
 
 class PolicyNetwork(nn.Module):
@@ -237,6 +242,30 @@ class StrategicRLNode(Node):
         # Configuration
         self.config = RLConfig(num_drones=num_drones)
 
+        # Actions are converted with the same ActionProcessor training used.
+        # Scaling them here by hand meant the deployed policy moved on a
+        # different scale than the one it learned, and skipped the area bound
+        # entirely.
+        # The clip geometry must match what the checkpoint was trained under,
+        # so it comes from ActionConfig's defaults rather than the runtime
+        # rl_target parameters. Those describe where operators want the swarm;
+        # if the two disagree the policy is being clipped against a disk it
+        # never saw, so say so loudly instead of silently re-centring.
+        self.action_config = ActionConfig(num_drones=num_drones)
+        self.action_processor = ActionProcessor(self.action_config)
+
+        target_offset = float(np.hypot(
+            self.get_parameter('rl_target_x').value - self.action_config.world_center_x,
+            self.get_parameter('rl_target_y').value - self.action_config.world_center_y,
+        ))
+        if target_offset > 1.0:
+            self.get_logger().warn(
+                f'rl_target is {target_offset:.1f} m from the trained world '
+                f'centre ({self.action_config.world_center_x}, '
+                f'{self.action_config.world_center_y}). Actions are clipped '
+                f'against the trained centre; retrain if the disaster zone '
+                f'has genuinely moved.')
+
         # Policy network
         action_dim = num_drones * 3  # dx, dy, dz per drone
         self.policy = None
@@ -369,9 +398,12 @@ class StrategicRLNode(Node):
                 try:
                     self.policy, _ = PolicyCheckpoint.load(dz_path, device="cpu")
                     self.policy.eval()
-                    pass  # Keep use_baseline from parameter
+                    self.use_baseline = False
+                    obs_config = ObservationConfig(num_drones=self.config.num_drones)
+                    self.obs_builder = TrainedObsBuilder(obs_config)
+                    self.obs_builder.obs_dim = obs_config.total_obs_dim
                     self.get_logger().info(
-                        f"Dead zone detected — loaded dead-zone RL policy ({len(self.weather_zones)} zones)")
+                        f"Dead zone detected — switched to dead-zone RL policy ({len(self.weather_zones)} zones)")
                 except Exception as e:
                     self.get_logger().warn(f"Failed to load dead-zone policy: {e}")
     
@@ -402,8 +434,8 @@ class StrategicRLNode(Node):
                 msg.position.y = goal_pos[1]
                 msg.position.z = goal_pos[2]
                 msg.priority = 1.0
-                msg.min_altitude = self.config.min_altitude
-                msg.max_altitude = self.config.max_altitude
+                msg.min_altitude = self.action_config.min_altitude
+                msg.max_altitude = self.action_config.max_altitude
                 
                 self.goal_pubs[drone_id].publish(msg)
     
@@ -438,19 +470,11 @@ class StrategicRLNode(Node):
         # Convert actions to goal positions
         goals = {}
         drones = self.latest_swarm.drones[:self.config.num_drones]
-        for i, drone in enumerate(drones):
-            delta = actions[i*3:(i+1)*3] * self.config.max_move_distance
-            current_pos = np.array([
-                drone.position.x,
-                drone.position.y,
-                drone.position.z
-            ])
-            goal_pos = current_pos + delta
-            goal_pos[2] = np.clip(
-                goal_pos[2],
-                self.config.min_altitude,
-                self.config.max_altitude
-            )
+        current_positions = [
+            np.array([d.position.x, d.position.y, d.position.z]) for d in drones
+        ]
+        goal_positions = self.action_processor.process(actions, current_positions)
+        for drone, goal_pos in zip(drones, goal_positions):
             goals[drone.drone_id] = goal_pos
 
         # Collision avoidance: push apart any goals that are too close horizontally,
@@ -474,7 +498,7 @@ class StrategicRLNode(Node):
 
         # Unique altitude band per drone index so vertically stacked drones clear each other
         for i, drone in enumerate(drones):
-            base_alt = self.config.min_altitude + i * ALT_STEP
+            base_alt = self.action_config.min_altitude + i * ALT_STEP
             goals[drone.drone_id][2] = np.clip(
                 goals[drone.drone_id][2],
                 base_alt,

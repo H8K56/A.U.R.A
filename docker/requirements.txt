@@ -11,12 +11,15 @@
 # Full environment record: requirements.lock.txt
 # Non-pip components (PX4, px4_msgs, ns-3, ...): versions.env
 
-# Build backend. pip freeze omits setuptools by default, so these were missing
-# from the first cut of this file — and CI promptly broke on it: a modern
-# setuptools against Jammy's apt packaging (21.3) raises
+# Build backend. CI broke building the ament Python eggs with
 # "canonicalize_version() got an unexpected keyword argument
-# 'strip_trailing_zero'" while building the ament Python eggs. Pin both.
-setuptools==80.10.2
+# 'strip_trailing_zero'": setuptools passes that keyword, and Jammy's
+# apt-provided packaging (21.3) predates it. packaging >= 24 is the fix.
+#
+# setuptools is deliberately NOT pinned. The dev container runs 80.10.2, but
+# pinning that broke pip's resolver on the ros:humble CI image, whose
+# colcon-core 0.21.1 requires setuptools<80. Each environment's own setuptools
+# is fine once packaging is new enough — setuptools was never the cause.
 packaging==26.0
 
 # Scientific stack

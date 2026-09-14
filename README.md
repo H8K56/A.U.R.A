@@ -2,6 +2,12 @@
   <img src="worlds/aura_logo.svg" alt="A.U.R.A Logo" width="75%"/>
 </p>
 
+## 📄 Paper
+
+Accepted at **IEEE CAMAD 2026** — Session 05, *Smart Cities, Public Safety &
+Resilient Communications*. Paper ID **1571300267**.
+*(DOI will be added here once the proceedings appear on IEEE Xplore.)*
+
 ## 🎥 Demo
 [▶ Watch the demo sim-flight video](https://github.com/H8K56/A.U.R.A/blob/main/aura_test_simflight.mp4)
 
@@ -43,9 +49,9 @@ There is a critical need for a **rapidly deployable, autonomous aerial communica
 ### Building the Container
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AURA.git
-cd AURA
-docker build -t aura:latest -f docker/Dockerfile .
+git clone https://github.com/H8K56/A.U.R.A.git
+cd A.U.R.A/docker
+docker compose build
 ```
 
 ### Running the Container
@@ -54,20 +60,17 @@ docker build -t aura:latest -f docker/Dockerfile .
 # Allow X11 forwarding for Gazebo GUI
 xhost +local:docker
 
-# Run with GPU support, display forwarding, and volume mounts
-docker run -it --rm \
-  --name aura \
-  --gpus all \
-  --privileged \
-  --network host \
-  -e DISPLAY=$DISPLAY \
-  -e QT_X11_NO_MITSHM=1 \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-  -v $HOME/A.U.R.A/worlds:/home/aura/ws/worlds \
-  -v $HOME/A.U.R.A/models:/home/aura/ws/models \
-  -v $HOME/A.U.R.A/src:/home/aura/ws/src \
-  aura:latest
+# Start the container (GPU, host networking, X11 and ssh-agent forwarding)
+cd docker
+docker compose up -d
+docker compose exec aura-dev bash
 ```
+
+The compose file mounts the repository root at `/home/aura/ws`, so there is a
+single clone shared between host and container: edits are visible from both, and
+Git runs inside the container against the host's `.git`. The SSH **private key is
+never copied into the container** — `SSH_AUTH_SOCK` forwards the host's
+ssh-agent instead.
 
 ### Container Contents
 
@@ -86,9 +89,17 @@ The Docker image includes:
 
 | Host Path | Container Path | Purpose |
 |-----------|---------------|---------|
-| `~/A.U.R.A/worlds` | `/home/aura/ws/worlds` | Gazebo world files and terrain models |
-| `~/A.U.R.A/models` | `/home/aura/ws/models` | Trained RL policies and drone models |
-| `~/A.U.R.A/src` | `/home/aura/ws/src` | ROS 2 package source code |
+| repository root | `/home/aura/ws` | Whole workspace, including `.git` — single shared clone |
+| `aura-build` (volume) | `/home/aura/ws/build` | colcon build cache, kept out of the repo |
+| `aura-install` (volume) | `/home/aura/ws/install` | colcon install space |
+| `aura-log` (volume) | `/home/aura/ws/log` | colcon logs |
+| `$XDG_RUNTIME_DIR/keyring` | `/run/user/1000/keyring` | Forwarded ssh-agent socket (no private key in the image) |
+| `/tmp/.X11-unix` | `/tmp/.X11-unix` | X11 display socket for the Gazebo GUI |
+| `/dev/shm` | `/dev/shm` | Shared memory for ROS 2 DDS transport |
+
+`build/`, `install/` and `log/` are named volumes layered on top of the
+repository mount, so build artifacts stay inside Docker and never reach the host
+working tree or the index.
 
 ### First-Time Setup Inside Container
 

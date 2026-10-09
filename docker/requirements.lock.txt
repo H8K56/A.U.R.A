@@ -8,6 +8,13 @@
 # can be reconstructed or diffed if a rebuild behaves differently.
 #
 # Non-pip components are pinned in versions.env.
+#
+# STALE ON THE MODERNIZATION BRANCH. This capture is of the *baseline*
+# container (torch 2.6.0+cu124). versions.env on this branch pins
+# 2.9.1+cu128 for sm_120 support, so the torch lines below no longer describe
+# what a build here produces. Regenerate this file from the rebuilt container
+# once the modernized image is verified — a forensic record should describe a
+# container that exists, and editing it by hand would defeat its purpose.
 absl-py==2.4.0
 appdirs==1.4.4
 argcomplete==1.8.1

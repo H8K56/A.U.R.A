@@ -6,12 +6,12 @@
 # used to clone default branches with --depth 1, so two builds of this same
 # file produced different stacks — see roadmap 0.2.
 #
-# GPU: the pinned torch is a cu124 build, which carries kernels for sm_50-sm_90.
-# On an sm_120 (Blackwell) card such as the RTX 5050, torch.cuda.is_available()
-# returns True and kernels then fail to launch; train_policy's resolve_device()
-# detects that and falls back to CPU. Overriding TORCH_CUDA_CHANNEL to cu128 is
-# the modernization step (roadmap 0.6), deliberately NOT done on the frozen
-# baseline.
+# GPU: this is the modernization branch, so torch is a cu128 build and carries
+# sm_120 kernels. The baseline pinned cu124, which has kernels for sm_50-sm_90
+# only — on an sm_120 (Blackwell) card such as the RTX 5050
+# torch.cuda.is_available() returned True and kernels then failed to launch, so
+# train_policy's resolve_device() fell back to CPU. That fallback stays in
+# place: it is still correct for anyone building the baseline image.
 # ==============================================================================
 
 FROM ubuntu:22.04
@@ -21,10 +21,10 @@ ARG PX4_AUTOPILOT_REV=7b7233587665c93fb6eb7e68d3d43035293d8af4
 ARG PX4_MSGS_REV=31147daec8fae45e0cfe265d9dfe426e7d6fcf86
 ARG PX4_ROS_COM_REV=86e9aeb20e55a4673fa8a9f1c29ea06a6c5ad1af
 ARG NS3_VERSION=3.40
-ARG TORCH_VERSION=2.6.0
-ARG TORCHVISION_VERSION=0.21.0
-ARG TORCHAUDIO_VERSION=2.6.0
-ARG TORCH_CUDA_CHANNEL=cu124
+ARG TORCH_VERSION=2.9.1
+ARG TORCHVISION_VERSION=0.24.1
+ARG TORCHAUDIO_VERSION=2.9.1
+ARG TORCH_CUDA_CHANNEL=cu128
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=UTC

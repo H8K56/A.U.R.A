@@ -48,34 +48,56 @@ class DeadZone:
     move_angle: float = 0.0      # radians, direction of movement
 
 
+# ── Disaster zone geometry ──────────────────────────────────────
+#
+# Must match the coverage grid in sim_params.yaml / network_sim_params.yaml
+# and ActionConfig.world_center_*: a 400 m box on (120, -170). Zones placed
+# outside the grid attenuate nothing that anything measures.
+# test_grid_alignment.py asserts these stay consistent.
+
+DISASTER_CENTER_X = 120.0
+DISASTER_CENTER_Y = -170.0
+
+#: How far a zone may sit or roam from the centre, per axis. Slightly inside
+#: the grid's 200 m half-width so a zone stays measurable.
+ZONE_ROAM_HALF_WIDTH_M = 180.0
+
+#: Spread of the randomly generated zones around the centre, per axis.
+ZONE_SPAWN_HALF_WIDTH_M = 70.0
+
+
 # ── Preset disaster scenarios ───────────────────────────────────
+#
+# Placed on actual structures from SwarmGymEnv._DISASTER_STRUCTURES, one per
+# cluster. They used to sit in a +/-80 m box on the origin — 200 m from the
+# disaster, outside the coverage grid, attenuating empty ground.
 
 PRESET_ZONES = {
     'collapsed_building': DeadZone(
         zone_id=1,
         name='Collapsed Building',
-        center_x=60.0, center_y=40.0,
+        center_x=121.0, center_y=-106.0,  # western cluster
         radius_m=35.0,
         attenuation_db=20.0,
     ),
     'rubble_field': DeadZone(
         zone_id=2,
         name='Rubble Field',
-        center_x=-50.0, center_y=70.0,
+        center_x=155.0, center_y=-228.0,  # central-south cluster
         radius_m=25.0,
         attenuation_db=12.0,
     ),
     'underground_parking': DeadZone(
         zone_id=3,
         name='Underground Parking (deep shadow)',
-        center_x=30.0, center_y=-60.0,
+        center_x=196.0, center_y=-150.0,  # school / police
         radius_m=20.0,
         attenuation_db=30.0,
     ),
     'metal_debris': DeadZone(
         zone_id=4,
         name='Metal Debris Scatter',
-        center_x=-80.0, center_y=-30.0,
+        center_x=290.0, center_y=-219.0,  # eastern cluster
         radius_m=40.0,
         attenuation_db=8.0,
     ),
@@ -165,10 +187,29 @@ class DeadZonePublisher(Node):
                 zone.center_x += zone.move_speed * math.cos(zone.move_angle) * self.dt
                 zone.center_y += zone.move_speed * math.sin(zone.move_angle) * self.dt
 
-                # Bounce off boundaries
-                bound = 180.0
-                if abs(zone.center_x) > bound or abs(zone.center_y) > bound:
-                    zone.move_angle += math.pi * 0.5  # turn 90 degrees
+                # Reflect off the edges of the disaster zone.
+                #
+                # This used to test abs(center) against a bound measured from
+                # the origin, and turn 90 degrees whenever it tripped. Two
+                # problems: the box was in the wrong place once zones moved
+                # to the disaster zone at (120, -170), and a 90-degree turn
+                # does not reliably point a zone back inside — a zone already
+                # outside the bound simply spun, turning every tick and never
+                # returning. Clamp to the edge and mirror the offending
+                # component instead, which is a real reflection and cannot
+                # leave a zone stuck outside.
+                x_min = DISASTER_CENTER_X - ZONE_ROAM_HALF_WIDTH_M
+                x_max = DISASTER_CENTER_X + ZONE_ROAM_HALF_WIDTH_M
+                y_min = DISASTER_CENTER_Y - ZONE_ROAM_HALF_WIDTH_M
+                y_max = DISASTER_CENTER_Y + ZONE_ROAM_HALF_WIDTH_M
+
+                if not x_min <= zone.center_x <= x_max:
+                    zone.center_x = min(max(zone.center_x, x_min), x_max)
+                    zone.move_angle = math.pi - zone.move_angle
+                if not y_min <= zone.center_y <= y_max:
+                    zone.center_y = min(max(zone.center_y, y_min), y_max)
+                    zone.move_angle = -zone.move_angle
+                zone.move_angle %= 2 * math.pi
 
             # Publish
             msg = WeatherZone()
@@ -198,8 +239,10 @@ class DeadZonePublisher(Node):
         zone = DeadZone(
             zone_id=self.next_zone_id,
             name=f'Dynamic Zone {self.next_zone_id}',
-            center_x=125.0 + np.random.uniform(-70, 70),
-            center_y=-164.0 + np.random.uniform(-70, 70),
+            center_x=DISASTER_CENTER_X + np.random.uniform(
+                -ZONE_SPAWN_HALF_WIDTH_M, ZONE_SPAWN_HALF_WIDTH_M),
+            center_y=DISASTER_CENTER_Y + np.random.uniform(
+                -ZONE_SPAWN_HALF_WIDTH_M, ZONE_SPAWN_HALF_WIDTH_M),
             radius_m=np.random.uniform(15, 45),
             attenuation_db=np.random.uniform(8, 25),
             is_moving=self.zones_moving,

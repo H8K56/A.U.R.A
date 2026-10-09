@@ -258,25 +258,33 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.failed_drone_ids = set()
         self.reward_calculator.reset()
 
-        # Initialize drones
+        # Initialize drones, in a ring around the disaster zone rather than
+        # around the origin.
+        #
+        # The ring used to be centred on (0, 0), roughly 200 m from the area
+        # the policy is rewarded for covering. That is an initial condition
+        # that never occurs at inference: RL activates only in OPERATIONS,
+        # after TRANSIT and FORMATION have already brought the swarm to the
+        # zone. So training spent its early steps on a transit the deployed
+        # policy is never asked to fly, and the deployed policy started from
+        # a state training had under-sampled.
         self.drones = []
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
         for i in range(self.config.num_drones):
+            angle = 2 * np.pi * i / self.config.num_drones
             if self.config.randomize_initial_positions:
-                angle = 2 * np.pi * i / self.config.num_drones
                 r = self.config.initial_radius * (0.8 + 0.4 * self.np_random.random())
-                pos = np.array([
-                    r * np.cos(angle),
-                    r * np.sin(angle),
-                    self.config.initial_altitude + self.np_random.uniform(-5, 5)
-                ])
+                altitude = (self.config.initial_altitude
+                            + self.np_random.uniform(-5, 5))
             else:
-                angle = 2 * np.pi * i / self.config.num_drones
-                pos = np.array([
-                    self.config.initial_radius * np.cos(angle),
-                    self.config.initial_radius * np.sin(angle),
-                    self.config.initial_altitude
-                ])
-
+                r = self.config.initial_radius
+                altitude = self.config.initial_altitude
+            pos = np.array([
+                wx + r * np.cos(angle),
+                wy + r * np.sin(angle),
+                altitude,
+            ])
             self.drones.append(DroneState(drone_id=i, position=pos))
 
         # Shadowing realization for this episode. Only draw from np_random
@@ -285,14 +293,22 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         # would stop reproducing.
         self._reset_shadowing()
 
-        # Weather zones
+        # Weather zones, placed inside the coverage grid.
+        #
+        # These were drawn from uniform(-100, 100) on the origin while the
+        # grid sits on (120, -170), so a zone was usually outside the measured
+        # area entirely and its attenuation reached nothing. Weather that
+        # never attenuates anything is not a randomization axis.
         self.weather_zones = []
-        if self.config.randomize_weather and self.np_random.random() < self.config.weather_probability:
-            wx = self.np_random.uniform(-100, 100)
-            wy = self.np_random.uniform(-100, 100)
-            wr = self.np_random.uniform(30, 80)
-            wa = self.np_random.uniform(5, 15)
-            self.weather_zones.append(WeatherZone(wx, wy, wr, wa))
+        if (self.config.randomize_weather
+                and self.np_random.random() < self.config.weather_probability):
+            half = self.config.area_size
+            zone_x = wx + self.np_random.uniform(-0.5 * half, 0.5 * half)
+            zone_y = wy + self.np_random.uniform(-0.5 * half, 0.5 * half)
+            zone_r = self.np_random.uniform(30, 80)
+            zone_attenuation = self.np_random.uniform(5, 15)
+            self.weather_zones.append(
+                WeatherZone(zone_x, zone_y, zone_r, zone_attenuation))
 
         # Compute initial state
         self._update_network()

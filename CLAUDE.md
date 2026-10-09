@@ -80,13 +80,47 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   (`coverage_calculator.py`) reports the *unweighted* fraction of grid cells
   above `rx_sensitivity_dbm`; the gym env reports *importance-weighted*
   coverage (disaster structures count 3x) against `coverage_threshold_dbm`.
-  They also measure different areas: the ROS grid is a fixed 400 m box around
-  the origin, the gym grid is centred on the disaster zone. For the same swarm
-  the ROS path reports ~95% and the gym env ~20%. Always say which one a
-  number came from — they are not comparable. With shadowing on there is a
-  third distinction on top of those two: *mean* coverage (expected fraction of
-  locations) and *reliable* coverage (fraction covered in >=90% of
-  realizations) move in **opposite** directions. See the shadowing entry below.
+  They used to measure different *areas* as well — the ROS grid was a 400 m
+  box on the origin — but both are now a 400 m box on the disaster zone, so
+  the regions finally coincide. The weighting still differs, so always say
+  which one a number came from. With shadowing on there is a further
+  distinction: *mean* coverage (expected fraction of locations) and *reliable*
+  coverage (fraction covered in >=90% of realizations) move in **opposite**
+  directions. See the shadowing entry below.
+- **Everything is positioned relative to the disaster zone at (120, -170),
+  not the origin.** That is `ActionConfig.world_center_*`, the centre of the
+  checkpoint's 250 m clip disk, and it cannot move without retraining. The
+  drones *spawn* at the origin in Gazebo and transit from there, which is why
+  so much had drifted onto it:
+  - The ROS coverage grid was a 400 m box on the origin. It contained **6 of
+    the 17 disaster structures** and excluded the entire eastern cluster, so
+    the headline ROS coverage figure was measured over mostly empty ground.
+  - The gym env's *grid* was centred correctly, but its initial drone ring was
+    not — training started the swarm ~200 m from its objective, an initial
+    condition that never occurs at inference, because RL activates only in
+    OPERATIONS after TRANSIT and FORMATION have already brought the swarm in.
+    Fixing it tripled reported gym coverage (RL 17.0% -> 50.7%) and **flipped
+    the final-coverage ordering in RL's favour** (see below).
+  - Gym weather zones were drawn from `uniform(-100, 100)` on the origin, so
+    they usually fell outside the measured area and attenuated nothing.
+  - Dead zones roamed inside a box on the origin, and the preset zones sat in
+    a +/-80 m box there. `dead_zone_publisher` now holds the centre in
+    `DISASTER_CENTER_X/Y` with the spawn and roam boxes derived from it.
+  - `rl_target` was (125, -164), 7.8 m off, so `strategic_rl_node`'s
+    "rl_target is N m from the trained world centre" warning fired on every
+    run and therefore carried no information.
+  `test_grid_alignment.py` reads the shipped YAML and asserts the grid stays
+  centred and contains all 17 structures — the comments are what failed last
+  time.
+- **Mean coverage over an episode is the wrong statistic for these policies.**
+  The baseline is non-stationary: it peaks around 70% by step 100 and then
+  collapses to 33% by step 300, ending below where it started. RL rises
+  monotonically (43% -> 54.6%) and ends higher. So the *mean* favours the
+  baseline (60.8% vs 50.7%) while the *final* value favours RL (54.6% vs
+  33.2%). Training's `eval_coverage` is final-step, which is the right choice
+  and the one that agrees with the SIL mission (baseline 89.5% -> 42.7%, RL
+  88.7% -> 88.9%). Before the realignment the gym eval disagreed with the
+  mission in *sign*; it no longer does.
 - **Coverage threshold is now explicit, and it matters.**
   `coverage_threshold_dbm` (-80 dBm in `sim_params.yaml`) is passed through to
   the radio model; leave it unset (NaN) to fall back to the physically derived
@@ -113,20 +147,21 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   (`ShadowingField`, Gudmundson exponential correlation; `CorrelatedShadowing`
   adds the shared component). It still omits multipath/fading and
   interference, so SNR is not SINR.
-  - It *raises* mean coverage — about +4 pp in the gym env, +13 pp on the ROS
+  - It *raises* mean coverage — about +6 pp in the gym env, +14 pp on the ROS
     path. That is not a bug: a ground user attaches to the best drone, and the
     maximum over partly-independent fades is biased upward. It is a real
     macro-diversity gain.
-  - What it lowers is **reliable** coverage. At sigma=5 dB the ROS path reports
-    78% mean but only **44% covered in 90% of realizations** (65.6% on the
-    deterministic channel), and 82% of the area becomes
+  - What it lowers is **reliable** coverage. On the shipped config (grid on
+    the disaster zone, -80 dBm, sigma=5 dB D2G, rho=0.5) one SIL swarm reads
+    53.9% deterministic, **68.2% mean**, but only **39.4% covered in 90% of
+    realizations** and 23.4% at 99%; 83.9% of the area becomes
     sometimes-covered-sometimes-not. Use
     `CoverageCalculator.compute_coverage_reliability()` and quote the
     reliability target; mean coverage alone flatters the system.
   - `shadow_inter_link_correlation` decides the sign. At rho=1 shadowing
     belongs to the ground point, there is no diversity to gain, and the effect
-    on mean coverage is ~0 pp. At rho=0 it is +22 pp. The default 0.5 is the
-    3GPP inter-site value.
+    on mean coverage is +1.4 pp. At rho=0 it is +22.6 pp. The default 0.5 is
+    the 3GPP inter-site value.
   - `compute_max_range()` is the **median** range. At sigma=5 dB the D2G range
     is 158 m median but **97 m at 10% outage** — pass
     `compute_max_range(0.1)` rather than quoting the median as "the range".
@@ -135,8 +170,8 @@ python3 -m aura_strategic_rl.train_policy --seed 42
     trained on the deterministic median channel. It is **on** in
     `sim_params.yaml` and `network_sim_params.yaml` (sigma=4 dB, +1 dB for
     D2G). Say which one a number was measured at.
-  - Enabling it multiplies episode-to-episode coverage spread by about 12x
-    (±0.2 pp to ±2.5 pp over 6 episodes). It does **not** change the
+  - Enabling it multiplies episode-to-episode coverage spread by about 4x
+    (±0.5 pp to ±1.8 pp over 6 episodes). It does **not** change the
     RL-vs-baseline ordering on coverage or connectivity, which is the useful
     robustness result.
 - `src/aura_localization` is an empty directory — no package, nothing references it.

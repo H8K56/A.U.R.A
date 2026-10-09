@@ -48,10 +48,15 @@ network_sim:
     update_rate_hz: 10.0
 
     # Coverage area bounds
-    area_x_min: -200.0
-    area_x_max: 200.0
-    area_y_min: -200.0
-    area_y_max: 200.0
+    # 400 m box on the disaster zone at (120, -170) — the centre the policy
+    # was trained against (ActionConfig.world_center_*). Keep it there: a box
+    # on the origin held only 6 of the 17 disaster structures, so coverage
+    # was measured over mostly empty ground.
+    # test_grid_alignment.py asserts this stays centred and complete.
+    area_x_min: -80.0
+    area_x_max: 320.0
+    area_y_min: -370.0
+    area_y_max: 30.0
 
     # Grid resolution
     grid_resolution_m: 10.0

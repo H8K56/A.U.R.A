@@ -80,10 +80,18 @@ class NetworkSimNode(Node):
         
         # Declare node-specific parameters
         self.declare_parameter('update_rate_hz', 10.0)
-        self.declare_parameter('area_x_min', -200.0)
-        self.declare_parameter('area_x_max', 200.0)
-        self.declare_parameter('area_y_min', -200.0)
-        self.declare_parameter('area_y_max', 200.0)
+        # Coverage grid: a 400 m box on the disaster zone at (120, -170),
+        # which is the centre the RL policy was trained against
+        # (ActionConfig.world_center_*). It used to be a 400 m box on the
+        # origin, which contained only 6 of the 17 disaster structures and
+        # excluded the entire eastern cluster — so the reported coverage
+        # measured mostly empty ground while two thirds of the disaster sat
+        # outside the grid. Moving the box does not move the swarm; it
+        # changes every coverage figure this node reports.
+        self.declare_parameter('area_x_min', -80.0)
+        self.declare_parameter('area_x_max', 320.0)
+        self.declare_parameter('area_y_min', -370.0)
+        self.declare_parameter('area_y_max', 30.0)
         self.declare_parameter('grid_resolution_m', 10.0)
         self.declare_parameter('hub_drone_id', 0)
         self.declare_parameter('ground_height_m', 0.0)
@@ -175,6 +183,10 @@ class NetworkSimNode(Node):
         # cached draw per link; positions outside the bounds clamp to the
         # edge, so a drone that strays keeps a plausible value.
         area_bounds = (x_min, y_min, x_max, y_max)
+        self.get_logger().info(
+            f'Coverage grid: x[{x_min:.0f}, {x_max:.0f}] '
+            f'y[{y_min:.0f}, {y_max:.0f}] at {grid_res:.0f} m resolution, '
+            f'centred on ({(x_min + x_max) / 2:.0f}, {(y_min + y_max) / 2:.0f})')
         self.mesh_sim = MeshSimulator(config=d2d_config, seed=random_seed,
                                       shadow_bounds=area_bounds)
         self.coverage_calc = CoverageCalculator(

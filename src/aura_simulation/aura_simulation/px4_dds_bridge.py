@@ -444,6 +444,10 @@ class PX4DDSBridge(Node):
             self.drone_pubs[i].publish(ds)
 
         # Network metrics (filled by network_sim, defaults here)
+        # NOT populated here: these describe the network, not the swarm, and
+        # NetworkMetrics is the authoritative source. Consumers must read
+        # /network/metrics — mission_control used to fall back to these fields
+        # and a telemetry outage then looked like "coverage 0%, mesh down".
         msg.coverage_percent = 0.0
         msg.coverage_quality = 0.0
         msg.avg_throughput_mbps = 0.0

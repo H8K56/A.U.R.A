@@ -67,6 +67,12 @@ class SwarmReadiness:
     coverage_percent: float = 0.0
     coverage_target: float = 80.0
     backhaul_active: bool = False
+    # False until fresh NetworkMetrics has been seen. mesh_connected,
+    # coverage_percent and backhaul_active are only meaningful when this is
+    # True — otherwise they are the last known values, or the defaults above
+    # if nothing has ever arrived. "Mesh down" and "cannot tell" are different
+    # conditions and must not be confused: the latter used to abort missions.
+    network_data_valid: bool = False
     elapsed_time_sec: float = 0.0
     any_critical_battery: bool = False  # any drone < critical threshold
     any_drone_lost: bool = False        # heartbeat timeout
@@ -249,14 +255,25 @@ class MissionStateMachine:
 
         if self.phase_elapsed > self.config.formation_timeout_sec:
             # Formation timeout isn't necessarily fatal — fall through to ops
-            # if mesh is connected, otherwise abort
-            if r.mesh_connected:
+            # if mesh is connected, otherwise abort.
+            if r.network_data_valid and r.mesh_connected:
                 return self._transition(MissionPhase.OPERATIONS,
                                         "Formation timeout but mesh connected — proceeding")
+            if not r.network_data_valid:
+                # Still an abort — a relay mission that cannot be monitored
+                # should not proceed — but the reason has to be accurate.
+                # This used to report "no mesh", making a telemetry outage
+                # indistinguishable from an actual mesh failure.
+                return self._transition(
+                    MissionPhase.ABORT,
+                    "Formation timeout; network telemetry unavailable, "
+                    "mesh state unknown")
             return self._transition(MissionPhase.ABORT, "Formation timeout, no mesh")
 
-        # Need formation converged AND mesh connected
-        if r.formation_converged and r.mesh_connected:
+        # Need formation converged AND a confirmed mesh. Unknown is not
+        # confirmed, so an outage holds the swarm in FORMATION rather than
+        # letting it enter OPERATIONS unmonitored.
+        if r.formation_converged and r.network_data_valid and r.mesh_connected:
             return self._transition(MissionPhase.OPERATIONS,
                                     "Formation converged, mesh established")
 

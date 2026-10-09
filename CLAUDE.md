@@ -89,11 +89,17 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   regardless of where the swarm flew. At -80 dBm the range is ~158 m and
   coverage is geometry-dependent. Changing this parameter changes every
   reported coverage figure, so say which threshold a number was measured at.
-- **`SwarmState.coverage_percent` is never populated.** `sim_swarm_driver`
-  publishes a hardcoded `0.0` ("network_sim will compute this") and nothing
-  writes it back, while `mission_control_node` falls back to exactly that
-  field when `/network/metrics` is missing — so a lost network node reads as
-  0% coverage rather than as unknown, and trips the below-target alert.
+- **`SwarmState`'s network fields are not authoritative.** `coverage_percent`,
+  `mesh_connected` and `backhaul_connected` are published as a hardcoded
+  `0.0`/`False` by `sim_swarm_driver` and `px4_dds_bridge`, and nothing fills
+  them in. Read `/network/metrics` instead. `mission_control` used to fall back
+  to them when `/network/metrics` was missing, which made a dropped topic look
+  like "coverage 0%, mesh down" and **aborted the mission at formation
+  timeout**. Staleness is now explicit:
+  `SwarmReadiness.network_data_valid` is False until fresh `NetworkMetrics`
+  arrives (budget: `network_timeout_sec`, default 3 s), the FORMATION gate
+  requires a *confirmed* mesh rather than an unknown one, and the abort reason
+  names telemetry loss instead of blaming the mesh.
 - **Battery model** (~0.5%/min) is optimistic vs real 15-25 min flight.
 - **Propagation** omits shadowing/fading/interference, so coverage is optimistic (add a log-normal shadowing term).
 - `src/aura_localization` is an empty directory — no package, nothing references it.

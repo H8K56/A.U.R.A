@@ -227,19 +227,20 @@ def build_checks(obs: Observations, args) -> List[CheckResult]:
           f'max {max(obs.network_coverage_percents):.1f}%'
           if obs.network_coverage_percents else 'no samples')
 
-    # 10. The known dangling field, asserted explicitly so it cannot quietly
-    # start or stop being a problem. sim_swarm_driver publishes
-    # SwarmState.coverage_percent as a hardcoded 0.0 and nothing fills it in,
-    # while mission_control falls back to exactly that value when
-    # /network/metrics is missing — so a lost network node reads as 0% coverage
-    # rather than as unknown. Flagged, not fatal: the normal path does not use
-    # the fallback.
+    # 10. SwarmState's network fields are still published as a hardcoded
+    # 0.0/False by every publisher. That is now by design — they describe the
+    # network, not the swarm, and NetworkMetrics is authoritative — so this is
+    # tracked rather than enforced. It used to be load-bearing:
+    # mission_control fell back to these values when /network/metrics was
+    # missing, which turned a telemetry outage into "coverage 0%, mesh down"
+    # and aborted the mission at formation timeout. That fallback is gone;
+    # staleness is now carried explicitly by SwarmReadiness.network_data_valid.
+    # The check stays so nobody reintroduces a dependency on these fields.
     swarm_cov_populated = any(c > 0.0 for c in obs.swarm_coverage_percents)
     results.append(CheckResult(
         'SwarmState.coverage_percent is populated',
         swarm_cov_populated,
-        'always 0.0 — known gap, mission_control falls back to this value '
-        'when /network/metrics is absent'
+        'always 0.0 — by design; read /network/metrics instead'
         if not swarm_cov_populated else 'populated',
         advisory=True,
     ))

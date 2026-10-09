@@ -68,9 +68,13 @@ def test_full_happy_path():
     sm.update()
     assert sm.phase == MissionPhase.FORMATION
 
-    # Satisfy formation conditions
+    # Satisfy formation conditions. network_data_valid goes with
+    # mesh_connected: mission_control only writes mesh_connected from fresh
+    # NetworkMetrics, so "connected but not valid" is a state the node cannot
+    # produce — it would mean believing stale telemetry.
     r.formation_converged = True
     r.mesh_connected = True
+    r.network_data_valid = True
     sm.update()
     assert sm.phase == MissionPhase.OPERATIONS
     assert sm.is_rl_active  # <-- RL should be active now

@@ -303,12 +303,16 @@ class SimSwarmDriver(Node):
 
         # Aggregate metrics
         batteries = [d.battery_percent for d in self.drones]
-        msg.coverage_percent = 0.0  # network_sim will compute this
+        # NOT populated here: these describe the network, not the swarm, and
+        # NetworkMetrics is the authoritative source. Consumers must read
+        # /network/metrics — mission_control used to fall back to these fields
+        # and a telemetry outage then looked like "coverage 0%, mesh down".
+        msg.coverage_percent = 0.0
         msg.coverage_quality = 0.0
         msg.avg_throughput_mbps = 0.0
         msg.avg_latency_ms = 0.0
         msg.packet_loss_percent = 0.0
-        msg.mesh_connected = False   # network_sim will compute this
+        msg.mesh_connected = False
         msg.backhaul_connected = False
 
         # Drone states

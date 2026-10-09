@@ -25,10 +25,14 @@
     # ── Network Simulation ────────────────────────
     sim_rate_hz: 10.0
     grid_resolution_m: 10.0
-    area_min_x: -200.0
-    area_min_y: -200.0
-    area_max_x: 200.0
-    area_max_y: 200.0
+    # Names must match what network_sim_node declares (area_x_min, not
+    # area_min_x). They were transposed, so these bounds were silently
+    # discarded and the node fell back to its own defaults — which happened to
+    # be the same numbers, which is why it went unnoticed.
+    area_x_min: -200.0
+    area_y_min: -200.0
+    area_x_max: 200.0
+    area_y_max: 200.0
     tx_power_dbm: 20.0
     path_loss_exponent: 2.7
     coverage_threshold_dbm: -80.0

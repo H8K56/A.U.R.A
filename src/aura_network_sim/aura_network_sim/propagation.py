@@ -76,15 +76,26 @@ class RadioConfig:
                         max_mesh_distance_m: float = 150.0,
                         min_snr_db: float = 10.0,
                         signal_noise_std_db: float = 2.0,
-                        frequency_ghz: float = 5.8) -> 'RadioConfig':
-        """Create RadioConfig from ROS parameters"""
+                        frequency_ghz: float = 5.8,
+                        rx_sensitivity_dbm: Optional[float] = None
+                        ) -> 'RadioConfig':
+        """Create RadioConfig from ROS parameters.
+
+        rx_sensitivity_dbm overrides the derived value when given. Without it
+        sensitivity is noise_floor + min_snr, which is the physically motivated
+        default; with it, a deployment can state the coverage threshold it
+        actually wants to report against. `coverage_threshold_dbm` in the YAML
+        configs used to be silently ignored because there was no way to pass
+        it through here.
+        """
         # Compute reference loss using free space formula at reference distance
         # FSPL = 20*log10(d) + 20*log10(f_GHz) + 32.44
         reference_loss_db = (20 * np.log10(max(0.1, reference_distance_m)) + 
                             20 * np.log10(frequency_ghz) + 32.44)
         
-        # Receiver sensitivity = noise_floor + min_snr
-        rx_sensitivity_dbm = noise_floor_dbm + min_snr_db
+        # Receiver sensitivity = noise_floor + min_snr unless overridden
+        if rx_sensitivity_dbm is None:
+            rx_sensitivity_dbm = noise_floor_dbm + min_snr_db
         
         return cls(
             tx_power_dbm=tx_power_dbm,

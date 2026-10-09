@@ -89,7 +89,7 @@ def generate_launch_description():
                     executable='network_sim_node',
                     name='network_sim',
                     output='screen',
-                    parameters=[config_file],
+                    parameters=[net_config, config_file],
                 ),
             ],
         ),
@@ -103,7 +103,7 @@ def generate_launch_description():
                     executable='coverage_calculator_node',
                     name='coverage_calculator',
                     output='screen',
-                    parameters=[config_file],
+                    parameters=[net_config, config_file],
                 ),
             ],
         ),
@@ -135,6 +135,7 @@ def generate_launch_description():
                     name='mission_control',
                     output='screen',
                     parameters=[
+                        mc_config,
                         config_file,
                         {
                             'auto_start': LaunchConfiguration('auto_start'),

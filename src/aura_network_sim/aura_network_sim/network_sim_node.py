@@ -56,6 +56,13 @@ class NetworkSimNode(Node):
         self.declare_parameter('max_mesh_distance_m', 150.0)
         self.declare_parameter('min_snr_db', 10.0)
         self.declare_parameter('signal_noise_std_db', 2.0)
+        # Coverage threshold. NaN (the default) means derive it from
+        # noise_floor_dbm + min_snr_db, which is the physically motivated
+        # value. Set it explicitly to report coverage against a specific
+        # receiver threshold instead — it used to be declared in the YAML
+        # configs and read by nothing.
+        self.declare_parameter('coverage_threshold_dbm',
+                               float('nan'))
         
         # Declare node-specific parameters
         self.declare_parameter('update_rate_hz', 10.0)
@@ -76,6 +83,10 @@ class NetworkSimNode(Node):
         max_mesh_dist = self.get_parameter('max_mesh_distance_m').value
         min_snr = self.get_parameter('min_snr_db').value
         signal_noise = self.get_parameter('signal_noise_std_db').value
+
+        threshold = self.get_parameter('coverage_threshold_dbm').value
+        rx_sensitivity = (None if threshold is None or np.isnan(threshold)
+                          else float(threshold))
         
         # Get node-specific parameters
         update_rate = self.get_parameter('update_rate_hz').value
@@ -98,6 +109,7 @@ class NetworkSimNode(Node):
             min_snr_db=min_snr,
             signal_noise_std_db=signal_noise,
             frequency_ghz=5.8,  # D2D uses 5 GHz
+            rx_sensitivity_dbm=rx_sensitivity,
         )
         
         d2g_config = RadioConfig.from_ros_params(
@@ -109,8 +121,18 @@ class NetworkSimNode(Node):
             min_snr_db=min_snr,
             signal_noise_std_db=signal_noise + 1.0,  # More variable
             frequency_ghz=2.4,  # D2G uses 2.4 GHz
+            rx_sensitivity_dbm=rx_sensitivity,
         )
         
+        if rx_sensitivity is None:
+            self.get_logger().info(
+                f'Coverage threshold derived from noise floor + min SNR: '
+                f'{noise_floor + min_snr:.1f} dBm')
+        else:
+            self.get_logger().info(
+                f'Coverage threshold set explicitly: {rx_sensitivity:.1f} dBm '
+                f'(derived value would be {noise_floor + min_snr:.1f} dBm)')
+
         # Initialize simulators with configured parameters
         self.mesh_sim = MeshSimulator(config=d2d_config)
         self.coverage_calc = CoverageCalculator(

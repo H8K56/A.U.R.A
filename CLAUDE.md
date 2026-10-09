@@ -76,18 +76,19 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   (`coverage_calculator.py`) reports the *unweighted* fraction of grid cells
   above `rx_sensitivity_dbm`; the gym env reports *importance-weighted*
   coverage (disaster structures count 3x) against `coverage_threshold_dbm`.
-  For the same swarm the ROS path reports ~100% and the gym env ~20%. Always
-  say which one a number came from.
-- **`sim_params.yaml` silently loses parameters to the network sim.** Three
-  separate wiring faults, all latent:
-  (a) `sim_no_px4.launch.py` computes `net_config` and `mc_config` and never
-  passes them to any node, so `network_sim_params.yaml` is never loaded;
-  (b) the config says `area_min_x`/`area_max_x` but `network_sim_node`
-  declares `area_x_min`/`area_x_max` — transposed, so the bounds fall back to
-  node defaults (which happen to match, hiding it);
-  (c) `coverage_threshold_dbm` is read by nothing in the ROS path — effective
-  sensitivity is `noise_floor_dbm + min_snr_db` (-90 dBm), giving a ~215 m
-  radius per drone over a 400 m box, which is why coverage reads ~100%.
+  They also measure different areas: the ROS grid is a fixed 400 m box around
+  the origin, the gym grid is centred on the disaster zone. For the same swarm
+  the ROS path reports ~95% and the gym env ~20%. Always say which one a
+  number came from — they are not comparable.
+- **Coverage threshold is now explicit, and it matters.**
+  `coverage_threshold_dbm` (-80 dBm in `sim_params.yaml`) is passed through to
+  the radio model; leave it unset (NaN) to fall back to the physically derived
+  `noise_floor_dbm + min_snr_db`. The difference is large: -90 dBm gives a
+  ~340 m per-drone range, which exceeds the 283 m half-diagonal of the 400 m
+  simulated box — one drone blanketed the whole area and coverage read ~100%
+  regardless of where the swarm flew. At -80 dBm the range is ~158 m and
+  coverage is geometry-dependent. Changing this parameter changes every
+  reported coverage figure, so say which threshold a number was measured at.
 - **`SwarmState.coverage_percent` is never populated.** `sim_swarm_driver`
   publishes a hardcoded `0.0` ("network_sim will compute this") and nothing
   writes it back, while `mission_control_node` falls back to exactly that

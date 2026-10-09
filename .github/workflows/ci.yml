@@ -89,6 +89,14 @@ jobs:
             --pytest-args -q \
             --event-handlers console_direct+
 
+      - name: Disaster scene is in sync with the world
+        shell: bash
+        run: |
+          # disaster_scene.py is generated from worlds/earthquake_city.world.
+          # A world edit without a regenerate would leave the coverage grid
+          # and the importance map describing a scene that no longer exists.
+          python3 src/aura/scripts/generate_disaster_scene.py --check
+
       - name: Evaluation script smoke run
         shell: bash
         run: |

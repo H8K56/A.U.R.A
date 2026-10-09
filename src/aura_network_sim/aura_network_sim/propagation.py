@@ -492,6 +492,26 @@ class PropagationModel:
 
         return float(self.rng.normal(0, self.config.shadow_fading_std))
 
+    def shadow_map(self, tx_id: int, x, y):
+        """Vectorized `shadow_db` for a whole grid of receiver positions.
+
+        Same values `shadow_db` would return cell by cell, computed in one
+        pass. The coverage grid needs this: sampling per cell in Python costs
+        more than every other part of the calculation put together.
+        """
+        x_arr = np.asarray(x, dtype=float)
+        if not self.config.shadowing_enabled or self.config.shadow_fading_std <= 0.0:
+            return np.zeros_like(x_arr)
+
+        if self.shadow_bounds is not None:
+            return np.asarray(self._shadowing_maps().sample(tx_id, x, y),
+                              dtype=float)
+
+        # No bounds: the degenerate single cached draw per link, broadcast
+        # across the grid. See the class docstring for why that is not
+        # shadowing; callers computing a grid should pass bounds.
+        return np.full_like(x_arr, self.shadow_db(link_id=(tx_id, -1)))
+
     def regenerate_shadowing(self, seed: Optional[int] = None) -> None:
         """Draw fresh shadowing for every transmitter. Call between episodes."""
         if seed is not None:

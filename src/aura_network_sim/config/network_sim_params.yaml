@@ -48,15 +48,14 @@ network_sim:
     update_rate_hz: 10.0
 
     # Coverage area bounds
-    # 400 m box on the disaster zone at (120, -170) — the centre the policy
-    # was trained against (ActionConfig.world_center_*). Keep it there: a box
-    # on the origin held only 6 of the 17 disaster structures, so coverage
-    # was measured over mostly empty ground.
-    # test_grid_alignment.py asserts this stays centred and complete.
-    area_x_min: -80.0
-    area_x_max: 320.0
-    area_y_min: -370.0
-    area_y_max: 30.0
+    # Fitted to the 29 damaged structures in worlds/earthquake_city.world
+    # plus a 50 m importance margin, snapped to the 10 m cell size.
+    # Generated: see disaster_scene.GRID_BOUNDS and
+    # scripts/generate_disaster_scene.py. Do not hand-edit.
+    area_x_min: -170.0
+    area_x_max: 390.0
+    area_y_min: -350.0
+    area_y_max: 20.0
 
     # Grid resolution
     grid_resolution_m: 10.0

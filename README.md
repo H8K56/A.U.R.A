@@ -217,10 +217,19 @@ Two caveats worth knowing before quoting any coverage figure:
 
 A custom Gazebo earthquake world (450m × 260m) containing:
 - 12 collapsed houses, 7 collapsed industrial buildings
-- 2 collapsed police stations, 1 school, 1 reactor
+- 2 collapsed police stations, 1 school, 1 playground, 1 reactor
 - 3 fallen radio towers (boundary markers), 2 water towers
 - Simple Baylands terrain heightmap with roads and paths
 - Launchpad at origin (0, 0) with H-marker
+
+29 damaged structures in all, spanning `x[-112, 338] y[-295, -33]`. The city
+lies **south-east of the launchpad**, not around it, which is why the coverage
+grid is fitted to the structures rather than squared off on the origin — it is
+`x[-170, 390] y[-350, 20]`, the bounding box plus a 50 m margin.
+
+The scene is not hand-maintained: `scripts/generate_disaster_scene.py` derives
+`aura_strategic_rl/disaster_scene.py` from the world file, and a test
+re-derives it so the two cannot drift.
 
 ---
 
@@ -235,8 +244,8 @@ A custom Gazebo earthquake world (450m × 260m) containing:
 
 ### Baseline Controller (Hungarian + Circular Formation)
 - Hungarian assignment algorithm for optimal drone-to-slot matching
-- Circular formation centred on disaster zone (125, -164)
-- Achieves 96–99% coverage with deterministic positioning
+- Circular formation centred on the disaster zone (120, -170), which is also
+  the centre of the RL policy's trained 250 m action bound
 - Dead zone avoidance: pushes drones away from active attenuation zones
 
 ### Context-Dependent Policy Switching
@@ -314,15 +323,43 @@ python3 -m aura_strategic_rl.train_policy \
 
 ## Key Results
 
-| Metric | Value |
-|--------|-------|
-| Drones supported | 4–5 simultaneous |
-| Network coverage | 96–99% of disaster zone |
-| Signal strength | -75.5 dBm average |
-| Throughput | 114.7 Mbps aggregate |
-| Latency | 6.0 ms average |
-| Mesh links | 10 (fully connected) |
-| Mission phases | 8 (IDLE through COMPLETE) |
+Measured over 90 s of OPERATIONS in the headless SIL stack, 5 drones, 905
+samples per run, against the shipped configuration: coverage threshold
+−80 dBm, log-normal shadowing on (σ = 4 dB D2D / 5 dB D2G, ρ = 0.5), and the
+coverage grid fitted to all 29 damaged structures.
+
+| Metric | RL policy | Hungarian baseline |
+|--------|-----------|--------------------|
+| Coverage, start → end | 40.7% → 40.4% | 40.7% → **70.1%** |
+| Coverage, steady state | 40.6% | **69.6%** |
+| Throughput | **114.7 Mbps** | 97.6 Mbps |
+| Mean signal | −73.0 dBm | −71.9 dBm |
+| Mesh links | **10 of 10** | 8.9 of 10 |
+| Mesh connected | 100% | 100% |
+| Drones supported | 4–5 simultaneous | |
+| Mission phases | 8 (IDLE through COMPLETE) | |
+
+The baseline spreads into a circular formation across the zone and reaches the
+eastern structure cluster; the RL policy holds a tighter cluster and covers
+less ground, but sustains a fully connected 10-link mesh at the top MCS rung.
+Coverage and connectivity are the two halves of the objective and each policy
+wins one.
+
+> **Earlier revisions of this table reported 96–99% coverage. That figure does
+> not stand.** It was measured against a receiver threshold that was being
+> silently derived rather than read from config (−90 dBm, giving a per-drone
+> range larger than the simulated area, so one drone blanketed everything),
+> over a grid centred on the launchpad that contained 6 of the 29 disaster
+> structures. Both are fixed; the numbers above are what the same system
+> reports once it is measuring the actual disaster. Any coverage figure should
+> be quoted with its threshold, its grid and — under shadowing — its
+> reliability target.
+
+With shadowing enabled, *mean* coverage and *reliable* coverage move in
+opposite directions, and the mean is the flattering one:
+`CoverageCalculator.compute_coverage_reliability()` reports both. For one
+sampled swarm geometry: 53.9% on the deterministic channel, 68.2% mean, but
+only 39.4% of the area covered in ≥90% of channel realizations.
 | Simulation FPS | 60+ with 5 drones |
 
 ---

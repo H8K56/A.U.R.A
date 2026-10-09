@@ -50,27 +50,37 @@ class DeadZone:
 
 # ── Disaster zone geometry ──────────────────────────────────────
 #
-# Must match the coverage grid in sim_params.yaml / network_sim_params.yaml
-# and ActionConfig.world_center_*: a 400 m box on (120, -170). Zones placed
-# outside the grid attenuate nothing that anything measures.
-# test_grid_alignment.py asserts these stay consistent.
+# Derived from the Gazebo world rather than written here, so a zone cannot
+# end up outside the area anything measures. Zones roam inside the coverage
+# grid; a zone outside it attenuates ground nobody is scoring.
+# test_grid_alignment.py and test_dead_zone_motion.py assert the three boxes
+# stay nested.
 
-DISASTER_CENTER_X = 120.0
-DISASTER_CENTER_Y = -170.0
+from aura_strategic_rl.disaster_scene import BBOX as _SCENE_BBOX
+from aura_strategic_rl.disaster_scene import GRID_BOUNDS as _GRID
 
-#: How far a zone may sit or roam from the centre, per axis. Slightly inside
-#: the grid's 200 m half-width so a zone stays measurable.
-ZONE_ROAM_HALF_WIDTH_M = 180.0
+#: Centre of the damaged-structure bounding box.
+DISASTER_CENTER_X = round((_SCENE_BBOX[0] + _SCENE_BBOX[2]) / 2.0, 1)
+DISASTER_CENTER_Y = round((_SCENE_BBOX[1] + _SCENE_BBOX[3]) / 2.0, 1)
 
-#: Spread of the randomly generated zones around the centre, per axis.
+#: Where a zone may sit or roam: the coverage grid, inset by a margin so a
+#: zone's *edge* stays measurable rather than just its centre.
+ZONE_ROAM_MARGIN_M = 30.0
+ZONE_ROAM_X_MIN = _GRID[0] + ZONE_ROAM_MARGIN_M
+ZONE_ROAM_Y_MIN = _GRID[1] + ZONE_ROAM_MARGIN_M
+ZONE_ROAM_X_MAX = _GRID[2] - ZONE_ROAM_MARGIN_M
+ZONE_ROAM_Y_MAX = _GRID[3] - ZONE_ROAM_MARGIN_M
+
+#: Spread of randomly generated zones around the centre, per axis. Inside the
+#: roam box, so a fresh zone never starts out of bounds.
 ZONE_SPAWN_HALF_WIDTH_M = 70.0
 
 
 # ── Preset disaster scenarios ───────────────────────────────────
 #
-# Placed on actual structures from SwarmGymEnv._DISASTER_STRUCTURES, one per
-# cluster. They used to sit in a +/-80 m box on the origin — 200 m from the
-# disaster, outside the coverage grid, attenuating empty ground.
+# Placed on real structures from the world, one per cluster. They used to sit
+# in a +/-80 m box on the origin — 200 m from the disaster, outside the
+# coverage grid, attenuating empty ground.
 
 PRESET_ZONES = {
     'collapsed_building': DeadZone(
@@ -198,10 +208,8 @@ class DeadZonePublisher(Node):
                 # returning. Clamp to the edge and mirror the offending
                 # component instead, which is a real reflection and cannot
                 # leave a zone stuck outside.
-                x_min = DISASTER_CENTER_X - ZONE_ROAM_HALF_WIDTH_M
-                x_max = DISASTER_CENTER_X + ZONE_ROAM_HALF_WIDTH_M
-                y_min = DISASTER_CENTER_Y - ZONE_ROAM_HALF_WIDTH_M
-                y_max = DISASTER_CENTER_Y + ZONE_ROAM_HALF_WIDTH_M
+                x_min, x_max = ZONE_ROAM_X_MIN, ZONE_ROAM_X_MAX
+                y_min, y_max = ZONE_ROAM_Y_MIN, ZONE_ROAM_Y_MAX
 
                 if not x_min <= zone.center_x <= x_max:
                     zone.center_x = min(max(zone.center_x, x_min), x_max)

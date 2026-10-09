@@ -80,10 +80,15 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   (`coverage_calculator.py`) reports the *unweighted* fraction of grid cells
   above `rx_sensitivity_dbm`; the gym env reports *importance-weighted*
   coverage (disaster structures count 3x) against `coverage_threshold_dbm`.
-  They used to measure different *areas* as well — the ROS grid was a 400 m
-  box on the origin — but both are now a 400 m box on the disaster zone, so
-  the regions finally coincide. The weighting still differs, so always say
-  which one a number came from. With shadowing on there is a further
+  They also still measure different *areas*, though both are now on the
+  disaster zone rather than one being on the origin. The ROS grid is fitted to
+  the scene (`x[-170, 390] y[-350, 20]`, all 29 structures); the gym grid is
+  a square 400 m box on the trained centre (`x[-80, 320] y[-370, 30]`, 26 of
+  29 — it clips the reactor and two radio towers). The gym grid cannot simply
+  be refitted: its 10x10 downsample feeds the 184-D observation, so changing
+  its shape changes what each observation cell means. That is retrain-gated.
+  So a ROS number and a gym number differ in weighting *and* in region — never
+  compare them directly. With shadowing on there is a further
   distinction: *mean* coverage (expected fraction of locations) and *reliable*
   coverage (fraction covered in >=90% of realizations) move in **opposite**
   directions. See the shadowing entry below.
@@ -93,8 +98,12 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   drones *spawn* at the origin in Gazebo and transit from there, which is why
   so much had drifted onto it:
   - The ROS coverage grid was a 400 m box on the origin. It contained **6 of
-    the 17 disaster structures** and excluded the entire eastern cluster, so
+    the 29 disaster structures** and excluded the entire eastern cluster, so
     the headline ROS coverage figure was measured over mostly empty ground.
+    It is now **fitted to the scene**: `x[-170, 390] y[-350, 20]`, 56x37
+    cells, being the bounding box of all 29 structures plus a 50 m importance
+    margin. Not square, because the scene isn't — coverage % is a fraction of
+    cells, so empty area dilutes it directly.
   - The gym env's *grid* was centred correctly, but its initial drone ring was
     not — training started the swarm ~200 m from its objective, an initial
     condition that never occurs at inference, because RL activates only in
@@ -109,9 +118,59 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   - `rl_target` was (125, -164), 7.8 m off, so `strategic_rl_node`'s
     "rl_target is N m from the trained world centre" warning fired on every
     run and therefore carried no information.
-  `test_grid_alignment.py` reads the shipped YAML and asserts the grid stays
-  centred and contains all 17 structures — the comments are what failed last
-  time.
+  `test_grid_alignment.py` reads the shipped YAML and asserts it still matches
+  `disaster_scene.GRID_BOUNDS` and contains all 29 structures — the comments
+  are what failed last time.
+- **The scene is generated from the world, not hand-written.**
+  `worlds/earthquake_city.world` is the single source of truth;
+  `scripts/generate_disaster_scene.py` derives
+  `aura_strategic_rl/disaster_scene.py` (structures, bbox, grid bounds) from
+  it. Regenerate and commit after editing the world —
+  `test_disaster_scene.py` re-derives and fails if the committed module has
+  drifted, and `--check` is the CI form.
+  **`SwarmGymEnv._DISASTER_STRUCTURES` still holds only 17 of the 29.** It
+  omits the reactor, both water towers, all three radio towers, five
+  collapsed industrials and a police station. Fixing it changes the
+  importance map, hence the reward, hence what training optimizes — so it is
+  **retrain-gated** and deliberately still stale.
+  `TestGymStructureListIsKnownStale` pins the gap at 12 so it cannot widen.
+  Measurement is already honest (the ROS grid covers all 29); the reward is
+  not.
+- **The 250 m clip radius is the scene's circumscribed circle.** The furthest
+  of the 29 structures is 251 m from (120, -170), so `area_bound = 250` was
+  evidently sized to the scene. Two boundary features (the reactor and the
+  furthest radio tower) sit ~1 m outside, which costs nothing: the per-drone
+  range is ~158 m, so a drone at the bound still covers them.
+- **The coverage grid is vectorized, and was the node's bottleneck.**
+  `compute_coverage` was three nested Python loops (cells x cells x drones),
+  ~194 ms per update against `update_rate_hz: 10.0` — so `/network/metrics`
+  had been publishing at about half its configured rate, and a larger grid
+  made it worse. One numpy pass is ~1 ms, a 165x speedup, and the smoke test
+  now sees 320 metrics messages where it saw 165. The arithmetic is
+  unchanged: `test_coverage_vectorization.py` keeps an independent scalar
+  reference and asserts they agree cell for cell.
+- **Measured honestly over the whole disaster, the baseline beats the RL
+  policy on coverage.** 90 s of OPERATIONS in the SIL stack, shipped config
+  (fitted grid, -80 dBm, shadowing on), 905 samples each:
+
+  | OPERATIONS | RL | Hungarian baseline |
+  |---|---|---|
+  | coverage, first -> last | 40.7% -> 40.4% | 40.7% -> **70.1%** |
+  | coverage, 2nd-half mean | 40.6% | **69.6%** |
+  | throughput | **114.7** Mbps | 97.6 Mbps |
+  | mesh links | **10.0** | 8.9 |
+  | mesh connected | 100% | 100% |
+
+  The baseline spreads into a circular formation over the zone and picks up
+  the eastern cluster; the RL policy holds a tight cluster near where it
+  starts and never reaches it. RL still wins on throughput and link count,
+  which is the connectivity half of the objective.
+
+  This reverses the earlier headline, and the reversal is the point: the old
+  figures were measured on a grid that excluded two thirds of the disaster,
+  against an importance map holding 17 of 29 structures, from a policy trained
+  with its start ring on the origin. Each of those flattered RL. Do not quote
+  pre-realignment coverage comparisons.
 - **Mean coverage over an episode is the wrong statistic for these policies.**
   The baseline is non-stationary: it peaks around 70% by step 100 and then
   collapses to 33% by step 300, ending below where it started. RL rises
@@ -121,6 +180,11 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   and the one that agrees with the SIL mission (baseline 89.5% -> 42.7%, RL
   88.7% -> 88.9%). Before the realignment the gym eval disagreed with the
   mission in *sign*; it no longer does.
+- **Coverage grid regeneration.** After editing the world:
+  `python3 scripts/generate_disaster_scene.py`, then copy
+  `GRID_BOUNDS` into `area_x_min`/`area_y_min`/`area_x_max`/`area_y_max` in
+  both `sim_params.yaml` and `network_sim_params.yaml`. The tests will tell
+  you if you miss one.
 - **Coverage threshold is now explicit, and it matters.**
   `coverage_threshold_dbm` (-80 dBm in `sim_params.yaml`) is passed through to
   the radio model; leave it unset (NaN) to fall back to the physically derived

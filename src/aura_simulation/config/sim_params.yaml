@@ -35,14 +35,22 @@
     # discarded and the node fell back to its own defaults — which happened to
     # be the same numbers, which is why it went unnoticed.
     #
-    # A 400 m box on the disaster zone at (120, -170), matching the gym env's
-    # grid so the ROS and gym coverage figures finally measure the same
-    # region. On the origin it contained 6 of 17 disaster structures.
-    # test_grid_alignment.py asserts this stays centred and complete.
-    area_x_min: -80.0
-    area_y_min: -370.0
-    area_x_max: 320.0
-    area_y_max: 30.0
+    # Fitted to the disaster scene in worlds/earthquake_city.world: the
+    # bounding box of all 29 damaged structures plus a 50 m margin (the
+    # importance radius), snapped to the 10 m cell size. 56 x 37 cells.
+    #
+    # Do not hand-edit: these come from disaster_scene.GRID_BOUNDS, which
+    # scripts/generate_disaster_scene.py derives from the world file.
+    # test_grid_alignment.py asserts they still match.
+    #
+    # It was a 400 m box on the *origin*, which held 6 of the 29 structures
+    # and excluded the whole eastern cluster, so coverage was reported over
+    # mostly empty ground. The box is not square because the scene is not:
+    # coverage % is a fraction of cells, so empty area dilutes it directly.
+    area_x_min: -170.0
+    area_y_min: -350.0
+    area_x_max: 390.0
+    area_y_max: 20.0
     tx_power_dbm: 20.0
     path_loss_exponent: 2.7
     coverage_threshold_dbm: -80.0

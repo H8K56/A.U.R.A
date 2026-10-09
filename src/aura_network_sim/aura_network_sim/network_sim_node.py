@@ -80,18 +80,20 @@ class NetworkSimNode(Node):
         
         # Declare node-specific parameters
         self.declare_parameter('update_rate_hz', 10.0)
-        # Coverage grid: a 400 m box on the disaster zone at (120, -170),
-        # which is the centre the RL policy was trained against
-        # (ActionConfig.world_center_*). It used to be a 400 m box on the
-        # origin, which contained only 6 of the 17 disaster structures and
-        # excluded the entire eastern cluster — so the reported coverage
-        # measured mostly empty ground while two thirds of the disaster sat
-        # outside the grid. Moving the box does not move the swarm; it
+        # Coverage grid, fitted to the disaster scene: the bounding box of
+        # the 29 damaged structures in worlds/earthquake_city.world plus a
+        # 50 m importance margin. These mirror disaster_scene.GRID_BOUNDS,
+        # which scripts/generate_disaster_scene.py derives from the world.
+        #
+        # It used to be a 400 m box on the *origin*, which held 6 of the 29
+        # structures and excluded the entire eastern cluster — the reported
+        # coverage measured mostly empty ground while most of the disaster
+        # sat outside the grid. Moving the box does not move the swarm; it
         # changes every coverage figure this node reports.
-        self.declare_parameter('area_x_min', -80.0)
-        self.declare_parameter('area_x_max', 320.0)
-        self.declare_parameter('area_y_min', -370.0)
-        self.declare_parameter('area_y_max', 30.0)
+        self.declare_parameter('area_x_min', -170.0)
+        self.declare_parameter('area_x_max', 390.0)
+        self.declare_parameter('area_y_min', -350.0)
+        self.declare_parameter('area_y_max', 20.0)
         self.declare_parameter('grid_resolution_m', 10.0)
         self.declare_parameter('hub_drone_id', 0)
         self.declare_parameter('ground_height_m', 0.0)

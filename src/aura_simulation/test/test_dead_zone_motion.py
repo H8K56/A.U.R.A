@@ -21,13 +21,12 @@ import pytest
 
 from aura_simulation.dead_zone_publisher import (
     DISASTER_CENTER_X, DISASTER_CENTER_Y, PRESET_ZONES,
-    ZONE_ROAM_HALF_WIDTH_M, ZONE_SPAWN_HALF_WIDTH_M, DeadZone,
+    ZONE_ROAM_X_MAX, ZONE_ROAM_X_MIN, ZONE_ROAM_Y_MAX, ZONE_ROAM_Y_MIN,
+    ZONE_SPAWN_HALF_WIDTH_M, DeadZone,
 )
 
-X_MIN = DISASTER_CENTER_X - ZONE_ROAM_HALF_WIDTH_M
-X_MAX = DISASTER_CENTER_X + ZONE_ROAM_HALF_WIDTH_M
-Y_MIN = DISASTER_CENTER_Y - ZONE_ROAM_HALF_WIDTH_M
-Y_MAX = DISASTER_CENTER_Y + ZONE_ROAM_HALF_WIDTH_M
+X_MIN, X_MAX = ZONE_ROAM_X_MIN, ZONE_ROAM_X_MAX
+Y_MIN, Y_MAX = ZONE_ROAM_Y_MIN, ZONE_ROAM_Y_MAX
 
 
 def step(zone, dt=0.5):
@@ -138,7 +137,24 @@ class TestReflectionIsPhysical:
 class TestGeometryIsConsistent:
 
     def test_spawned_zones_start_inside_the_roam_box(self):
-        assert ZONE_SPAWN_HALF_WIDTH_M < ZONE_ROAM_HALF_WIDTH_M
+        half = ZONE_SPAWN_HALF_WIDTH_M
+        assert DISASTER_CENTER_X - half >= X_MIN
+        assert DISASTER_CENTER_X + half <= X_MAX
+        assert DISASTER_CENTER_Y - half >= Y_MIN
+        assert DISASTER_CENTER_Y + half <= Y_MAX
+
+    def test_the_roam_box_is_derived_from_the_coverage_grid(self):
+        """Not a hand-written box: a zone outside the grid attenuates ground
+        nothing is scoring."""
+        from aura_strategic_rl.disaster_scene import GRID_BOUNDS
+        assert X_MIN >= GRID_BOUNDS[0]
+        assert Y_MIN >= GRID_BOUNDS[1]
+        assert X_MAX <= GRID_BOUNDS[2]
+        assert Y_MAX <= GRID_BOUNDS[3]
+
+    def test_the_roam_box_is_not_centred_on_the_origin(self):
+        centre = ((X_MIN + X_MAX) / 2, (Y_MIN + Y_MAX) / 2)
+        assert math.hypot(*centre) > 100.0
 
     def test_preset_zones_start_inside_the_roam_box(self):
         for key, zone in PRESET_ZONES.items():

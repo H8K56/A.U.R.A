@@ -198,8 +198,8 @@ class DeadZonePublisher(Node):
         zone = DeadZone(
             zone_id=self.next_zone_id,
             name=f'Dynamic Zone {self.next_zone_id}',
-            center_x=np.random.uniform(-120, 120),
-            center_y=np.random.uniform(-120, 120),
+            center_x=125.0 + np.random.uniform(-70, 70),
+            center_y=-164.0 + np.random.uniform(-70, 70),
             radius_m=np.random.uniform(15, 45),
             attenuation_db=np.random.uniform(8, 25),
             is_moving=self.zones_moving,

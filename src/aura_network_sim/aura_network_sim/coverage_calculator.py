@@ -40,6 +40,45 @@ class CoverageResult:
     max_signal_dbm: float
 
 
+@dataclass
+class CoverageReliability:
+    """Coverage measured over many shadowing realizations.
+
+    A single run against a random channel is one draw, and its coverage
+    percentage is a sample, not a property of the swarm. This aggregates
+    `realizations` draws into the two numbers that mean different things:
+
+    - `mean_coverage_percent`: the expected fraction of locations covered.
+      Shadowing tends to *raise* this relative to the deterministic median
+      channel, because a ground user attaches to the best drone and the
+      maximum over partly-independent fades is biased upward. That is a real
+      macro-diversity gain, and quoting it alone makes a disaster relay look
+      better than it is.
+    - `reliable_coverage_percent`: the fraction of locations covered in at
+      least `reliability` of realizations. This is what a responder standing
+      on a given street cares about, and shadowing lowers it sharply.
+
+    `marginal_percent` is the area that is sometimes covered and sometimes
+    not. The deterministic model reports a crisp coverage boundary; this is
+    how much of the map that boundary was hiding.
+    """
+
+    realizations: int
+    reliability: float
+    #: Per-cell probability of being covered, shape (grid_size_y, grid_size_x).
+    coverage_probability: np.ndarray
+    mean_coverage_percent: float
+    reliable_coverage_percent: float
+    marginal_percent: float
+    #: Coverage percentage of each individual realization.
+    per_realization_percent: np.ndarray
+
+    @property
+    def spread_percent(self) -> float:
+        """Standard deviation across realizations, in percentage points."""
+        return float(np.std(self.per_realization_percent))
+
+
 class CoverageCalculator:
     """
     Calculates ground coverage from drone positions.
@@ -52,16 +91,23 @@ class CoverageCalculator:
                  config: Optional[RadioConfig] = None,
                  area_bounds: Tuple[float, float, float, float] = (-100, -100, 100, 100),
                  resolution_m: float = 10.0,
-                 ground_height: float = 0.0):
+                 ground_height: float = 0.0,
+                 seed: Optional[int] = None):
         """
         Args:
             config: Radio configuration (defaults to D2G_CONFIG)
             area_bounds: (x_min, y_min, x_max, y_max) in meters
             resolution_m: Grid cell size in meters
             ground_height: Height of ground users (meters)
+            seed: Seeds the shadowing realization; None draws a fresh one
         """
         self.config = config or D2G_CONFIG
-        self.propagation = PropagationModel(self.config)
+        # The grid bounds are also the shadowing bounds. Without them the
+        # model falls back to one cached draw per (drone, ground) pair, which
+        # is identical for every cell — a per-drone RSSI offset, not
+        # shadowing. See PropagationModel's docstring.
+        self.propagation = PropagationModel(self.config, seed=seed,
+                                            shadow_bounds=area_bounds)
         
         self.bounds = area_bounds
         self.resolution = resolution_m
@@ -108,11 +154,15 @@ class CoverageCalculator:
                 for drone_id, drone in drones.items():
                     distance = np.linalg.norm(ground_pos - drone.position)
                     
-                    # Compute RSSI using D2G propagation
+                    # Compute RSSI using D2G propagation. tx_id + rx_xy
+                    # select this drone's shadowing field at this cell, so
+                    # shadowing varies across the ground instead of offsetting
+                    # the whole footprint by one cached value.
                     rssi = self.propagation.compute_rssi(
-                        distance, 
-                        link_id=(drone_id, -1),  # -1 for ground user
-                        tx_power_dbm=drone.tx_power_dbm
+                        distance,
+                        tx_power_dbm=drone.tx_power_dbm,
+                        tx_id=drone_id,
+                        rx_xy=(x, y),
                     )
                     
                     # Apply dead zone signal attenuation
@@ -140,6 +190,52 @@ class CoverageCalculator:
         
         return self._build_result(signal_map, throughput_map, serving_map)
     
+    def compute_coverage_reliability(self,
+                                     drones: Dict[int, DroneNetworkState],
+                                     dead_zones: list = None,
+                                     realizations: int = 100,
+                                     reliability: float = 0.9,
+                                     seed: int = 0) -> CoverageReliability:
+        """Coverage over repeated shadowing draws, for the same drone positions.
+
+        Reports expected coverage and coverage at a reliability target; see
+        CoverageReliability for why both are needed. With shadowing disabled
+        every realization is identical and the two numbers coincide, which is
+        the honest answer for a deterministic channel rather than an error.
+        """
+        if realizations < 1:
+            raise ValueError(f'realizations must be >= 1, got {realizations}')
+        if not 0.0 < reliability <= 1.0:
+            raise ValueError(f'reliability must be in (0, 1], got {reliability}')
+
+        masks = np.empty((realizations, self.grid_size_y, self.grid_size_x),
+                         dtype=bool)
+        per_realization = np.empty(realizations, dtype=float)
+
+        for i in range(realizations):
+            # Reseed rather than reuse: a fresh realization per draw is the
+            # point, and seeding from (seed, i) keeps the set reproducible.
+            self.propagation.regenerate_shadowing(seed=seed + i)
+            result = self.compute_coverage(drones, dead_zones)
+            masks[i] = result.coverage_mask
+            per_realization[i] = result.coverage_percent
+
+        probability = masks.mean(axis=0)
+        cells = probability.size
+
+        return CoverageReliability(
+            realizations=realizations,
+            reliability=reliability,
+            coverage_probability=probability,
+            mean_coverage_percent=float(100.0 * probability.mean()),
+            reliable_coverage_percent=float(
+                100.0 * np.count_nonzero(probability >= reliability) / cells),
+            marginal_percent=float(
+                100.0 * np.count_nonzero((probability > 0.0)
+                                         & (probability < 1.0)) / cells),
+            per_realization_percent=per_realization,
+        )
+
     def _build_result(self, signal_map: np.ndarray, 
                       throughput_map: np.ndarray,
                       serving_map: np.ndarray) -> CoverageResult:
@@ -195,7 +291,8 @@ class CoverageCalculator:
         
         for drone_id, drone in drones.items():
             distance = np.linalg.norm(ground_pos - drone.position)
-            rssi = self.propagation.compute_rssi(distance, (drone_id, -1))
+            rssi = self.propagation.compute_rssi(
+                distance, tx_id=drone_id, rx_xy=(x, y))
             
             if rssi > best_rssi:
                 best_rssi = rssi

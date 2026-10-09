@@ -30,6 +30,13 @@ except ImportError:
     class gym:  # type: ignore[no-redef]
         Env = _StubEnv
 
+try:
+    from aura_network_sim.propagation import CorrelatedShadowing
+    SHADOWING_AVAILABLE = True
+except ImportError:  # pragma: no cover - depends on the workspace overlay
+    CorrelatedShadowing = None
+    SHADOWING_AVAILABLE = False
+
 from .spaces import ObservationConfig, ActionConfig, ObservationBuilder, ActionProcessor
 from .rewards import RewardConfig, RewardCalculator
 
@@ -67,6 +74,25 @@ class EnvConfig:
     reference_loss_db: float = 46.7  # Free-space loss at 1m for 2.4 GHz
     coverage_threshold_dbm: float = -80.0
     max_mesh_distance: float = 150.0
+
+    # Log-normal shadowing (roadmap §8).
+    #
+    # Off by default, and that default is load-bearing: the published
+    # checkpoint was trained on the deterministic median channel, so enabling
+    # this changes both the reported coverage and the policy that training
+    # produces. Turn it on deliberately and say so alongside the numbers.
+    #
+    # A fresh realization is drawn every episode, which makes the channel a
+    # domain-randomization axis rather than one map the policy can memorize.
+    shadowing_enabled: bool = False
+    shadow_sigma_db: float = 4.0
+    shadow_correlation_distance_m: float = 25.0
+    # Correlation between two drones' shadowing to the same ground point.
+    # This decides the sign of the effect: coverage takes the best server, so
+    # independent paths (0.0) hand the swarm a diversity gain and *raise*
+    # coverage, while fully shared shadowing (1.0) lowers it. 0.5 is the
+    # 3GPP inter-site value.
+    shadow_inter_link_correlation: float = 0.5
 
     # Randomization
     randomize_initial_positions: bool = True
@@ -129,6 +155,22 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         # reproducible.
         self.np_random = np.random.default_rng(seed)
         self._seed = seed
+
+        if self.config.shadowing_enabled and not SHADOWING_AVAILABLE:
+            raise ImportError(
+                'shadowing_enabled=True needs aura_network_sim.propagation, '
+                'which is not importable. Source the workspace overlay '
+                '(install/setup.bash) or set shadowing_enabled=False. '
+                'Silently training on a different channel than the one asked '
+                'for is worse than failing here.')
+
+        # Per-drone shadowing, precomputed over the coverage grid once per
+        # episode. The ground grid is fixed and so is the field, so the
+        # offset at each cell does not change within an episode — sampling it
+        # per cell per step would cost ~8k interpolations per step for
+        # nothing.
+        self._shadowing: Any = None
+        self._shadow_grids: List[np.ndarray] = []
 
         # Create configs
         self.obs_config = ObservationConfig(num_drones=self.config.num_drones)
@@ -237,6 +279,12 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
             self.drones.append(DroneState(drone_id=i, position=pos))
 
+        # Shadowing realization for this episode. Only draw from np_random
+        # when shadowing is on: consuming the stream unconditionally would
+        # shift the initial positions and weather, and the frozen baseline
+        # would stop reproducing.
+        self._reset_shadowing()
+
         # Weather zones
         self.weather_zones = []
         if self.config.randomize_weather and self.np_random.random() < self.config.weather_probability:
@@ -329,6 +377,51 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         return obs, reward, terminated, truncated, info
 
+    # ── Shadowing ───────────────────────────────────────────────
+
+    def _reset_shadowing(self) -> None:
+        """Draw this episode's shadowing and bake it onto the coverage grid."""
+        if not self.config.shadowing_enabled or self.config.shadow_sigma_db <= 0.0:
+            self._shadowing = None
+            self._shadow_grids = []
+            return
+
+        half = self.config.area_size
+        res = self.config.grid_resolution
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
+        bounds = (wx - half, wy - half, wx + half, wy + half)
+
+        # Cell centres, matching _update_network's indexing exactly.
+        idx = np.arange(self.grid_size)
+        cell_x = wx - half + (idx + 0.5) * res
+        cell_y = wy - half + (idx + 0.5) * res
+        grid_x, grid_y = np.meshgrid(cell_x, cell_y)  # (gy, gx)
+
+        # One realization per drone, from a sub-seed of this episode's stream
+        # so the whole run stays reproducible from the env seed.
+        episode_seed = int(self.np_random.integers(0, 2 ** 31 - 1))
+
+        self._shadowing = CorrelatedShadowing(
+            sigma_db=self.config.shadow_sigma_db,
+            correlation_distance_m=self.config.shadow_correlation_distance_m,
+            bounds=bounds,
+            inter_link_correlation=self.config.shadow_inter_link_correlation,
+            seed=episode_seed,
+        )
+        self._shadow_grids = [
+            np.asarray(self._shadowing.sample(drone_id, grid_x, grid_y),
+                       dtype=np.float32)
+            for drone_id in range(self.config.num_drones)
+        ]
+
+    def _link_shadow_db(self, tx_id: int, position: np.ndarray) -> float:
+        """Shadowing on a drone-to-drone link, sampled at the far end."""
+        if self._shadowing is None:
+            return 0.0
+        return self._shadowing.sample(
+            tx_id, float(position[0]), float(position[1]))
+
     # ── Network simulation ──────────────────────────────────────
 
     def _update_network(self):
@@ -345,6 +438,9 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
             if drone.is_failed:
                 drone.neighbors = []
                 continue
+
+            shadow = (self._shadow_grids[drone.drone_id]
+                      if self._shadow_grids else None)
 
             # Compute signal at each grid cell (grid is centered on disaster zone)
             for gy in range(self.grid_size):
@@ -374,6 +470,11 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
                             )
                             if wdist < wz.radius:
                                 path_loss += wz.attenuation_db
+
+                    # Log-normal shadowing, spatially correlated across the
+                    # grid and fixed for the episode.
+                    if shadow is not None:
+                        path_loss += float(shadow[gy, gx])
 
                     signal = self.config.tx_power_dbm - path_loss
 
@@ -413,6 +514,8 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
                     pl = (self.config.reference_loss_db +
                           10 * self.config.path_loss_exponent *
                           math.log10(d / self.config.reference_distance_m))
+                    pl += self._link_shadow_db(
+                        drone.drone_id, self.drones[nid].position)
                     signals.append(self.config.tx_power_dbm - pl)
                 drone.signal_strength_dbm = max(signals)
                 # Simplified throughput model (Shannon-ish)

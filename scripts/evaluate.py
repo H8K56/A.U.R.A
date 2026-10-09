@@ -380,8 +380,21 @@ def write_run_config(args, env: SwarmGymEnv, out_dir: str) -> str:
         'obs_dim': env.obs_config.total_obs_dim,
         'action_dim': env.action_config.action_dim,
         'metric_notes': {
-            'snr_db': 'SNR, not SINR: the propagation model has no '
-                      'interference term (roadmap §8).',
+            'snr_db': 'SNR, not SINR: the propagation model has log-normal '
+                      'shadowing but still no interference term, so this is '
+                      'not SINR (roadmap §8, partially done).',
+            'coverage_mean_pct': 'Importance-weighted coverage from the gym '
+                                 'env, against coverage_threshold_dbm. With '
+                                 'shadowing on this is the *expected* '
+                                 'fraction of locations covered, averaged '
+                                 'over realizations; it runs higher than the '
+                                 'deterministic channel because a ground '
+                                 'user attaches to the best drone and the '
+                                 'maximum over partly-independent fades is '
+                                 'biased upward. The fraction covered '
+                                 '*reliably* is lower, not higher — see '
+                                 'CoverageCalculator.compute_coverage_'
+                                 'reliability.',
             'energy_used_pct': 'Mean battery percentage consumed over the '
                                'episode; the battery model is optimistic '
                                '(roadmap §9).',
@@ -615,7 +628,20 @@ def evaluate(args) -> Dict:
         randomize_initial_positions=True,
         randomize_weather=args.weather,
         weather_probability=0.5 if args.weather else 0.0,
+        shadowing_enabled=args.shadowing,
+        shadow_sigma_db=args.shadow_sigma,
+        shadow_correlation_distance_m=args.shadow_correlation_distance,
+        shadow_inter_link_correlation=args.shadow_inter_link_correlation,
     )
+
+    if args.shadowing:
+        print(f"  log-normal shadowing: sigma={args.shadow_sigma:.1f} dB, "
+              f"correlation distance {args.shadow_correlation_distance:.0f} m, "
+              f"inter-link rho={args.shadow_inter_link_correlation:.2f}")
+        print("  NOTE: the published checkpoint was trained on the "
+              "deterministic median channel.")
+    else:
+        print("  log-normal shadowing: off (deterministic median channel)")
 
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -685,6 +711,26 @@ def parse_args(argv=None):
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--num-drones', type=int, default=5)
     parser.add_argument('--max-steps', type=int, default=300)
+    parser.add_argument('--shadowing', action='store_true',
+                        help='enable spatially correlated log-normal '
+                             'shadowing (roadmap §8). Off by default: the '
+                             'published checkpoint was trained without it, '
+                             'so enabling it changes every coverage figure.')
+    parser.add_argument('--shadow-sigma', type=float, default=4.0,
+                        help='shadowing standard deviation in dB (2-4 '
+                             'air-to-air, 4-8 suburban air-to-ground, 8-12 '
+                             'dense urban)')
+    parser.add_argument('--shadow-correlation-distance', type=float,
+                        default=25.0,
+                        help='distance in metres over which shadowing decays '
+                             'to 1/e')
+    parser.add_argument('--shadow-inter-link-correlation', type=float,
+                        default=0.5,
+                        help='correlation between two drones shadowing to the '
+                             'same ground point (3GPP inter-site value is '
+                             '0.5). Decides the sign of the effect: 0 gives '
+                             'the swarm a macro-diversity gain that raises '
+                             'mean coverage, 1 removes it.')
     parser.add_argument('--weather', action='store_true',
                         help='Enable weather randomization')
     parser.add_argument('--policy-path', type=str, default=None,

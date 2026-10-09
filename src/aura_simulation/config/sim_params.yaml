@@ -37,6 +37,13 @@
     path_loss_exponent: 2.7
     coverage_threshold_dbm: -80.0
     max_mesh_distance_m: 150.0
+    # Log-normal shadowing (roadmap §8). sigma in dB; see
+    # network_sim_params.yaml for the ranges these values come from.
+    signal_noise_std_db: 4.0
+    shadow_correlation_distance_m: 25.0
+    shadow_inter_link_correlation: 0.5
+    shadowing_enabled: true
+    random_seed: 42
 
     # ── Dead Zones ────────────────────────────────
     num_preset_zones: 0           # How many preset zones to load

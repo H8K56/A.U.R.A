@@ -34,6 +34,10 @@ python3 scripts/integration_smoke_test.py
 python3 scripts/evaluate.py --policies rl,baseline --episodes 10
 python3 scripts/evaluate.py --policies rl --fault-step 100 --fault-drone 2
 
+# With log-normal shadowing (roadmap §8). Off by default — the published
+# checkpoint was trained on the deterministic median channel.
+python3 scripts/evaluate.py --policies rl,baseline --episodes 10 --shadowing
+
 # Train the RL policy (always pass an explicit --seed for anything reportable)
 python3 -m aura_strategic_rl.train_policy --seed 42
 ```
@@ -79,7 +83,10 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   They also measure different areas: the ROS grid is a fixed 400 m box around
   the origin, the gym grid is centred on the disaster zone. For the same swarm
   the ROS path reports ~95% and the gym env ~20%. Always say which one a
-  number came from — they are not comparable.
+  number came from — they are not comparable. With shadowing on there is a
+  third distinction on top of those two: *mean* coverage (expected fraction of
+  locations) and *reliable* coverage (fraction covered in >=90% of
+  realizations) move in **opposite** directions. See the shadowing entry below.
 - **Coverage threshold is now explicit, and it matters.**
   `coverage_threshold_dbm` (-80 dBm in `sim_params.yaml`) is passed through to
   the radio model; leave it unset (NaN) to fall back to the physically derived
@@ -101,7 +108,37 @@ python3 -m aura_strategic_rl.train_policy --seed 42
   requires a *confirmed* mesh rather than an unknown one, and the abort reason
   names telemetry loss instead of blaming the mesh.
 - **Battery model** (~0.5%/min) is optimistic vs real 15-25 min flight.
-- **Propagation** omits shadowing/fading/interference, so coverage is optimistic (add a log-normal shadowing term).
+- **Shadowing is on, and it does not do what you would guess.** The
+  propagation model has spatially correlated log-normal shadowing
+  (`ShadowingField`, Gudmundson exponential correlation; `CorrelatedShadowing`
+  adds the shared component). It still omits multipath/fading and
+  interference, so SNR is not SINR.
+  - It *raises* mean coverage — about +4 pp in the gym env, +13 pp on the ROS
+    path. That is not a bug: a ground user attaches to the best drone, and the
+    maximum over partly-independent fades is biased upward. It is a real
+    macro-diversity gain.
+  - What it lowers is **reliable** coverage. At sigma=5 dB the ROS path reports
+    78% mean but only **44% covered in 90% of realizations** (65.6% on the
+    deterministic channel), and 82% of the area becomes
+    sometimes-covered-sometimes-not. Use
+    `CoverageCalculator.compute_coverage_reliability()` and quote the
+    reliability target; mean coverage alone flatters the system.
+  - `shadow_inter_link_correlation` decides the sign. At rho=1 shadowing
+    belongs to the ground point, there is no diversity to gain, and the effect
+    on mean coverage is ~0 pp. At rho=0 it is +22 pp. The default 0.5 is the
+    3GPP inter-site value.
+  - `compute_max_range()` is the **median** range. At sigma=5 dB the D2G range
+    is 158 m median but **97 m at 10% outage** — pass
+    `compute_max_range(0.1)` rather than quoting the median as "the range".
+  - **Shadowing is off by default in the gym env**
+    (`EnvConfig.shadowing_enabled`) because the published checkpoint was
+    trained on the deterministic median channel. It is **on** in
+    `sim_params.yaml` and `network_sim_params.yaml` (sigma=4 dB, +1 dB for
+    D2G). Say which one a number was measured at.
+  - Enabling it multiplies episode-to-episode coverage spread by about 12x
+    (±0.2 pp to ±2.5 pp over 6 episodes). It does **not** change the
+    RL-vs-baseline ordering on coverage or connectivity, which is the useful
+    robustness result.
 - `src/aura_localization` is an empty directory — no package, nothing references it.
 - `etc` and `test_data` are tracked symlinks to absolute `/home/aura/PX4-Autopilot/...` paths; they resolve only inside the container.
 
@@ -118,7 +155,9 @@ python3 -m aura_strategic_rl.train_policy --seed 42
 0. **FOUNDATION FIRST.** (a) Freeze & tag the CAMAD baseline + pin the environment — **done**: tag `camad-2026-baseline`, `docker/versions.env`, `docker/requirements*.txt`. (b) On a branch: Gazebo Classic->Harmonic, ROS 2 Humble->Jazzy, PX4 align, RL stack refresh. Re-run eval before merging.
 1. **Repo hygiene** — **done**.
 2. **Reproducibility pass** — **done**. **Standardized eval script** — **done**: `scripts/evaluate.py` reports coverage, SNR (not SINR — no interference term yet), throughput, connectivity, energy and fault recovery, with plots. **Integration smoke test (A.1)** — **done**: `scripts/integration_smoke_test.py`.
-3. **Log-normal shadowing add-on** to the propagation model.
+3. **Log-normal shadowing add-on** — **done**: spatially correlated field with
+   a configurable inter-link correlation, plus reliability-aware coverage.
+   Interference/SINR is still open, so §8 is only partly closed.
 4. **alpha_m coverage<->connectivity Pareto sweep.**
 5. **Resilient multi-hop routing** — redundant/disjoint paths + k-connectivity; fold path-redundancy into the reward.
 6. **Energy-efficiency term** in the reward — coverage-per-joule.

@@ -103,6 +103,15 @@ jobs:
           test -f "$RUNNER_TEMP/eval-ci/summary.csv"
           test -f "$RUNNER_TEMP/eval-ci/run_config.json"
           test -f "$RUNNER_TEMP/eval-ci/results.json"
+          # Same again with log-normal shadowing (roadmap §8). It is off by
+          # default, so without this the shadowed path never runs in CI.
+          python3 src/aura/scripts/evaluate.py \
+            --policies static,random --episodes 2 --max-steps 40 \
+            --shadowing --shadow-sigma 6 \
+            --no-plots --output-dir "$RUNNER_TEMP/eval-ci-shadow"
+          test -f "$RUNNER_TEMP/eval-ci-shadow/summary.csv"
+          grep -q '"shadowing_enabled": true' \
+            "$RUNNER_TEMP/eval-ci-shadow/run_config.json"
 
       - name: Integration smoke test
         shell: bash

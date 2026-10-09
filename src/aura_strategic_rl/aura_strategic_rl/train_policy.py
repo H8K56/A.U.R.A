@@ -39,6 +39,7 @@ import torch.optim as optim
 from .swarm_gym_env import SwarmGymEnv, EnvConfig
 from .policy import MLPPolicy, PolicyCheckpoint
 from .spaces import ObservationConfig, ActionConfig
+from .value_norm import ValueNormalizer
 
 
 
@@ -220,6 +221,7 @@ class PPOTrainer:
                  shadow_sigma_db: float = 4.0,
                  coverage_weight: float = None,
                  connectivity_weight: float = None,
+                 normalize_value_targets: bool = True,
                  device: str = 'cpu',
                  seed: int = None):
 
@@ -232,6 +234,9 @@ class PPOTrainer:
         self.clip_range = clip_range
         self.ent_coef = ent_coef
         self.vf_coef = vf_coef
+        # Keeps the critic's targets O(1) so vf_coef does not secretly depend
+        # on the reward scale. See value_norm for what went wrong without it.
+        self.value_normalizer = ValueNormalizer(enabled=normalize_value_targets)
         self.max_grad_norm = max_grad_norm
         self.device = device
         self.seed = seed
@@ -332,7 +337,9 @@ class PPOTrainer:
                     action, log_prob, value = self.policy.get_action(obs_t)
                     action = action.squeeze(0).cpu().numpy()
                     log_prob = log_prob.item()
-                    value = value.item()
+                    # The critic predicts in normalized units; GAE needs
+                    # reward units.
+                    value = self.value_normalizer.denormalize(value.item())
 
                 # Step environment
                 next_obs, reward, terminated, truncated, info = env.step(action)
@@ -365,7 +372,8 @@ class PPOTrainer:
             with torch.no_grad():
                 last_obs_t = torch.FloatTensor(
                     self._current_obs[i]).unsqueeze(0).to(self.device)
-                last_value = self.policy.get_value(last_obs_t).item()
+                last_value = self.value_normalizer.denormalize(
+                    self.policy.get_value(last_obs_t).item())
 
             advantages, returns = self.buffers[i].compute_returns(
                 last_value, self.gamma, self.gae_lambda)
@@ -388,6 +396,15 @@ class PPOTrainer:
             (self._rollout_advantages - self._rollout_advantages.mean()) /
             (self._rollout_advantages.std() + 1e-8)
         )
+
+        # Value targets. Fold this rollout into the running scale first, so
+        # the targets are normalized by an estimate that has seen them —
+        # otherwise the very first update, which is the one that used to
+        # destroy the policy, is normalized by the initial guess of 1.0.
+        # Returns themselves stay in reward units for logging and for GAE.
+        self.value_normalizer.update(self._rollout_returns)
+        self._rollout_value_targets = self.value_normalizer.normalize(
+            self._rollout_returns)
 
         self.episode_rewards.extend(ep_rewards)
         self.episode_coverages.extend(ep_coverages)
@@ -431,7 +448,7 @@ class PPOTrainer:
                 advantages_b = torch.FloatTensor(
                     self._rollout_advantages[batch_idx]).to(self.device)
                 returns_b = torch.FloatTensor(
-                    self._rollout_returns[batch_idx]).to(self.device)
+                    self._rollout_value_targets[batch_idx]).to(self.device)
 
                 # Evaluate actions under current policy
                 log_probs, entropy, values = self.policy.evaluate_actions(
@@ -518,6 +535,12 @@ class PPOTrainer:
             'num_drones': self.envs[0].config.num_drones,
             'obs_dim': self.obs_dim,
             'action_dim': self.action_dim,
+            # The critic predicts in normalized units, so its scale has to
+            # travel with the weights. Without this, resumed training would
+            # read the value head against the wrong scale and a checkpoint
+            # would not describe its own critic. Inference never touches the
+            # value head, so this does not affect deployment.
+            'value_normalizer': self.value_normalizer.state_dict(),
             **(metadata or {}),
         }
         PolicyCheckpoint.save(self.policy, path, metadata=meta)
@@ -542,6 +565,7 @@ def train(args):
           f"(importance map)")
     print(f"  Weights:    coverage={args.coverage_weight or 'default'} "
           f"alpha_m={args.connectivity_weight or 'default'}")
+    print(f"  Value norm: {args.normalize_value} (vf_coef={args.vf_coef})")
     print(f"  Seed:       {args.seed}{' (deterministic)' if args.deterministic else ''}")
     print(f"  Device:     {device.upper()}")
     print(f"  Save path:  {args.save_path}")
@@ -562,6 +586,7 @@ def train(args):
         coverage_weight=args.coverage_weight,
         connectivity_weight=args.connectivity_weight,
         vf_coef=args.vf_coef,
+        normalize_value_targets=args.normalize_value,
         device=device,
         seed=args.seed,
     )
@@ -687,12 +712,18 @@ def main():
     parser.add_argument("--shadow-sigma", type=float, default=4.0,
                         help="Shadowing standard deviation in dB")
     parser.add_argument("--vf-coef", type=float, default=0.5,
-                        help="Value loss coefficient. The actor and critic "
-                             "share a feature trunk and the value head trains "
-                             "on raw (unnormalized) returns, so when returns "
-                             "are large the value gradient dominates the "
-                             "shared trunk after global grad-norm clipping "
-                             "and the policy collapses.")
+                        help="Value loss coefficient. Meaningful again now "
+                             "that value targets are normalized; before that "
+                             "it secretly depended on the reward scale.")
+    parser.add_argument("--no-value-normalization", dest="normalize_value",
+                        action="store_false",
+                        help="Train the critic on raw returns, as runs before "
+                             "this change did. The actor and critic share a "
+                             "feature trunk and the gradient norm is clipped "
+                             "globally, so with large returns the value "
+                             "gradient takes most of the update and the "
+                             "policy collapses. For comparison only.")
+    parser.set_defaults(normalize_value=True)
     parser.add_argument("--coverage-weight", type=float, default=None,
                         help="Reward weight on coverage (default 2.0)")
     parser.add_argument("--connectivity-weight", type=float, default=None,

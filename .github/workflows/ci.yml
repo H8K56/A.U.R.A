@@ -89,6 +89,41 @@ jobs:
             --pytest-args -q \
             --event-handlers console_direct+
 
+      - name: Evaluation script smoke run
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          source install/setup.bash
+          # Tiny run: this proves scripts/evaluate.py still executes and emits
+          # its artifacts, not that the policy is any good. The real
+          # measurement runs are long and belong off CI.
+          python3 src/aura/scripts/evaluate.py \
+            --policies static,random --episodes 2 --max-steps 40 \
+            --no-plots --output-dir "$RUNNER_TEMP/eval-ci"
+          test -f "$RUNNER_TEMP/eval-ci/summary.csv"
+          test -f "$RUNNER_TEMP/eval-ci/run_config.json"
+          test -f "$RUNNER_TEMP/eval-ci/results.json"
+
+      - name: Integration smoke test
+        shell: bash
+        timeout-minutes: 8
+        run: |
+          source /opt/ros/humble/setup.bash
+          source install/setup.bash
+          # Brings up the whole headless stack and checks it runs end to end
+          # (roadmap A.1). Needs no Gazebo, no PX4 and no display.
+          python3 src/aura/scripts/integration_smoke_test.py \
+            --timeout 180 --ops-duration 40 --observe-operations 15 \
+            --log-dir "$RUNNER_TEMP/smoke"
+
+      - name: Upload smoke test launch log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-smoke-launch-log
+          path: ${{ runner.temp }}/smoke
+          if-no-files-found: ignore
+
       - name: Report results
         if: always()
         shell: bash

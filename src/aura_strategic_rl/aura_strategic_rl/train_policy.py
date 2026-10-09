@@ -216,6 +216,10 @@ class PPOTrainer:
                  vf_coef: float = 0.5,
                  max_grad_norm: float = 0.5,
                  weather: bool = False,
+                 shadowing: bool = False,
+                 shadow_sigma_db: float = 4.0,
+                 coverage_weight: float = None,
+                 connectivity_weight: float = None,
                  device: str = 'cpu',
                  seed: int = None):
 
@@ -239,6 +243,10 @@ class PPOTrainer:
             randomize_initial_positions=True,
             randomize_weather=weather,
             weather_probability=0.5 if weather else 0.0,
+            shadowing_enabled=shadowing,
+            shadow_sigma_db=shadow_sigma_db,
+            coverage_weight=coverage_weight,
+            connectivity_weight=connectivity_weight,
         )
 
         # Each env gets its own stream, offset from the run seed, so parallel
@@ -248,11 +256,19 @@ class PPOTrainer:
                         seed=None if seed is None else seed + i)
             for i in range(num_envs)
         ]
+        # The eval env keeps the same channel as training — evaluating a
+        # shadowing-trained policy on a deterministic channel would report a
+        # number no deployment ever sees. Weather stays off so eval_coverage
+        # tracks the policy rather than the weather draw.
         self.eval_env = SwarmGymEnv(config=EnvConfig(
             num_drones=num_drones,
             max_steps=500,
             randomize_initial_positions=True,
             randomize_weather=False,
+            shadowing_enabled=shadowing,
+            shadow_sigma_db=shadow_sigma_db,
+            coverage_weight=coverage_weight,
+            connectivity_weight=connectivity_weight,
         ), seed=None if seed is None else seed + num_envs)
 
         # Get dimensions
@@ -520,6 +536,12 @@ def train(args):
     print(f"  Envs:       {args.num_envs}")
     print(f"  Batch size: {args.batch_size}")
     print(f"  Weather:    {args.weather}")
+    print(f"  Shadowing:  {args.shadowing}"
+          f"{f' (sigma={args.shadow_sigma:.1f} dB)' if args.shadowing else ''}")
+    print(f"  Structures: {len(SwarmGymEnv._DISASTER_STRUCTURES)} "
+          f"(importance map)")
+    print(f"  Weights:    coverage={args.coverage_weight or 'default'} "
+          f"alpha_m={args.connectivity_weight or 'default'}")
     print(f"  Seed:       {args.seed}{' (deterministic)' if args.deterministic else ''}")
     print(f"  Device:     {device.upper()}")
     print(f"  Save path:  {args.save_path}")
@@ -535,6 +557,11 @@ def train(args):
         lr=args.lr,
         ent_coef=args.ent_coef,
         weather=args.weather,
+        shadowing=args.shadowing,
+        shadow_sigma_db=args.shadow_sigma,
+        coverage_weight=args.coverage_weight,
+        connectivity_weight=args.connectivity_weight,
+        vf_coef=args.vf_coef,
         device=device,
         seed=args.seed,
     )
@@ -652,6 +679,28 @@ def main():
                         help="Entropy coefficient")
     parser.add_argument("--weather", action="store_true",
                         help="Enable weather randomization")
+    parser.add_argument("--shadowing", action="store_true",
+                        help="Train against spatially correlated log-normal "
+                             "shadowing (roadmap §8). The deployed stack has "
+                             "it on, so a policy trained without it is "
+                             "trained on a channel that does not exist.")
+    parser.add_argument("--shadow-sigma", type=float, default=4.0,
+                        help="Shadowing standard deviation in dB")
+    parser.add_argument("--vf-coef", type=float, default=0.5,
+                        help="Value loss coefficient. The actor and critic "
+                             "share a feature trunk and the value head trains "
+                             "on raw (unnormalized) returns, so when returns "
+                             "are large the value gradient dominates the "
+                             "shared trunk after global grad-norm clipping "
+                             "and the policy collapses.")
+    parser.add_argument("--coverage-weight", type=float, default=None,
+                        help="Reward weight on coverage (default 2.0)")
+    parser.add_argument("--connectivity-weight", type=float, default=None,
+                        help="alpha_m, the reward weight on mesh connectivity "
+                             "(default 3.0). Connectivity dominates at the "
+                             "default, which is why the trained policy holds "
+                             "a tight cluster and trades coverage away. Sweep "
+                             "this for the Pareto front (roadmap §10).")
     parser.add_argument("--device", choices=["auto", "cpu", "cuda"],
                         default="auto",
                         help="Compute device; auto falls back to CPU if the GPU is unsupported")

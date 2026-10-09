@@ -27,6 +27,13 @@ colcon build && source install/setup.bash
 # Tests
 colcon test --ctest-args -LE linter && colcon test-result --all
 
+# End-to-end integration smoke test (roadmap A.1) — no Gazebo/PX4 needed
+python3 scripts/integration_smoke_test.py
+
+# Standardized evaluation + plots (roadmap §12)
+python3 scripts/evaluate.py --policies rl,baseline --episodes 10
+python3 scripts/evaluate.py --policies rl --fault-step 100 --fault-drone 2
+
 # Train the RL policy (always pass an explicit --seed for anything reportable)
 python3 -m aura_strategic_rl.train_policy --seed 42
 ```
@@ -65,7 +72,27 @@ python3 -m aura_strategic_rl.train_policy --seed 42
 - **Do it on a branch, keep `camad-2026-baseline` intact**, re-run the tests + eval script, and confirm results still match before merging.
 
 ## Known-fragile / gotchas
-- **End-to-end wiring is still unverified** — packages compile and unit tests pass, but there is no integration smoke test (roadmap A.1). This is the largest open gap.
+- **"Coverage" means two different things.** The ROS pipeline
+  (`coverage_calculator.py`) reports the *unweighted* fraction of grid cells
+  above `rx_sensitivity_dbm`; the gym env reports *importance-weighted*
+  coverage (disaster structures count 3x) against `coverage_threshold_dbm`.
+  For the same swarm the ROS path reports ~100% and the gym env ~20%. Always
+  say which one a number came from.
+- **`sim_params.yaml` silently loses parameters to the network sim.** Three
+  separate wiring faults, all latent:
+  (a) `sim_no_px4.launch.py` computes `net_config` and `mc_config` and never
+  passes them to any node, so `network_sim_params.yaml` is never loaded;
+  (b) the config says `area_min_x`/`area_max_x` but `network_sim_node`
+  declares `area_x_min`/`area_x_max` — transposed, so the bounds fall back to
+  node defaults (which happen to match, hiding it);
+  (c) `coverage_threshold_dbm` is read by nothing in the ROS path — effective
+  sensitivity is `noise_floor_dbm + min_snr_db` (-90 dBm), giving a ~215 m
+  radius per drone over a 400 m box, which is why coverage reads ~100%.
+- **`SwarmState.coverage_percent` is never populated.** `sim_swarm_driver`
+  publishes a hardcoded `0.0` ("network_sim will compute this") and nothing
+  writes it back, while `mission_control_node` falls back to exactly that
+  field when `/network/metrics` is missing — so a lost network node reads as
+  0% coverage rather than as unknown, and trips the below-target alert.
 - **Battery model** (~0.5%/min) is optimistic vs real 15-25 min flight.
 - **Propagation** omits shadowing/fading/interference, so coverage is optimistic (add a log-normal shadowing term).
 - `src/aura_localization` is an empty directory — no package, nothing references it.
@@ -83,7 +110,7 @@ python3 -m aura_strategic_rl.train_policy --seed 42
 ## Task backlog — first sprint (see AURA_Roadmap_and_Gaps.md)
 0. **FOUNDATION FIRST.** (a) Freeze & tag the CAMAD baseline + pin the environment — **done**: tag `camad-2026-baseline`, `docker/versions.env`, `docker/requirements*.txt`. (b) On a branch: Gazebo Classic->Harmonic, ROS 2 Humble->Jazzy, PX4 align, RL stack refresh. Re-run eval before merging.
 1. **Repo hygiene** — **done**.
-2. **Reproducibility pass** — **done** — + **standardized eval script** (coverage, SINR, throughput, connectivity, energy, fault-recovery time -> plots).
+2. **Reproducibility pass** — **done**. **Standardized eval script** — **done**: `scripts/evaluate.py` reports coverage, SNR (not SINR — no interference term yet), throughput, connectivity, energy and fault recovery, with plots. **Integration smoke test (A.1)** — **done**: `scripts/integration_smoke_test.py`.
 3. **Log-normal shadowing add-on** to the propagation model.
 4. **alpha_m coverage<->connectivity Pareto sweep.**
 5. **Resilient multi-hop routing** — redundant/disjoint paths + k-connectivity; fold path-redundancy into the reward.

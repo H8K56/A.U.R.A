@@ -137,6 +137,39 @@ The recommended workflow uses **Zed editor on the host** with file sync to the c
 3. Build inside the container: `cd ~/ws && colcon build --packages-select <package>`
 4. Run inside the container: `ros2 launch aura_simulation gazebo_swarm.launch.py`
 
+### Testing and Evaluation
+
+```bash
+# Unit tests (style linters are reported separately, see CI)
+colcon test --ctest-args -LE linter && colcon test-result --all
+
+# End-to-end integration smoke test — brings up the whole headless stack,
+# checks the pipeline runs start to finish, and verifies the safety boundary
+# that the RL policy only commands the swarm during OPERATIONS.
+# Needs no Gazebo, no PX4 and no display.
+python3 scripts/integration_smoke_test.py
+
+# Standardized evaluation with plots: coverage, SNR, throughput,
+# connectivity, energy and fault-recovery time, over seeded episodes.
+python3 scripts/evaluate.py --policies rl,baseline --episodes 10
+
+# Measure resilience: fail drone 2 at step 100 and time the recovery
+python3 scripts/evaluate.py --policies rl --fault-step 100 --fault-drone 2
+```
+
+Every evaluation writes `run_config.json` beside its results, recording the
+seed, git revision, library versions and the full environment and reward
+configuration — so a reported number can be regenerated rather than trusted.
+
+Two caveats worth knowing before quoting any coverage figure:
+
+- The metric is reported as **SNR, not SINR**. The propagation model has no
+  interference term yet, so there is no interference to include.
+- The ROS pipeline and the training environment **define coverage
+  differently** — the former as the unweighted fraction of grid cells above
+  receiver sensitivity, the latter as importance-weighted coverage where
+  disaster structures count triple. They are not interchangeable.
+
 ---
 
 ## System Architecture

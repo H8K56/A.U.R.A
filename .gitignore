@@ -52,3 +52,6 @@ tensorboard/
 # Temporary files
 *.tmp
 *.bak
+
+# Evaluation output (roadmap §12) — regenerate with scripts/evaluate.py
+results/

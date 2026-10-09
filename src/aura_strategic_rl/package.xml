@@ -13,6 +13,10 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>aura_msgs</exec_depend>
+  <!-- ShadowingField: one propagation implementation, shared with the ROS
+       network sim. A second copy is how the deployed z-step silently became
+       2.5x the trained one. -->
+  <exec_depend>aura_network_sim</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

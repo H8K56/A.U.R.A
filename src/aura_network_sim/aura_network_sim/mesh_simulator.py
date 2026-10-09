@@ -43,9 +43,15 @@ class MeshSimulator:
     - Routing paths to hub
     """
     
-    def __init__(self, config: Optional[RadioConfig] = None, seed: int = 42):
+    def __init__(self, config: Optional[RadioConfig] = None, seed: int = 42,
+                 shadow_bounds: Optional[Tuple[float, float, float, float]] = None):
         self.config = config or D2D_CONFIG
-        self.propagation = PropagationModel(self.config, seed)
+        # With bounds, air-to-air shadowing decorrelates as the drones move.
+        # Without them the model keeps one cached draw per pair for its whole
+        # lifetime, so two drones that fly 300 m apart carry the shadowing of
+        # wherever they started.
+        self.propagation = PropagationModel(self.config, seed,
+                                            shadow_bounds=shadow_bounds)
         
         # Drone states
         self.drones: Dict[int, DroneNetworkState] = {}
@@ -139,9 +145,15 @@ class MeshSimulator:
                 # Compute distance
                 distance = np.linalg.norm(drone_i.position - drone_j.position)
                 
-                # Compute link metrics
+                # Compute link metrics. The link is shadowed by whatever
+                # obstructs the path, so sample the lower-numbered drone's
+                # field at the other end: symmetric in the pair, and it
+                # changes as they fly.
                 link_id = (min(id_i, id_j), max(id_i, id_j))
-                metrics = self.propagation.compute_link_metrics(distance, link_id)
+                lo, hi = link_id
+                rx = self.drones[hi].position
+                metrics = self.propagation.compute_link_metrics(
+                    distance, link_id, tx_id=lo, rx_xy=(rx[0], rx[1]))
                 
                 # Store results (symmetric)
                 self.rssi_matrix[i, j] = metrics['rssi_dbm']

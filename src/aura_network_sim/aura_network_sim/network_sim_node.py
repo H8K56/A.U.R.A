@@ -17,7 +17,7 @@ from geometry_msgs.msg import Point
 from std_msgs.msg import Header
 
 # Import our simulation modules
-from .propagation import RadioConfig, D2D_CONFIG, D2G_CONFIG
+from .propagation import RadioConfig, PropagationModel, D2D_CONFIG, D2G_CONFIG
 from .mesh_simulator import MeshSimulator, DroneNetworkState
 from .coverage_calculator import CoverageCalculator
 
@@ -56,13 +56,44 @@ class NetworkSimNode(Node):
         self.declare_parameter('max_mesh_distance_m', 150.0)
         self.declare_parameter('min_snr_db', 10.0)
         self.declare_parameter('signal_noise_std_db', 2.0)
+        # Shadowing decorrelation distance. Terrain and buildings obstruct
+        # nearby points the same way, so the shadowing term is spatially
+        # correlated; drawing it independently per grid cell models receiver
+        # noise instead and averages out of the coverage figure.
+        self.declare_parameter('shadow_correlation_distance_m', 25.0)
+        # Set False for the deterministic median channel.
+        # Correlation between two drones' shadowing to the same ground
+        # point (3GPP inter-site value). It sets the sign of the effect:
+        # independent paths give the swarm a diversity gain and raise
+        # coverage; shared shadowing lowers it.
+        self.declare_parameter('shadow_inter_link_correlation', 0.5)
+        self.declare_parameter('shadowing_enabled', True)
+        # Seeds the shadowing realization, so a run is reproducible.
+        self.declare_parameter('random_seed', 42)
+        # Coverage threshold. NaN (the default) means derive it from
+        # noise_floor_dbm + min_snr_db, which is the physically motivated
+        # value. Set it explicitly to report coverage against a specific
+        # receiver threshold instead — it used to be declared in the YAML
+        # configs and read by nothing.
+        self.declare_parameter('coverage_threshold_dbm',
+                               float('nan'))
         
         # Declare node-specific parameters
         self.declare_parameter('update_rate_hz', 10.0)
-        self.declare_parameter('area_x_min', -200.0)
-        self.declare_parameter('area_x_max', 200.0)
-        self.declare_parameter('area_y_min', -200.0)
-        self.declare_parameter('area_y_max', 200.0)
+        # Coverage grid, fitted to the disaster scene: the bounding box of
+        # the 29 damaged structures in worlds/earthquake_city.world plus a
+        # 50 m importance margin. These mirror disaster_scene.GRID_BOUNDS,
+        # which scripts/generate_disaster_scene.py derives from the world.
+        #
+        # It used to be a 400 m box on the *origin*, which held 6 of the 29
+        # structures and excluded the entire eastern cluster — the reported
+        # coverage measured mostly empty ground while most of the disaster
+        # sat outside the grid. Moving the box does not move the swarm; it
+        # changes every coverage figure this node reports.
+        self.declare_parameter('area_x_min', -170.0)
+        self.declare_parameter('area_x_max', 390.0)
+        self.declare_parameter('area_y_min', -350.0)
+        self.declare_parameter('area_y_max', 20.0)
         self.declare_parameter('grid_resolution_m', 10.0)
         self.declare_parameter('hub_drone_id', 0)
         self.declare_parameter('ground_height_m', 0.0)
@@ -76,6 +107,14 @@ class NetworkSimNode(Node):
         max_mesh_dist = self.get_parameter('max_mesh_distance_m').value
         min_snr = self.get_parameter('min_snr_db').value
         signal_noise = self.get_parameter('signal_noise_std_db').value
+        shadow_corr = self.get_parameter('shadow_correlation_distance_m').value
+        shadow_rho = self.get_parameter('shadow_inter_link_correlation').value
+        shadowing_on = self.get_parameter('shadowing_enabled').value
+        random_seed = self.get_parameter('random_seed').value
+
+        threshold = self.get_parameter('coverage_threshold_dbm').value
+        rx_sensitivity = (None if threshold is None or np.isnan(threshold)
+                          else float(threshold))
         
         # Get node-specific parameters
         update_rate = self.get_parameter('update_rate_hz').value
@@ -98,6 +137,10 @@ class NetworkSimNode(Node):
             min_snr_db=min_snr,
             signal_noise_std_db=signal_noise,
             frequency_ghz=5.8,  # D2D uses 5 GHz
+            rx_sensitivity_dbm=rx_sensitivity,
+            shadow_correlation_distance_m=shadow_corr,
+            shadow_inter_link_correlation=shadow_rho,
+            shadowing_enabled=shadowing_on,
         )
         
         d2g_config = RadioConfig.from_ros_params(
@@ -109,15 +152,51 @@ class NetworkSimNode(Node):
             min_snr_db=min_snr,
             signal_noise_std_db=signal_noise + 1.0,  # More variable
             frequency_ghz=2.4,  # D2G uses 2.4 GHz
+            rx_sensitivity_dbm=rx_sensitivity,
+            shadow_correlation_distance_m=shadow_corr,
+            shadow_inter_link_correlation=shadow_rho,
+            shadowing_enabled=shadowing_on,
         )
         
-        # Initialize simulators with configured parameters
-        self.mesh_sim = MeshSimulator(config=d2d_config)
+        if rx_sensitivity is None:
+            self.get_logger().info(
+                f'Coverage threshold derived from noise floor + min SNR: '
+                f'{noise_floor + min_snr:.1f} dBm')
+        else:
+            self.get_logger().info(
+                f'Coverage threshold set explicitly: {rx_sensitivity:.1f} dBm '
+                f'(derived value would be {noise_floor + min_snr:.1f} dBm)')
+
+        if shadowing_on and signal_noise > 0.0:
+            probe = PropagationModel(d2g_config)
+            self.get_logger().info(
+                f'Log-normal shadowing on: sigma={d2g_config.shadow_fading_std:.1f} dB '
+                f'D2G / {d2d_config.shadow_fading_std:.1f} dB D2D, '
+                f'correlation distance {shadow_corr:.0f} m, '
+                f'inter-link rho {shadow_rho:.2f}, seed {random_seed}. '
+                f'D2G range: {probe.compute_max_range():.0f} m median, '
+                f'{probe.compute_max_range(0.1):.0f} m at 10% outage')
+        else:
+            self.get_logger().info(
+                'Log-normal shadowing off — reporting the median channel')
+
+        # Initialize simulators with configured parameters. Both get the
+        # area bounds so shadowing is a map over the area rather than one
+        # cached draw per link; positions outside the bounds clamp to the
+        # edge, so a drone that strays keeps a plausible value.
+        area_bounds = (x_min, y_min, x_max, y_max)
+        self.get_logger().info(
+            f'Coverage grid: x[{x_min:.0f}, {x_max:.0f}] '
+            f'y[{y_min:.0f}, {y_max:.0f}] at {grid_res:.0f} m resolution, '
+            f'centred on ({(x_min + x_max) / 2:.0f}, {(y_min + y_max) / 2:.0f})')
+        self.mesh_sim = MeshSimulator(config=d2d_config, seed=random_seed,
+                                      shadow_bounds=area_bounds)
         self.coverage_calc = CoverageCalculator(
             config=d2g_config,
-            area_bounds=(x_min, y_min, x_max, y_max),
+            area_bounds=area_bounds,
             resolution_m=grid_res,
-            ground_height=ground_height
+            ground_height=ground_height,
+            seed=random_seed,
         )
         
         # QoS profile

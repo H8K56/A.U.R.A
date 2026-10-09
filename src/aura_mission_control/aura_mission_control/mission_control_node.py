@@ -71,6 +71,8 @@ class MissionControlNode(Node):
         # ── Latest messages ─────────────────────────────────────
         self.latest_swarm: Optional[SwarmState] = None
         self.latest_network: Optional[NetworkMetrics] = None
+        self.last_network_time: Optional[float] = None
+        self._network_stale_logged = False
         self.drone_last_seen: dict = {}  # drone_id -> timestamp
 
         # ── QoS ─────────────────────────────────────────────────
@@ -164,6 +166,10 @@ class MissionControlNode(Node):
         # Safety
         self.declare_parameter('critical_battery_percent', 20.0)
         self.declare_parameter('lost_drone_timeout_sec', 10.0)
+        # How long NetworkMetrics may go unheard before mesh and coverage are
+        # treated as unknown. network_sim publishes at 10 Hz, so this is ~30
+        # missed messages.
+        self.declare_parameter('network_timeout_sec', 3.0)
         self.declare_parameter('max_drones_lost_before_abort', 2)
 
     def _build_config(self) -> MissionConfig:
@@ -205,6 +211,7 @@ class MissionControlNode(Node):
     def _network_callback(self, msg: NetworkMetrics):
         """Process incoming network metrics"""
         self.latest_network = msg
+        self.last_network_time = self.get_clock().now().nanoseconds / 1e9
 
     # ── Main tick ───────────────────────────────────────────────
 
@@ -284,15 +291,38 @@ class MissionControlNode(Node):
             r.formation_converged = True
 
         # ── Network ─────────────────────────────────────────────
-        if self.latest_network is not None:
+        # NetworkMetrics is the only authoritative source. SwarmState also
+        # carries mesh_connected / coverage_percent / backhaul_connected
+        # fields, but every publisher (sim_swarm_driver, px4_dds_bridge) sets
+        # them to a hardcoded False/0.0 with a comment saying network_sim will
+        # fill them in, and nothing ever does. Falling back to them turned a
+        # telemetry outage into "coverage 0%, mesh down", which aborts the
+        # mission at formation timeout — a dropped topic was indistinguishable
+        # from a real mesh failure.
+        network_timeout = self.get_parameter('network_timeout_sec').value
+        network_age = (None if self.last_network_time is None
+                       else now - self.last_network_time)
+        r.network_data_valid = (self.latest_network is not None
+                                and network_age is not None
+                                and network_age <= network_timeout)
+
+        if r.network_data_valid:
             net = self.latest_network
             r.mesh_connected = net.mesh_connected
             r.coverage_percent = net.total_coverage_percent
             r.backhaul_active = net.backhaul_active
+            self._network_stale_logged = False
         else:
-            r.mesh_connected = swarm.mesh_connected
-            r.coverage_percent = swarm.coverage_percent
-            r.backhaul_active = swarm.backhaul_connected
+            # Leave mesh_connected / coverage_percent at their last known
+            # values; network_data_valid is what tells the state machine not
+            # to trust them. Logged once per outage rather than every tick.
+            if not self._network_stale_logged:
+                self._network_stale_logged = True
+                age = ('never received' if network_age is None
+                       else f'{network_age:.1f}s stale')
+                self.get_logger().warn(
+                    f'NetworkMetrics {age} (budget {network_timeout:.1f}s) — '
+                    f'mesh and coverage unknown, holding last known values')
 
         r.coverage_target = config.coverage_target
 
@@ -387,11 +417,19 @@ class MissionControlNode(Node):
             alerts.append(f"{lost} drone(s) not reporting")
             severities.append(2)
 
-        if not r.mesh_connected and self.state_machine.phase == MissionPhase.OPERATIONS:
+        if not r.network_data_valid:
+            # Report the actual problem. Previously this surfaced as
+            # "Coverage 0% below target", blaming the swarm for a dead topic.
+            alerts.append("Network telemetry unavailable — mesh and coverage unknown")
+            severities.append(2)  # critical: the mission cannot be assessed
+
+        if (r.network_data_valid and not r.mesh_connected
+                and self.state_machine.phase == MissionPhase.OPERATIONS):
             alerts.append("Mesh network disconnected")
             severities.append(1)  # warning
 
-        if (r.coverage_percent < r.coverage_target
+        if (r.network_data_valid
+                and r.coverage_percent < r.coverage_target
                 and self.state_machine.phase == MissionPhase.OPERATIONS):
             alerts.append(f"Coverage {r.coverage_percent:.0f}% below target {r.coverage_target:.0f}%")
             severities.append(0)  # info

@@ -40,6 +40,45 @@ class CoverageResult:
     max_signal_dbm: float
 
 
+@dataclass
+class CoverageReliability:
+    """Coverage measured over many shadowing realizations.
+
+    A single run against a random channel is one draw, and its coverage
+    percentage is a sample, not a property of the swarm. This aggregates
+    `realizations` draws into the two numbers that mean different things:
+
+    - `mean_coverage_percent`: the expected fraction of locations covered.
+      Shadowing tends to *raise* this relative to the deterministic median
+      channel, because a ground user attaches to the best drone and the
+      maximum over partly-independent fades is biased upward. That is a real
+      macro-diversity gain, and quoting it alone makes a disaster relay look
+      better than it is.
+    - `reliable_coverage_percent`: the fraction of locations covered in at
+      least `reliability` of realizations. This is what a responder standing
+      on a given street cares about, and shadowing lowers it sharply.
+
+    `marginal_percent` is the area that is sometimes covered and sometimes
+    not. The deterministic model reports a crisp coverage boundary; this is
+    how much of the map that boundary was hiding.
+    """
+
+    realizations: int
+    reliability: float
+    #: Per-cell probability of being covered, shape (grid_size_y, grid_size_x).
+    coverage_probability: np.ndarray
+    mean_coverage_percent: float
+    reliable_coverage_percent: float
+    marginal_percent: float
+    #: Coverage percentage of each individual realization.
+    per_realization_percent: np.ndarray
+
+    @property
+    def spread_percent(self) -> float:
+        """Standard deviation across realizations, in percentage points."""
+        return float(np.std(self.per_realization_percent))
+
+
 class CoverageCalculator:
     """
     Calculates ground coverage from drone positions.
@@ -52,16 +91,23 @@ class CoverageCalculator:
                  config: Optional[RadioConfig] = None,
                  area_bounds: Tuple[float, float, float, float] = (-100, -100, 100, 100),
                  resolution_m: float = 10.0,
-                 ground_height: float = 0.0):
+                 ground_height: float = 0.0,
+                 seed: Optional[int] = None):
         """
         Args:
             config: Radio configuration (defaults to D2G_CONFIG)
             area_bounds: (x_min, y_min, x_max, y_max) in meters
             resolution_m: Grid cell size in meters
             ground_height: Height of ground users (meters)
+            seed: Seeds the shadowing realization; None draws a fresh one
         """
         self.config = config or D2G_CONFIG
-        self.propagation = PropagationModel(self.config)
+        # The grid bounds are also the shadowing bounds. Without them the
+        # model falls back to one cached draw per (drone, ground) pair, which
+        # is identical for every cell — a per-drone RSSI offset, not
+        # shadowing. See PropagationModel's docstring.
+        self.propagation = PropagationModel(self.config, seed=seed,
+                                            shadow_bounds=area_bounds)
         
         self.bounds = area_bounds
         self.resolution = resolution_m
@@ -91,55 +137,135 @@ class CoverageCalculator:
         signal_map = np.full((self.grid_size_y, self.grid_size_x), -200.0)
         throughput_map = np.zeros((self.grid_size_y, self.grid_size_x))
         serving_map = np.full((self.grid_size_y, self.grid_size_x), -1, dtype=int)
-        
+
         if not drones:
             return self._build_result(signal_map, throughput_map, serving_map)
         
-        # Compute coverage for each grid cell
-        for iy, y in enumerate(self.grid_y):
-            for ix, x in enumerate(self.grid_x):
-                ground_pos = np.array([x, y, self.ground_height])
-                
-                best_rssi = -200.0
-                best_rate = 0.0
-                best_drone_id = -1
-                
-                # Find best serving drone
-                for drone_id, drone in drones.items():
-                    distance = np.linalg.norm(ground_pos - drone.position)
-                    
-                    # Compute RSSI using D2G propagation
-                    rssi = self.propagation.compute_rssi(
-                        distance, 
-                        link_id=(drone_id, -1),  # -1 for ground user
-                        tx_power_dbm=drone.tx_power_dbm
-                    )
-                    
-                    # Apply dead zone signal attenuation
-                    if dead_zones:
-                        for zone in dead_zones:
-                            dz_dx = x - zone['cx']
-                            dz_dy = y - zone['cy']
-                            dist_to_zone = np.sqrt(dz_dx*dz_dx + dz_dy*dz_dy)
-                            if dist_to_zone < zone['radius']:
-                                rssi -= zone['attenuation_db']
-                    
-                    if rssi > best_rssi:
-                        best_rssi = rssi
-                        best_drone_id = drone_id
-                        
-                        if rssi > self.config.rx_sensitivity_dbm:
-                            snr = self.propagation.compute_snr(rssi)
-                            best_rate = self.propagation.get_data_rate(snr)
-                        else:
-                            best_rate = 0.0
-                
-                signal_map[iy, ix] = best_rssi
-                throughput_map[iy, ix] = best_rate
-                serving_map[iy, ix] = best_drone_id
-        
+        # One vectorized pass over the whole grid.
+        #
+        # This was three nested Python loops (cells x cells x drones), which
+        # cost ~194 ms per update on a 40x40 grid — the node is configured for
+        # 10 Hz, so it had been silently running at about half that, and any
+        # larger grid made it worse. The arithmetic is unchanged;
+        # test_coverage_vectorization.py asserts this agrees with the scalar
+        # formulation cell for cell.
+        cfg = self.config
+        grid_x, grid_y = np.meshgrid(self.grid_x, self.grid_y)   # (ny, nx)
+
+        # Dead zone attenuation depends on the cell, not the drone, so it is
+        # computed once and applied to every drone's RSSI.
+        attenuation = None
+        if dead_zones:
+            attenuation = np.zeros_like(grid_x)
+            for zone in dead_zones:
+                dz_dx = grid_x - zone['cx']
+                dz_dy = grid_y - zone['cy']
+                inside = (dz_dx * dz_dx + dz_dy * dz_dy
+                          < zone['radius'] * zone['radius'])
+                attenuation[inside] += zone['attenuation_db']
+
+        # Drone ids in iteration order, so argmax's first-wins tie-breaking
+        # matches the strict `>` the scalar version used.
+        drone_ids = list(drones.keys())
+        rssi_stack = np.empty((len(drone_ids),) + grid_x.shape, dtype=float)
+        antenna_gain = 2 * cfg.antenna_gain_dbi
+
+        for index, drone_id in enumerate(drone_ids):
+            drone = drones[drone_id]
+            dx = grid_x - drone.position[0]
+            dy = grid_y - drone.position[1]
+            dz = self.ground_height - drone.position[2]
+            distance = np.sqrt(dx * dx + dy * dy + dz * dz)
+            # compute_path_loss clamps to 1 m; keep that, or a cell directly
+            # under a drone would give a negative log.
+            np.maximum(distance, 1.0, out=distance)
+
+            path_loss = (cfg.reference_loss_db
+                         + 10 * cfg.path_loss_exponent * np.log10(distance))
+            path_loss += self.propagation.shadow_map(drone_id, grid_x, grid_y)
+
+            rssi = drone.tx_power_dbm + antenna_gain - path_loss
+            if attenuation is not None:
+                rssi -= attenuation
+            rssi_stack[index] = rssi
+
+        best = np.argmax(rssi_stack, axis=0)
+        best_rssi = np.take_along_axis(rssi_stack, best[None], axis=0)[0]
+
+        # A cell with no drone above the -200 dBm floor stays uncovered and
+        # unserved, exactly as the scalar version's strict `>` left it.
+        served = best_rssi > -200.0
+        signal_map = np.where(served, best_rssi, -200.0)
+        serving_map = np.where(served, np.asarray(drone_ids)[best], -1
+                               ).astype(int)
+        throughput_map = self._data_rate_map(signal_map)
+
         return self._build_result(signal_map, throughput_map, serving_map)
+
+    def _data_rate_map(self, signal_map: np.ndarray) -> np.ndarray:
+        """MCS lookup over a whole grid.
+
+        The table is sorted and its rates increase with their SNR threshold,
+        so the highest rate whose threshold the SNR clears is a binary search
+        rather than the linear scan `get_data_rate` does per cell.
+        """
+        cfg = self.config
+        thresholds = np.array(sorted(cfg.mcs_thresholds))
+        rates = np.array([cfg.mcs_thresholds[t] for t in thresholds])
+
+        snr = signal_map - cfg.noise_floor_dbm
+        rung = np.searchsorted(thresholds, snr, side='right') - 1
+        rate = np.where(rung >= 0, rates[np.clip(rung, 0, None)], 0.0)
+
+        # Rate is only meaningful where the cell is actually covered.
+        return np.where(signal_map > cfg.rx_sensitivity_dbm, rate, 0.0)
     
+    def compute_coverage_reliability(self,
+                                     drones: Dict[int, DroneNetworkState],
+                                     dead_zones: list = None,
+                                     realizations: int = 100,
+                                     reliability: float = 0.9,
+                                     seed: int = 0) -> CoverageReliability:
+        """Coverage over repeated shadowing draws, for the same drone positions.
+
+        Reports expected coverage and coverage at a reliability target; see
+        CoverageReliability for why both are needed. With shadowing disabled
+        every realization is identical and the two numbers coincide, which is
+        the honest answer for a deterministic channel rather than an error.
+        """
+        if realizations < 1:
+            raise ValueError(f'realizations must be >= 1, got {realizations}')
+        if not 0.0 < reliability <= 1.0:
+            raise ValueError(f'reliability must be in (0, 1], got {reliability}')
+
+        masks = np.empty((realizations, self.grid_size_y, self.grid_size_x),
+                         dtype=bool)
+        per_realization = np.empty(realizations, dtype=float)
+
+        for i in range(realizations):
+            # Reseed rather than reuse: a fresh realization per draw is the
+            # point, and seeding from (seed, i) keeps the set reproducible.
+            self.propagation.regenerate_shadowing(seed=seed + i)
+            result = self.compute_coverage(drones, dead_zones)
+            masks[i] = result.coverage_mask
+            per_realization[i] = result.coverage_percent
+
+        probability = masks.mean(axis=0)
+        cells = probability.size
+
+        return CoverageReliability(
+            realizations=realizations,
+            reliability=reliability,
+            coverage_probability=probability,
+            mean_coverage_percent=float(100.0 * probability.mean()),
+            reliable_coverage_percent=float(
+                100.0 * np.count_nonzero(probability >= reliability) / cells),
+            marginal_percent=float(
+                100.0 * np.count_nonzero((probability > 0.0)
+                                         & (probability < 1.0)) / cells),
+            per_realization_percent=per_realization,
+        )
+
     def _build_result(self, signal_map: np.ndarray, 
                       throughput_map: np.ndarray,
                       serving_map: np.ndarray) -> CoverageResult:
@@ -195,7 +321,8 @@ class CoverageCalculator:
         
         for drone_id, drone in drones.items():
             distance = np.linalg.norm(ground_pos - drone.position)
-            rssi = self.propagation.compute_rssi(distance, (drone_id, -1))
+            rssi = self.propagation.compute_rssi(
+                distance, tx_id=drone_id, rx_xy=(x, y))
             
             if rssi > best_rssi:
                 best_rssi = rssi

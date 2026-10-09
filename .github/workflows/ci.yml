@@ -89,6 +89,14 @@ jobs:
             --pytest-args -q \
             --event-handlers console_direct+
 
+      - name: Disaster scene is in sync with the world
+        shell: bash
+        run: |
+          # disaster_scene.py is generated from worlds/earthquake_city.world.
+          # A world edit without a regenerate would leave the coverage grid
+          # and the importance map describing a scene that no longer exists.
+          python3 src/aura/scripts/generate_disaster_scene.py --check
+
       - name: Evaluation script smoke run
         shell: bash
         run: |
@@ -103,6 +111,15 @@ jobs:
           test -f "$RUNNER_TEMP/eval-ci/summary.csv"
           test -f "$RUNNER_TEMP/eval-ci/run_config.json"
           test -f "$RUNNER_TEMP/eval-ci/results.json"
+          # Same again with log-normal shadowing (roadmap §8). It is off by
+          # default, so without this the shadowed path never runs in CI.
+          python3 src/aura/scripts/evaluate.py \
+            --policies static,random --episodes 2 --max-steps 40 \
+            --shadowing --shadow-sigma 6 \
+            --no-plots --output-dir "$RUNNER_TEMP/eval-ci-shadow"
+          test -f "$RUNNER_TEMP/eval-ci-shadow/summary.csv"
+          grep -q '"shadowing_enabled": true' \
+            "$RUNNER_TEMP/eval-ci-shadow/run_config.json"
 
       - name: Integration smoke test
         shell: bash

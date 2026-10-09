@@ -17,8 +17,25 @@
     max_mesh_distance_m: 150.0
     min_snr_db: 10.0
 
-    # Simulation noise (useful for RL training)
+    # Log-normal shadowing. signal_noise_std_db is sigma in dB: measured
+    # values are roughly 2-4 dB near-free-space air-to-air, 4-8 dB
+    # air-to-ground over suburban terrain, 8-12 dB in dense urban canyons.
+    # The D2G config adds 1 dB on top of this.
     signal_noise_std_db: 2.0
+    # Distance over which shadowing decays to 1/e. Shadowing comes from
+    # terrain and buildings, so nearby points are obstructed alike; an
+    # independent draw per grid cell would be receiver noise, and it averages
+    # out of the coverage figure instead of changing it.
+    shadow_correlation_distance_m: 25.0
+    # Correlation between two drones' shadowing to the same ground point
+    # (3GPP inter-site value). Sets the sign of the effect: independent
+    # paths give a diversity gain and raise coverage, shared shadowing
+    # lowers it.
+    shadow_inter_link_correlation: 0.5
+    # false gives the deterministic median channel.
+    shadowing_enabled: true
+    # Seeds the shadowing realization so a run reproduces.
+    random_seed: 42
 
 
 # ------------------------------------------------------------
@@ -31,10 +48,14 @@ network_sim:
     update_rate_hz: 10.0
 
     # Coverage area bounds
-    area_x_min: -200.0
-    area_x_max: 200.0
-    area_y_min: -200.0
-    area_y_max: 200.0
+    # Fitted to the 29 damaged structures in worlds/earthquake_city.world
+    # plus a 50 m importance margin, snapped to the 10 m cell size.
+    # Generated: see disaster_scene.GRID_BOUNDS and
+    # scripts/generate_disaster_scene.py. Do not hand-edit.
+    area_x_min: -170.0
+    area_x_max: 390.0
+    area_y_min: -350.0
+    area_y_max: 20.0
 
     # Grid resolution
     grid_resolution_m: 10.0

@@ -30,6 +30,13 @@ except ImportError:
     class gym:  # type: ignore[no-redef]
         Env = _StubEnv
 
+try:
+    from aura_network_sim.propagation import CorrelatedShadowing
+    SHADOWING_AVAILABLE = True
+except ImportError:  # pragma: no cover - depends on the workspace overlay
+    CorrelatedShadowing = None
+    SHADOWING_AVAILABLE = False
+
 from .spaces import ObservationConfig, ActionConfig, ObservationBuilder, ActionProcessor
 from .rewards import RewardConfig, RewardCalculator
 
@@ -67,6 +74,37 @@ class EnvConfig:
     reference_loss_db: float = 46.7  # Free-space loss at 1m for 2.4 GHz
     coverage_threshold_dbm: float = -80.0
     max_mesh_distance: float = 150.0
+
+    # Objective weights, forwarded to RewardConfig.
+    #
+    # alpha_m is the connectivity weight. At the defaults (coverage 2.0,
+    # connectivity 3.0) connectivity dominates, and the trained policy holds a
+    # tight cluster: a full 10-link mesh and ~40% coverage, where the
+    # Hungarian baseline spreads out for ~70% coverage and 8.9 links. That is
+    # not a training failure, it is the operating point the weights pick — so
+    # they are exposed here, for the coverage<->connectivity Pareto sweep
+    # (roadmap §10). None keeps RewardConfig's own default.
+    coverage_weight: Optional[float] = None
+    connectivity_weight: Optional[float] = None
+
+    # Log-normal shadowing (roadmap §8).
+    #
+    # Off by default, and that default is load-bearing: the published
+    # checkpoint was trained on the deterministic median channel, so enabling
+    # this changes both the reported coverage and the policy that training
+    # produces. Turn it on deliberately and say so alongside the numbers.
+    #
+    # A fresh realization is drawn every episode, which makes the channel a
+    # domain-randomization axis rather than one map the policy can memorize.
+    shadowing_enabled: bool = False
+    shadow_sigma_db: float = 4.0
+    shadow_correlation_distance_m: float = 25.0
+    # Correlation between two drones' shadowing to the same ground point.
+    # This decides the sign of the effect: coverage takes the best server, so
+    # independent paths (0.0) hand the swarm a diversity gain and *raise*
+    # coverage, while fully shared shadowing (1.0) lowers it. 0.5 is the
+    # 3GPP inter-site value.
+    shadow_inter_link_correlation: float = 0.5
 
     # Randomization
     randomize_initial_positions: bool = True
@@ -130,6 +168,22 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.np_random = np.random.default_rng(seed)
         self._seed = seed
 
+        if self.config.shadowing_enabled and not SHADOWING_AVAILABLE:
+            raise ImportError(
+                'shadowing_enabled=True needs aura_network_sim.propagation, '
+                'which is not importable. Source the workspace overlay '
+                '(install/setup.bash) or set shadowing_enabled=False. '
+                'Silently training on a different channel than the one asked '
+                'for is worse than failing here.')
+
+        # Per-drone shadowing, precomputed over the coverage grid once per
+        # episode. The ground grid is fixed and so is the field, so the
+        # offset at each cell does not change within an episode — sampling it
+        # per cell per step would cost ~8k interpolations per step for
+        # nothing.
+        self._shadowing: Any = None
+        self._shadow_grids: List[np.ndarray] = []
+
         # Create configs
         self.obs_config = ObservationConfig(num_drones=self.config.num_drones)
         self.action_config = ActionConfig(
@@ -137,9 +191,16 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
             world_center_x=self.config.world_center_x,
             world_center_y=self.config.world_center_y,
         )
+        reward_overrides = {}
+        if self.config.coverage_weight is not None:
+            reward_overrides['coverage_weight'] = self.config.coverage_weight
+        if self.config.connectivity_weight is not None:
+            reward_overrides['connectivity_weight'] = \
+                self.config.connectivity_weight
         self.reward_config = RewardConfig(
             world_center_x=self.config.world_center_x,
             world_center_y=self.config.world_center_y,
+            **reward_overrides,
         )
 
         # Create helpers
@@ -189,21 +250,27 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.coverage_grid = np.zeros((size, size), dtype=np.float32)
         self.signal_grid = np.full((size, size), -200.0, dtype=np.float32)
 
-        # Build importance grid: 3× weight for cells within 50 m of a disaster structure
+        # Cell centres, as (gy, gx) grids. Built once: _update_network and
+        # _reset_shadowing both index by (gy, gx) and must agree about which
+        # ground point each cell is, so they share these rather than each
+        # recomputing the arithmetic.
         half = self.config.area_size
         res = self.config.grid_resolution
-        wx = self.config.world_center_x
-        wy = self.config.world_center_y
+        index = np.arange(size)
+        centres_x = self.config.world_center_x - half + (index + 0.5) * res
+        centres_y = self.config.world_center_y - half + (index + 0.5) * res
+        self._cell_x, self._cell_y = np.meshgrid(centres_x, centres_y)
+
+        # Build importance grid: 3× weight for cells within 50 m of a disaster
+        # structure. One pass per structure over the whole grid rather than a
+        # per-cell scan over every structure.
         IMPORTANCE_RADIUS = 50.0
         self.importance_grid = np.ones((size, size), dtype=np.float32)
-        for gy in range(size):
-            for gx in range(size):
-                cell_x = wx - half + (gx + 0.5) * res
-                cell_y = wy - half + (gy + 0.5) * res
-                for sx, sy in self._DISASTER_STRUCTURES:
-                    if math.sqrt((cell_x - sx) ** 2 + (cell_y - sy) ** 2) < IMPORTANCE_RADIUS:
-                        self.importance_grid[gy, gx] = 3.0
-                        break
+        for sx, sy in self._DISASTER_STRUCTURES:
+            dx = self._cell_x - sx
+            dy = self._cell_y - sy
+            near = (dx * dx + dy * dy) < IMPORTANCE_RADIUS * IMPORTANCE_RADIUS
+            self.importance_grid[near] = 3.0
 
     def reset(self, seed: int = None, options: Dict = None) -> Tuple[np.ndarray, Dict]:
         """Reset environment to initial state"""
@@ -216,35 +283,57 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.failed_drone_ids = set()
         self.reward_calculator.reset()
 
-        # Initialize drones
+        # Initialize drones, in a ring around the disaster zone rather than
+        # around the origin.
+        #
+        # The ring used to be centred on (0, 0), roughly 200 m from the area
+        # the policy is rewarded for covering. That is an initial condition
+        # that never occurs at inference: RL activates only in OPERATIONS,
+        # after TRANSIT and FORMATION have already brought the swarm to the
+        # zone. So training spent its early steps on a transit the deployed
+        # policy is never asked to fly, and the deployed policy started from
+        # a state training had under-sampled.
         self.drones = []
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
         for i in range(self.config.num_drones):
+            angle = 2 * np.pi * i / self.config.num_drones
             if self.config.randomize_initial_positions:
-                angle = 2 * np.pi * i / self.config.num_drones
                 r = self.config.initial_radius * (0.8 + 0.4 * self.np_random.random())
-                pos = np.array([
-                    r * np.cos(angle),
-                    r * np.sin(angle),
-                    self.config.initial_altitude + self.np_random.uniform(-5, 5)
-                ])
+                altitude = (self.config.initial_altitude
+                            + self.np_random.uniform(-5, 5))
             else:
-                angle = 2 * np.pi * i / self.config.num_drones
-                pos = np.array([
-                    self.config.initial_radius * np.cos(angle),
-                    self.config.initial_radius * np.sin(angle),
-                    self.config.initial_altitude
-                ])
-
+                r = self.config.initial_radius
+                altitude = self.config.initial_altitude
+            pos = np.array([
+                wx + r * np.cos(angle),
+                wy + r * np.sin(angle),
+                altitude,
+            ])
             self.drones.append(DroneState(drone_id=i, position=pos))
 
-        # Weather zones
+        # Shadowing realization for this episode. Only draw from np_random
+        # when shadowing is on: consuming the stream unconditionally would
+        # shift the initial positions and weather, and the frozen baseline
+        # would stop reproducing.
+        self._reset_shadowing()
+
+        # Weather zones, placed inside the coverage grid.
+        #
+        # These were drawn from uniform(-100, 100) on the origin while the
+        # grid sits on (120, -170), so a zone was usually outside the measured
+        # area entirely and its attenuation reached nothing. Weather that
+        # never attenuates anything is not a randomization axis.
         self.weather_zones = []
-        if self.config.randomize_weather and self.np_random.random() < self.config.weather_probability:
-            wx = self.np_random.uniform(-100, 100)
-            wy = self.np_random.uniform(-100, 100)
-            wr = self.np_random.uniform(30, 80)
-            wa = self.np_random.uniform(5, 15)
-            self.weather_zones.append(WeatherZone(wx, wy, wr, wa))
+        if (self.config.randomize_weather
+                and self.np_random.random() < self.config.weather_probability):
+            half = self.config.area_size
+            zone_x = wx + self.np_random.uniform(-0.5 * half, 0.5 * half)
+            zone_y = wy + self.np_random.uniform(-0.5 * half, 0.5 * half)
+            zone_r = self.np_random.uniform(30, 80)
+            zone_attenuation = self.np_random.uniform(5, 15)
+            self.weather_zones.append(
+                WeatherZone(zone_x, zone_y, zone_r, zone_attenuation))
 
         # Compute initial state
         self._update_network()
@@ -329,6 +418,48 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         return obs, reward, terminated, truncated, info
 
+    # ── Shadowing ───────────────────────────────────────────────
+
+    def _reset_shadowing(self) -> None:
+        """Draw this episode's shadowing and bake it onto the coverage grid."""
+        if not self.config.shadowing_enabled or self.config.shadow_sigma_db <= 0.0:
+            self._shadowing = None
+            self._shadow_grids = []
+            return
+
+        half = self.config.area_size
+        wx = self.config.world_center_x
+        wy = self.config.world_center_y
+        bounds = (wx - half, wy - half, wx + half, wy + half)
+
+        # The same cell centres _update_network uses, so a baked offset lands
+        # on the cell it was computed for.
+        grid_x, grid_y = self._cell_x, self._cell_y
+
+        # One realization per drone, from a sub-seed of this episode's stream
+        # so the whole run stays reproducible from the env seed.
+        episode_seed = int(self.np_random.integers(0, 2 ** 31 - 1))
+
+        self._shadowing = CorrelatedShadowing(
+            sigma_db=self.config.shadow_sigma_db,
+            correlation_distance_m=self.config.shadow_correlation_distance_m,
+            bounds=bounds,
+            inter_link_correlation=self.config.shadow_inter_link_correlation,
+            seed=episode_seed,
+        )
+        self._shadow_grids = [
+            np.asarray(self._shadowing.sample(drone_id, grid_x, grid_y),
+                       dtype=np.float32)
+            for drone_id in range(self.config.num_drones)
+        ]
+
+    def _link_shadow_db(self, tx_id: int, position: np.ndarray) -> float:
+        """Shadowing on a drone-to-drone link, sampled at the far end."""
+        if self._shadowing is None:
+            return 0.0
+        return self._shadowing.sample(
+            tx_id, float(position[0]), float(position[1]))
+
     # ── Network simulation ──────────────────────────────────────
 
     def _update_network(self):
@@ -336,50 +467,46 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.signal_grid.fill(-200.0)
         self.coverage_grid.fill(0.0)
 
-        half = self.config.area_size
-        res = self.config.grid_resolution
-        wx = self.config.world_center_x
-        wy = self.config.world_center_y
+        # Weather attenuation depends on the cell, not the drone, so it is
+        # computed once for the whole grid rather than per drone per cell.
+        weather = None
+        for wz in self.weather_zones:
+            if not wz.is_active:
+                continue
+            if weather is None:
+                weather = np.zeros_like(self._cell_x)
+            wdx = self._cell_x - wz.center[0]
+            wdy = self._cell_y - wz.center[1]
+            inside = (wdx * wdx + wdy * wdy) < wz.radius * wz.radius
+            weather[inside] += wz.attenuation_db
 
+        # One vectorized pass per drone over the whole grid. This was a
+        # cell x cell x drone Python loop and it was the training bottleneck:
+        # ~54 env steps/s, so a 400k-step run took two hours and an alpha_m
+        # sweep was out of reach. The arithmetic is unchanged;
+        # test_env_vectorization.py asserts agreement with the scalar form.
+        cfg = self.config
         for drone in self.drones:
             if drone.is_failed:
                 drone.neighbors = []
                 continue
 
-            # Compute signal at each grid cell (grid is centered on disaster zone)
-            for gy in range(self.grid_size):
-                for gx in range(self.grid_size):
-                    cell_x = wx - half + (gx + 0.5) * res
-                    cell_y = wy - half + (gy + 0.5) * res
+            dx = self._cell_x - drone.position[0]
+            dy = self._cell_y - drone.position[1]
+            dz = -drone.position[2]  # ground level
+            dist_3d = np.sqrt(dx * dx + dy * dy + dz * dz)
+            np.maximum(dist_3d, cfg.reference_distance_m, out=dist_3d)
 
-                    dx = cell_x - drone.position[0]
-                    dy = cell_y - drone.position[1]
-                    dz = -drone.position[2]  # ground level
-                    dist_3d = math.sqrt(dx * dx + dy * dy + dz * dz)
+            path_loss = (cfg.reference_loss_db
+                         + 10 * cfg.path_loss_exponent
+                         * np.log10(dist_3d / cfg.reference_distance_m))
+            if weather is not None:
+                path_loss = path_loss + weather
+            if self._shadow_grids:
+                path_loss = path_loss + self._shadow_grids[drone.drone_id]
 
-                    if dist_3d < self.config.reference_distance_m:
-                        dist_3d = self.config.reference_distance_m
-
-                    # Log-distance path loss
-                    path_loss = (self.config.reference_loss_db +
-                                 10 * self.config.path_loss_exponent *
-                                 math.log10(dist_3d / self.config.reference_distance_m))
-
-                    # Weather attenuation
-                    for wz in self.weather_zones:
-                        if wz.is_active:
-                            wdist = math.sqrt(
-                                (cell_x - wz.center[0]) ** 2 +
-                                (cell_y - wz.center[1]) ** 2
-                            )
-                            if wdist < wz.radius:
-                                path_loss += wz.attenuation_db
-
-                    signal = self.config.tx_power_dbm - path_loss
-
-                    # Max signal from any drone
-                    if signal > self.signal_grid[gy, gx]:
-                        self.signal_grid[gy, gx] = signal
+            np.maximum(self.signal_grid, cfg.tx_power_dbm - path_loss,
+                       out=self.signal_grid)
 
             # Update drone-to-drone links
             drone.neighbors = []
@@ -387,7 +514,7 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
                 if other.drone_id == drone.drone_id or other.is_failed:
                     continue
                 d = np.linalg.norm(drone.position - other.position)
-                if d < self.config.max_mesh_distance:
+                if d < cfg.max_mesh_distance:
                     drone.neighbors.append(other.drone_id)
 
         # Coverage mask
@@ -413,6 +540,8 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
                     pl = (self.config.reference_loss_db +
                           10 * self.config.path_loss_exponent *
                           math.log10(d / self.config.reference_distance_m))
+                    pl += self._link_shadow_db(
+                        drone.drone_id, self.drones[nid].position)
                     signals.append(self.config.tx_power_dbm - pl)
                 drone.signal_strength_dbm = max(signals)
                 # Simplified throughput model (Shannon-ish)

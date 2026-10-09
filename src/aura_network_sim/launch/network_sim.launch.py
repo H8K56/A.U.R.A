@@ -14,7 +14,6 @@ def generate_launch_description():
 
     # Arguments
     update_rate = LaunchConfiguration('update_rate')
-    area_size = LaunchConfiguration('area_size')
     grid_resolution = LaunchConfiguration('grid_resolution')
     enable_viz = LaunchConfiguration('enable_visualization')
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -23,7 +22,11 @@ def generate_launch_description():
     return LaunchDescription([
 
         DeclareLaunchArgument('update_rate', default_value='10.0'),
-        DeclareLaunchArgument('area_size', default_value='200.0'),
+        # No area_size argument: it was declared here and never passed to any
+        # node, so setting it did nothing. The grid is four explicit bounds
+        # (area_x_min .. area_y_max) in the YAML config, because it is a box
+        # on the disaster zone at (120, -170) rather than on the origin — a
+        # single half-width cannot express that.
         DeclareLaunchArgument('grid_resolution', default_value='10.0'),
         DeclareLaunchArgument('enable_visualization', default_value='true'),
         DeclareLaunchArgument('use_sim_time', default_value='true'),

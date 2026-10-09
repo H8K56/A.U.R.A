@@ -176,8 +176,18 @@ RUN wget https://www.nsnam.org/releases/ns-allinone-${NS3_VERSION}.tar.bz2 \
     && ./build.py --enable-examples --enable-tests
 
 ENV NS3_HOME=/opt/ns-allinone-${NS3_VERSION}/ns-${NS3_VERSION}
-ENV PYTHONPATH=${NS3_HOME}/build/bindings/python:${PYTHONPATH}
-ENV LD_LIBRARY_PATH=${NS3_HOME}/build/lib:${LD_LIBRARY_PATH}
+# No ":${PYTHONPATH}" suffix. ENV does not go through a shell, so an undefined
+# variable expands to nothing and leaves a trailing colon — an *empty* path
+# element, which Python reads as the current working directory. That put cwd on
+# sys.path for every script run in the container, so a file named rewards.py,
+# spaces.py, policy.py or propagation.py sitting in whatever directory you
+# happened to run from would silently shadow the real module, and only in that
+# directory. Nothing sets either variable earlier in this file, so appending
+# could never have added anything but the empty element. The same reasoning
+# applies to LD_LIBRARY_PATH, where an empty element means "search .".
+# ROS's setup.bash prepends to both at runtime and preserves what is here.
+ENV PYTHONPATH=${NS3_HOME}/build/bindings/python
+ENV LD_LIBRARY_PATH=${NS3_HOME}/build/lib
 
 # ==============================================================================
 # PYTHON ML/RL STACK
@@ -276,8 +286,8 @@ RUN echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc \
     && echo 'export PX4_HOME=/home/aura/PX4-Autopilot' >> ~/.bashrc \
     && echo 'source $PX4_HOME/Tools/simulation/gazebo-classic/setup_gazebo.bash $PX4_HOME $PX4_HOME/build/px4_sitl_default' >> ~/.bashrc \
     && echo "export NS3_HOME=${NS3_HOME}" >> ~/.bashrc \
-    && echo 'export PYTHONPATH=$NS3_HOME/build/bindings/python:$PYTHONPATH' >> ~/.bashrc \
-    && echo 'export GAZEBO_MODEL_PATH=/home/aura/ws/models:$GAZEBO_MODEL_PATH' >> ~/.bashrc \
+    && echo 'export PYTHONPATH=$NS3_HOME/build/bindings/python${PYTHONPATH:+:$PYTHONPATH}' >> ~/.bashrc \
+    && echo 'export GAZEBO_MODEL_PATH=/home/aura/ws/models${GAZEBO_MODEL_PATH:+:$GAZEBO_MODEL_PATH}' >> ~/.bashrc \
     && echo 'alias cb="cd /home/aura/ws && colcon build --symlink-install"' >> ~/.bashrc \
     && echo 'alias cbp="cd /home/aura/ws && colcon build --symlink-install --packages-select"' >> ~/.bashrc \
     && echo 'alias ws="cd /home/aura/ws"' >> ~/.bashrc \

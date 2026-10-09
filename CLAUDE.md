@@ -238,6 +238,16 @@ python3 -m aura_strategic_rl.train_policy --seed 42
     (±0.5 pp to ±1.8 pp over 6 episodes). It does **not** change the
     RL-vs-baseline ordering on coverage or connectivity, which is the useful
     robustness result.
+- **The container used to put cwd on `sys.path`.** `ENV PYTHONPATH=...:${PYTHONPATH}`
+  in the Dockerfile left a trailing colon, because ENV does not go through a
+  shell and the variable was undefined. An empty path element means "the
+  current directory", so any file named `rewards.py`, `spaces.py`, `policy.py`
+  or `propagation.py` in whatever directory you ran from silently shadowed the
+  real module — and only in that directory. Same for `LD_LIBRARY_PATH`.
+  Fixed on the modernization branch; **images built before that fix still have
+  it**, so `echo $PYTHONPATH` and look for a trailing `:` if an import behaves
+  differently depending on where you launched from. BuildKit flagged this the
+  whole time as `WARN: UndefinedVar`.
 - `src/aura_localization` is an empty directory — no package, nothing references it.
 - `etc` and `test_data` are tracked symlinks to absolute `/home/aura/PX4-Autopilot/...` paths; they resolve only inside the container.
 

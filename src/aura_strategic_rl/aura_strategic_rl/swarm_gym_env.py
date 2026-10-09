@@ -84,6 +84,11 @@ class DroneState:
         self.battery = 100.0
         self.is_hub = (drone_id == 0)
 
+        # A failed drone stays in the list so drone_id keeps matching its index
+        # (BFS and the observation layout both rely on that) but stops flying,
+        # stops relaying and stops contributing coverage.
+        self.is_failed = False
+
         # Network state
         self.signal_strength_dbm = -70.0
         self.throughput_mbps = 50.0
@@ -163,6 +168,7 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         self.weather_zones: List[WeatherZone] = []
         self.step_count = 0
         self.coverage_history: List[float] = []
+        self.failed_drone_ids: set = set()
 
         # Coverage grid
         self._init_coverage_grid()
@@ -207,6 +213,7 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         self.step_count = 0
         self.coverage_history = []
+        self.failed_drone_ids = set()
         self.reward_calculator.reset()
 
         # Initialize drones
@@ -259,6 +266,10 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         # Update drone positions (simplified dynamics)
         for i, drone in enumerate(self.drones):
+            if drone.is_failed:
+                drone.velocity = np.zeros(3)
+                continue
+
             if i < len(goals):
                 direction = goals[i] - drone.position
                 dist = np.linalg.norm(direction)
@@ -331,6 +342,10 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         wy = self.config.world_center_y
 
         for drone in self.drones:
+            if drone.is_failed:
+                drone.neighbors = []
+                continue
+
             # Compute signal at each grid cell (grid is centered on disaster zone)
             for gy in range(self.grid_size):
                 for gx in range(self.grid_size):
@@ -369,7 +384,7 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
             # Update drone-to-drone links
             drone.neighbors = []
             for other in self.drones:
-                if other.drone_id == drone.drone_id:
+                if other.drone_id == drone.drone_id or other.is_failed:
                     continue
                 d = np.linalg.norm(drone.position - other.position)
                 if d < self.config.max_mesh_distance:
@@ -382,6 +397,12 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
 
         # Update per-drone network metrics
         for drone in self.drones:
+            if drone.is_failed:
+                drone.signal_strength_dbm = -100.0
+                drone.throughput_mbps = 0.0
+                drone.latency_ms = 999.0
+                continue
+
             # Best signal from neighbors
             if drone.neighbors:
                 signals = []
@@ -412,30 +433,80 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
         return 100.0 * np.sum(self.coverage_grid * self.importance_grid) / total_weight
 
     def _check_mesh_connected(self) -> bool:
-        """Check if all drones form a connected mesh (BFS)"""
-        if len(self.drones) <= 1:
+        """Check whether every surviving drone forms one connected mesh (BFS).
+
+        Failed drones are excluded rather than counted as unreachable: after a
+        loss the question is whether the remaining swarm still holds a mesh
+        together, which is the N-1 tolerance the system claims. With no
+        failures this is identical to requiring all drones connected.
+        """
+        active = [d for d in self.drones if not d.is_failed]
+        if len(active) <= 1:
             return True
 
-        visited = {0}
-        queue = [0]
+        start = active[0].drone_id
+        visited = {start}
+        queue = [start]
 
         while queue:
             current = queue.pop(0)
             for neighbor_id in self.drones[current].neighbors:
-                if neighbor_id not in visited:
+                if neighbor_id not in visited and not self.drones[neighbor_id].is_failed:
                     visited.add(neighbor_id)
                     queue.append(neighbor_id)
 
-        return len(visited) == len(self.drones)
+        return len(visited) == len(active)
+
+    def _active_drones(self) -> List[DroneState]:
+        """Surviving drones. Identical to self.drones when nothing has failed."""
+        return [d for d in self.drones if not d.is_failed] or list(self.drones)
 
     def _compute_avg_signal(self) -> float:
-        return np.mean([d.signal_strength_dbm for d in self.drones])
+        return float(np.mean([d.signal_strength_dbm for d in self._active_drones()]))
 
     def _compute_avg_throughput(self) -> float:
-        return np.mean([d.throughput_mbps for d in self.drones])
+        return float(np.mean([d.throughput_mbps for d in self._active_drones()]))
 
     def _compute_avg_latency(self) -> float:
-        return np.mean([d.latency_ms for d in self.drones])
+        return float(np.mean([d.latency_ms for d in self._active_drones()]))
+
+    def _compute_avg_snr_db(self) -> float:
+        """Mean SNR over surviving drones.
+
+        This is SNR, not SINR: the propagation model has no interference term
+        (roadmap 8), so there is no I to include. Reporting it as SINR would
+        overstate what the model computes.
+        """
+        return float(np.mean([
+            d.signal_strength_dbm - self.config.noise_floor_dbm
+            for d in self._active_drones()
+        ]))
+
+    # ── Fault injection ─────────────────────────────────────────
+
+    def fail_drone(self, drone_id: int) -> None:
+        """Take a drone out of service: it stops flying, relaying and covering.
+
+        It stays in self.drones so drone_id keeps matching its list index and
+        the observation keeps its fixed width — the policy sees a degraded
+        neighbour rather than a resized swarm.
+        """
+        if not 0 <= drone_id < len(self.drones):
+            raise IndexError(
+                f"drone_id {drone_id} out of range for {len(self.drones)} drones")
+        self.drones[drone_id].is_failed = True
+        self.drones[drone_id].velocity = np.zeros(3)
+        self.failed_drone_ids.add(drone_id)
+        self._update_network()
+
+    def recover_drone(self, drone_id: int) -> None:
+        """Return a previously failed drone to service."""
+        if not 0 <= drone_id < len(self.drones):
+            raise IndexError(
+                f"drone_id {drone_id} out of range for {len(self.drones)} drones")
+        self.drones[drone_id].is_failed = False
+        self.failed_drone_ids.discard(drone_id)
+        self._update_network()
 
     # ── Observation / Info ──────────────────────────────────────
 
@@ -463,9 +534,12 @@ class SwarmGymEnv(gym.Env if GYM_AVAILABLE else object):
             'avg_signal_dbm': self._compute_avg_signal(),
             'avg_throughput_mbps': self._compute_avg_throughput(),
             'avg_latency_ms': self._compute_avg_latency(),
+            'avg_snr_db': self._compute_avg_snr_db(),
             'step': self.step_count,
             'drone_positions': [d.position.tolist() for d in self.drones],
             'batteries': [d.battery for d in self.drones],
+            'failed_drone_ids': sorted(self.failed_drone_ids),
+            'num_active_drones': sum(1 for d in self.drones if not d.is_failed),
         }
 
     def render(self):
